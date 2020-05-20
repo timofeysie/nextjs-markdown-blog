@@ -23,17 +23,10 @@ jobs:
         npm install
     - name: Production Build
       run: |
-        npm build
+        npm run build
     - name: Unit Tests
       run: |
         npm test
-    - name: Download artifact
-      uses: dawidd6/action-download-artifact@v2
-      with:
-        github_token: ${{secrets.GITHUB_TOKEN}}
-        workflow: workflow_name.yml
-        name: artifact_name
-        path: extract_here
     - name: Deploy to S3
       uses: jakejarvis/s3-sync-action@master
       with:
