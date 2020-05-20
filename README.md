@@ -56,7 +56,14 @@ AWS_REGION
 
 Create the yaml file via the article linked to above and make a PR on the master branch.
 
+```bash
 ##[warning]Unexpected input 'args', valid inputs are ['']
+...
+Invalid endpoint: https://s3.***.amazonaws.com
+```
+
+Possibly the region was wrong.  
+"US East (N. Virginia)" in the console should use the key: us-east-1
 
 ## Apex and his Orchestra
 
