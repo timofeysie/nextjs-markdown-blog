@@ -24,6 +24,13 @@ jobs:
     - name: Production Build
       run: |
         npm build
+      steps:  
+        - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/build
+      - attach_workspace:
+          at: ~/
     - name: Unit Tests
       run: |
         npm test

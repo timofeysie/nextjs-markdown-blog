@@ -65,6 +65,17 @@ Invalid endpoint: https://s3.***.amazonaws.com
 Possibly the region was wrong.  
 "US East (N. Virginia)" in the console should use the key: us-east-1
 
+After that, this error:
+
+```bash
+The user-provided path build does not exist.
+```
+
+A [SO]() question answer comment says: *I guess it's important to point out the version that you might have used in your configuration, which I assume it was the 2. I had the same problem as you, and when I tried to install awscli in the deploy step using the python-executor, circleci did not like it... Apparently, in the version 2.1, circleci does not accept executor/docker in the deploy step, only in build. – pmanresa93 Dec 19 '19 at 8:51*
+
+So there's the sinking feeling that going with awscli version 2 might be a bigger issue.
+
+
 ## Apex and his Orchestra
 
 The promise of an easy deployment faded while following [this guide](https://medium.com/@romanenko/simple-ci-for-next-js-projects-with-apex-up-github-actions-6f0b1b9a5400)
