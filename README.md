@@ -75,6 +75,103 @@ A [SO]() question answer comment says: *I guess it's important to point out the 
 
 So there's the sinking feeling that going with awscli version 2 might be a bigger issue.
 
+Another solution is to use a persist_to_workspace step in the yaml, but there is always a syntax error on the yaml when it's run.
+
+The last part of the yaml:
+
+```yml
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        SOURCE_DIR: "build"
+```
+
+That last part, when we run npm run build, there is no build directory created.
+
+```
+> next build
+
+Warning: Built-in CSS support is being disabled due to custom CSS configuration being detected.
+See here for more info: https://err.sh/next.js/built-in-css-disabled
+
+Creating an optimized production build
+
+Compiled successfully.
+
+Automatically optimizing pages
+
+Page                                                           Size     First Load JS
+┌ λ /                                                          19.7 kB         138 kB
+├   /_app                                                      2.21 kB        61.6 kB
+├ ○ /404                                                       2.61 kB        64.2 kB
+├ ○ /about                                                     864 kB          931 kB
+├ λ /post/[slug]                                               981 B           138 kB
+├ λ /uses                                                      1.25 kB        68.3 kB
+└ λ /writings/[slug]                                           272 kB          414 kB
++ First Load JS shared by all                                  61.6 kB
+  ├ static/pages/_app.js                                       2.21 kB
+  ├ chunks/319bd00ec334e48eda8ee8651510dfb953cf9cb3.689f56.js  8.12 kB
+  ├ chunks/commons.4abdc0.js                                   3.19 kB
+  ├ chunks/framework.43cbee.js                                 40.5 kB
+  ├ chunks/styles.7a2eb5.js                                    87 B
+  ├ runtime/main.e1255e.js                                     6.27 kB
+  ├ runtime/webpack.539cb6.js                                  1.26 kB
+  └ css/styles.887bae79.chunk.css                              1.94 kB
+
+λ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+○  (Static)  automatically rendered as static HTML (uses no initial props)
+●  (SSG)     automatically generated as static HTML + JSON (uses getStaticProps)
+```
+
+There is a .next/static/chunks/... directory that has js chunks.  Shouldn't that be used?  How to put that in the yaml?  And why didn't the article meant for React Next.js projects not include it?
+
+Asking the [author](https://medium.com/p/b1cb9ba75c95/responses/show).
+
+Probably should have looked more at the Next.js docs.  They have an extra export command that can be run after a build.
+
+In the scripts, we can use this:
+
+```bash
+"build": "next build && next export",
+```
+
+Then this:
+
+```bash
+npm run build
+...
+> using build directory: C:\Users\timof\repos\nextjs-markdown-blog\.next
+  copying "static build" directory
+> No "exportPathMap" found in "next.config.js". Generating map from "./pages"
+  launching 7 workers
+  copying "public" directory
+[    ] Exporting (4/7)
+Error occurred prerendering page "/post/[slug]". Read more: https://err.sh/next.js/prerender-error
+Error: Cannot find module './undefined.md'
+[==  ] Exporting (6/7)
+Error occurred prerendering page "/writings/[slug]". Read more: https://err.sh/next.js/prerender-error
+Error: Cannot find module './undefined.md'
+Exporting (7/7)
+Error: Export encountered errors
+    at _default (C:\Users\timof\repos\nextjs-markdown-blog\node_modules\next\dist\export\index.js:19:1164)
+    at processTicksAndRejections (internal/process/task_queues.js:88:5)
+```
+
+So maybe the static site approach is not going to work with the markdown serving app.
+
+Next.js is *heavily* pushing the Vercel approach.  There is a free hobby version that appears to support GitHub for CI/CD.  It boasts a simple setup.  I delivers.  My interactions from using my GitHub account login I chose the repos, it detected Next.js and did the rest.  Two minutes later the app was live.
+
+The Vercel site provides a dashboard and tools.
+
+https://vercel.com/timofeysie/nextjs-markdown-blog
+
+https://vercel.com/timofeysie/nextjs-markdown-blog/855x35dte
+
+Then I realized that the initial blog by Telmo talked about ZEIT, which is now Vercel.  Well, it's a very proactive deployment process.  Since dev-ops is not the goal of this project, it works well to simplify hosting.
+
+It will use Twitter and hashtags to run comments.  I don't use Twitter for much besides an induscty watch, so using it with article specific hashtags to collect comments and discussion is fine.  Disqus was also an option.  SN sharing links would also be an improvement.
 
 ## Apex and his Orchestra
 
