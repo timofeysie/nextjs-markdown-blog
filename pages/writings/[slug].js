@@ -54,7 +54,7 @@ function Writing({ content, data }) {
             <div className="twitter-follow">
               If you liked this post I'm sure you'll love
               what I usually share on {' '}
-              <a href="https://twitter.com/telmo" rel="noopener noreferrer nofollow">Twitter</a>,
+              <a href="https://twitter.com/timofey" rel="noopener noreferrer nofollow">Twitter</a>,
               I share a lot of coding tips there ✌️
             </div>
           </div>

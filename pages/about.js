@@ -32,7 +32,7 @@ const Icon = ({ stack, style }) => {
 
 function About() {
   const [index, setIndex] = useState(0)
-  const avatar = `https://images.weserv.nl/?url=https://unavatar.now.sh/twitter/telmo`
+  const avatar = `https://images.weserv.nl/?url=https://unavatar.now.sh/twitter/timofey`
 
   useEffect(() => {
     const intervalId = setInterval(() =>
@@ -48,7 +48,7 @@ function About() {
       <Layout secondaryPage>
         <div style={{ marginTop: 50 }}>
           <h1 className="about-h1">
-            Telmo {' '}
+            Timothy {' '}
             <TextTransition
               text={SKILLS[index % SKILLS.length]}
               springConfig={config.gentle}
@@ -59,21 +59,19 @@ function About() {
           <div className="about-intro">
             <Row>
               <Col md={12}>
-                I'm a full-stack engineer with 13+ years of
-                experience. I started my career back in 2007
-                as a designer, then quickly started coding as well.
+                I'm a JavaScript developer with a focus on the front end using React and Angular.
+                I also like doing full-stack work if it involves NodeJS. I started my career as a Java developer many years ago, moved to native Android work before going purely into JavaScript in 2013
 
                 <br /><br />
 
-                I've seen it all. In my career I've worked with
-                a lot of technologies: PHP, MooTools, jQuery, Ruby
-                on Rails, Angular, ReactJS, GraphQL, and many more.
+                Since developer blogs quickly get out of date, this blog is devoted to updated content about real world issues from my web development job.
+                Enterprise Angular and React are currently the main focus.
               </Col>
             </Row>
 
             <hr />
 
-            <h3>What I've worked with so far</h3>
+            <h3>Everybody loves front end tech logos</h3>
 
             <Row style={{ marginTop: 30 }}>
               {PRESENT.map(s => (
@@ -87,9 +85,9 @@ function About() {
             <hr />
 
             Follow me on {' '}
-            <a href="https://twitter.com/telmo" target="_blank" rel="noopener noreferrer nofollow">
+            <a href="https://twitter.com/timofey" target="_blank" rel="noopener noreferrer nofollow">
               Twitter
-            </a>. That's where I usually hangout.
+            </a>. I don't post much but if you reach out, I will be there!
           </div>
         </div>
       </Layout>

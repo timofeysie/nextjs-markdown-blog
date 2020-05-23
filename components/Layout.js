@@ -80,7 +80,7 @@ function Layout({ children, isHomepage, secondaryPage, noHead = false }) {
           <Col {...containerProps}>
             {!secondaryPage && (
               <h1 className={`blog-title`} style={isHomepage && { textAlign: 'left' }}>
-                Telmo, code <span className="amp">&</span> design
+                Timothy Curchod, Web Dev
               </h1>
             )}
 

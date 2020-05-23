@@ -2,6 +2,77 @@
 
 Based on the simple [blog of Telmo Goncalves](https://telmo.im/writings/open-sourcing-blog) which uses React via Next.js to serve up markdown content.
 
+## Workflow
+
+```bash
+npm run dev
+```
+
+## App structure
+
+Here is the basic layout of the app.
+
+```txt
+├───components
+│   ├───CodeBlock.js
+│   └───Layout.js
+├───constants
+│   ├───Stack.js
+│   └───Uses.js
+├───content
+│   └───hello-world.md
+├───pages
+│   ├───_app.js
+│   ├───about.js
+│   ├───index.js
+│   ├───uses.js
+│   ├───post
+│   │   └───[slug].js
+│   └───writings
+│       └───[slug].js
+├───public
+│   ├───images
+│   │   └───reduce.png
+│   └───og
+│       └───darkmodecssjs.png
+├───styles
+│       └───# base.css
+├───writings
+│       ├───counter-example.md
+│       └─── ...
+```
+
+I would prefer using TypeScript.  Just seeing the .js file extension makes me a little uncomfortable these days.  TypeScript offers a lot of confidence when working on a project.  I could use Next.js to setup TypeScript, but since this project is not about React with TypeScript, I will keep it as it is.  Keeps me in touch with the Vanilla JavaScript world.
+
+The variety of naming conventions also makes me a little uncomfortable, but again, the goal here is not to create a project with model code, but to serve up markdown tutorials.
+
+## The counter example blog
+
+After creating the first blog page, when deployed, it returned a 500 error.  Locally, it's a 500 with messages:
+
+```bash
+wait  - compiling...
+event - compiled successfully
+Warning: Invalid DOM property `charset`. Did you mean `charSet`?
+    in script (at _app.js:20)
+    in head
+    in Head
+    in html
+    in Html
+    in Document
+    in Context.Provider
+    in Context.Provider
+event - build page: /writings/[slug]
+wait  - compiling...
+event - compiled successfully
+TypeError: Cannot read property 'twitter' of undefined
+    at Writing (C:\Users\timof\repos\nextjs-markdown-blog\.next\server\static\development\pages\writings\[slug].js:17211:90)
+...
+counter-example:1 GET http://localhost:3000/writings/counter-example 500 (Internal Server Error)
+nodeStackFrames.js:39 Uncaught     at Writing (file://C:\Users\timof\repos\nextjs-markdown-blog\.next\server\static\development\pages\writings\[slug].js:17211:90)
+```
+
+This is due to the header missing in the markdown file.  This portion is used by the gray-matter lib to parse the file frontmatter data which is the information between --- strings in the .md files.
 
 ## Set up an S3 bucket with AWS for your production and staging environments
 
@@ -172,6 +243,8 @@ https://vercel.com/timofeysie/nextjs-markdown-blog/855x35dte
 Then I realized that the initial blog by Telmo talked about ZEIT, which is now Vercel.  Well, it's a very proactive deployment process.  Since dev-ops is not the goal of this project, it works well to simplify hosting.
 
 It will use Twitter and hashtags to run comments.  I don't use Twitter for much besides an induscty watch, so using it with article specific hashtags to collect comments and discussion is fine.  Disqus was also an option.  SN sharing links would also be an improvement.
+
+For now, I need to do some [more reading about Vercel deployments](https://nextjs.org/docs/deployment).  The first attempt at visiting the counter example markdown file in the writings directory returned a 500.
 
 ## Apex and his Orchestra
 

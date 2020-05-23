@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start"
   },
-  "author": "Telmo Goncalves <@telmo>",
+  "author": "Timothy Curchod <@timofey>",
   "license": "ISC",
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
