@@ -1,5 +1,5 @@
 ---
-title: "Counter Example"
+title: "The Classic Counter Example"
 date: "2020-05-22"
 og:
   description: "A detailed walk through of the official NgRx counter example"
@@ -11,16 +11,16 @@ author:
 
 ## The NgRx Counter example
 
-- [Angular and Redux versus React](#angular-and-Redux-versus-React)
-- [Using Nrwl/nx](#using-Nrwl/nx)
-- [The official store counter example](#the-official-store-counter-example)
-- [Create a new project with the nx CLI](#create-a-new-project-with-the-nx-CLI)
-- [Install NgRx](#install-NgRx)
-- [Define actions to express events](define-actions-to-express-events)
-- [Define a reducer function to manage the state](#define-a-reducer-function-to-manage-the-state)
-- [Register the global state container that is available throughout the application](#register-the-global-state-container-that-is-available-throughout-the-application)
-- [Inject the Store service to dispatch actions and select the current state of the counter](#inject-the-Store-service-to-dispatch-actions-and-select-the-current-state-of-the-counter)
-- [Use the Redux devtools](#use-the-Redux-devtools)
+- Angular and Redux versus React
+- Using Nrwl/nx
+- The official store counter example
+- Create a new project with the nx CLI
+- Install NgRx
+- Define actions to express events
+- Define a reducer function to manage the state
+- Register the global state container that is available throughout the application
+- Inject the Store service to dispatch actions and select the current state of the counter
+- Use the Redux devtools
 
 ### Angular and Redux versus React
 

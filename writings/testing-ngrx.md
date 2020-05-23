@@ -9,9 +9,9 @@ author:
   name: "Timothy Curchod"
 ---
 
-- [Testing Ngrx](#testing-ngrx)
-- [Fix the failing tests](#fix-the-failing-tests)
-- [Using the NgRx MockStore](#using-the-NgRx-MockStore)
+* Testing Ngrx
+* Fix the failing tests
+* Using the NgRx MockStore
 
 The counter example from the official documents which I discussed in detail in a previous article is a good place to start with the basics of unit tests for Angular using NgRx.
 
