@@ -2,11 +2,15 @@
 
 Based on the simple [blog of Telmo Goncalves](https://telmo.im/writings/open-sourcing-blog) which uses React via Next.js to serve up markdown content.
 
+This project uses [react-markdown](https://github.com/rexxars/react-markdown) to handle markdown formatting and [gray-matter](https://www.npmjs.com/package/gray-matter) to parse the file frontmatter data.
+
 ## Workflow
 
 ```bash
 npm run dev
 ```
+
+To ship a new version, merge a pull request to the master branch. Vercel will automatically create a production deployment.
 
 ## App structure
 
@@ -242,7 +246,7 @@ https://vercel.com/timofeysie/nextjs-markdown-blog/855x35dte
 
 Then I realized that the initial blog by Telmo talked about ZEIT, which is now Vercel.  Well, it's a very proactive deployment process.  Since dev-ops is not the goal of this project, it works well to simplify hosting.
 
-It will use Twitter and hashtags to run comments.  I don't use Twitter for much besides an induscty watch, so using it with article specific hashtags to collect comments and discussion is fine.  Disqus was also an option.  SN sharing links would also be an improvement.
+It will use Twitter and hashtags to run comments.  I don't use Twitter for much besides an industry watch, so using it with article specific hashtags to collect comments and discussion is fine.  Disqus was also an option.  SN sharing links would also be an improvement.
 
 For now, I need to do some [more reading about Vercel deployments](https://nextjs.org/docs/deployment).  The first attempt at visiting the counter example markdown file in the writings directory returned a 500.
 
@@ -252,7 +256,7 @@ The promise of an easy deployment faded while following [this guide](https://med
 
 Should have read [this update](https://aws.amazon.com/blogs/mobile/amplify-framework-announces-new-rearchitected-ui-component-and-modular-javascript-libraries/) first.
 
-Amplify Framework announces new, rearchitected UI Component and modular JavaScript libraries, on 09 APR 2020.  Actually, we don't need Amplify.  It is a wrapper for Cognito Auth funtionality.  That's nice, but a static blog only needs comments, an email list and social network share links.
+Amplify Framework announces new, rearchitected UI Component and modular JavaScript libraries, on 09 APR 2020.  Actually, we don't need Amplify.  It is a wrapper for Cognito Auth functionality.  That's nice, but a static blog only needs comments, an email list and social network share links.
 
 SO just an S3 bucket should be fine.
 
@@ -403,9 +407,3 @@ npm run dev
 [Next.js][https://nextjs.org/].
 
 If you access http://localhost:3000/post/hello-world we'll want to load a file called hello-world.md
-
-
-[react-markdown](https://github.com/rexxars/react-markdown) to handle markdown formatting.
-[gray-matter](https://www.npmjs.com/package/gray-matter) to parse our file frontmatter data.
-raw-loader  add some NextJS configuration to tell it to load .md files
-react react-dom next

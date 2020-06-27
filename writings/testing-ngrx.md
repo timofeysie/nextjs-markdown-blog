@@ -349,4 +349,4 @@ Do we need to re-use the initialState instead of the value 0? Not sure. Now, sho
 this.store.dispatch(increment());
 ```
 
-Also, these tests for the reducers are in the counter component tests. Should these tests be moved to the store directory? I think the component tests might want to do something like snapshot testing. Is that done in Angular.
+Also, these tests for the reducers are in the counter component tests. Should these tests be moved to the store directory? I think the component tests might want to do something like snapshot testing. Is that done in Angular?  It becoming standard in the React world.

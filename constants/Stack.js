@@ -2,14 +2,17 @@ export const PRESENT = [
   'HTML5',
   'CSS3',
   'JavaScript',
+  'React',
   'Angular',
   'Sass',
-  'React',
   'Next.js',
   'Node.js',
   'Redux',
   'TypeScript',
   'Zeit',
+  'Git',
+  //'Nrwl',
+  //'Nx',
 ]
 
 export const SKILLS = [

@@ -12,7 +12,7 @@ author:
 ## The NgRx Counter example
 
 - Angular and Redux versus React
-- Using Nrwl/nx
+- Using Nx in a Nrwl workspace
 - The official store counter example
 - Create a new project with the nx CLI
 - Install NgRx
@@ -24,25 +24,34 @@ author:
 
 ### Angular and Redux versus React
 
-NgRx is short for "Angular Redux".  It's the best thing Angular has to keep large production apps from falling into a soup of functions.  React is a great choice to start simple, but you have to make bets on all the libs needed to fill out a complete production architecture, which can lead code bases into excessive technical debt.
+NgRx is short for "Angular Redux". It's the best thing Angular has to keep large production apps from falling into a soup of functions. React is a great choice to start simple, but you have to make bets on all the libs needed to fill out a complete production architecture, which can lead code bases into excessive technical debt.
 
-There are plenty of articles comparing the two choices.  It's an interesting subject I think.  Some people think it's a framework war.  If that's so, React is certainly winning these days.  As a contractor, I have to worry about getting jobs.  As of right now, there are at least double the number of React jobs compared with Angular, and the situation is getting worse for Angular.
+There are plenty of articles comparing the two choices. It's an interesting subject I think. Some people think it's a framework war. If that's so, React is certainly winning these days. As a contractor, I have to worry about getting jobs. As of right now, there are at least double the number of React jobs compared with Angular, and the situation is getting worse for Angular.
 
-That being said, Angular is a great choice for large projects.  It's opinionated so that you don't have to leave those opinions up to a team of rotating devs.
+That being said, Angular is a great choice for large projects. It has stricter conventions which is great for tooling and you don't have to leave those opinions up to a team of rotating devs.
 
-Taking things a step further is the monorepo tools offered by Nrwl.  This used to be more of a niche area for the largest most organized projects.  But as the nx tools mature, now allowing React development also, it's a space worth watching and if you're lucky enough, working with it it on the job.
+Taking things a step further is the monorepo tools offered by Nrwl. This used to be more of a niche area for the largest most organized projects. But as the nx tools mature, now allowing React development also, it's a space worth watching and if you're lucky enough, working with it it on the job.
 
-### Using Nrwl/nx
+### Using Nx in a Nrwl workspace
 
-This article will use an [Nrwl workspace](https://blog.nrwl.io/) and the [nx CLI](https://nx.dev/angular/cli/overview) to scaffold the files.  This is not necessary for the counter example, but I found too little help when learning nx and NgRx, so decided to capture the whole process so that it might help others in the same situation and me and also make it all clearer to myself in the process.
+This article will use an [Nrwl workspace](https://blog.nrwl.io/) and the [nx CLI](https://nx.dev/angular/cli/overview) to scaffold the files. This is not necessary for the counter example, but I found too little help when learning nx and NgRx, so decided to capture the whole process so that it might help others in the same situation and me and also make it all clearer to myself in the process.
+
+To install the nx CLI you can use yarn or npm.
+
+```bash
+yarn global add @nrwl/cli
+npm install -g @nrwl/cli
+```
+
+You should only use one or the other, not both. At work we use npm, but at home I use yarn. I have run into issues with npm that were solved by using yarn. The only reason I could find was [this article suggests](https://dev.to/stereobooster/typescript-monorepo-for-react-project-3cpa) using yarn instead of npm in a monorepo because it supports workspaces to link cross-dependencies.
 
 ### The official store counter example
 
-The official NgRx docs page for a store has [a counter tutorial briefly explained with some code](https://ngrx.io/guide/store#tutorial).  This article aims to go into more detail about the state management shown as a model here.
+The official NgRx docs page for a store has [a counter tutorial briefly explained with some code](https://ngrx.io/guide/store#tutorial). This article aims to go into more detail about the state management shown as a model here.
 
-I wont go into detail about what a store is, as you can read plenty of articles online about it.  My goal his is to flesh out the code shown in their counter example.  
+I wont go into detail about what a store is, as you can read plenty of articles online about it. My goal his is to flesh out the code shown in their counter example.
 
-In the next article I will go through unit tests for this example.  The goal of these two articles will be to lay out a model for achieving TDD (test driven development) with NgRx.  To do TDD, you need to know before hand how to write meaningful tests for what you want to do.  It's kind of a chicken and egg kind of thing.
+In the next article I will go through unit tests for this example. The goal of these two articles will be to lay out a model for achieving TDD (test driven development) with NgRx. To do TDD, you need to know before hand how to write meaningful tests for what you want to do. It's kind of a chicken and egg kind of thing.
 
 Now getting on with the counter example there are four steps to accomplish this simple feature.
 

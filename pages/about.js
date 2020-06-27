@@ -19,13 +19,13 @@ const Icon = ({ stack, style }) => {
     <div
       data-icon={stack}
       style={{
-        fill: `#${icon.hex}`,
+        fill: `#${icon?.hex}`,
         display: 'inline-block',
         width: '50px',
         margin: '0 auto',
         ...style,
       }}
-      dangerouslySetInnerHTML={{ __html: icon.svg }}
+      dangerouslySetInnerHTML={{ __html: icon?.svg }}
     />
   )
 }
