@@ -7,7 +7,8 @@ This project uses [react-markdown](https://github.com/rexxars/react-markdown) to
 ## Workflow
 
 ```bash
-npm run dev
+
+
 ```
 
 To ship a new version, merge a pull request to the master branch. Vercel will automatically create a production deployment.
@@ -49,6 +50,16 @@ Here is the basic layout of the app.
 I would prefer using TypeScript.  Just seeing the .js file extension makes me a little uncomfortable these days.  TypeScript offers a lot of confidence when working on a project.  I could use Next.js to setup TypeScript, but since this project is not about React with TypeScript, I will keep it as it is.  Keeps me in touch with the Vanilla JavaScript world.
 
 The variety of naming conventions also makes me a little uncomfortable, but again, the goal here is not to create a project with model code, but to serve up markdown tutorials.
+
+## Linting
+
+After using this app for a while with no issues, all of a sudden, after upgrading VSCode, the import statements had TypeScript errors indicated by red squiggly underlines which on mouseover said:
+
+```txt
+'import' is only available in ES6 (use 'esversion: 6'). (W119)jshint(W119)
+```
+
+Getting rid of the JSHint plugin did the trick.  I was getting an error alert with is sometimes, and this was the last straw.
 
 ## The counter example blog
 
