@@ -6,7 +6,7 @@ import Link from 'next/link'
 const menu = [
   {
     path: '/',
-    name: 'start',
+    name: 'articles',
   },
   {
     path: '/about',

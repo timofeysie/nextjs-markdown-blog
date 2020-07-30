@@ -10,7 +10,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <meta property="og:title" content={title || `Timothy Curchod, a.k.a: timofeysie`} />
+        <meta property="og:title" content={title || `Timothy Curchod`} />
         <meta property="og:site_name" content="Timothy Curchod" />
         <meta property="og:description" content={og ? og.description : `Writings about web development.`} />
         <meta name="twitter:card" content="summary_large_image" />
@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }) {
 
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
-        <title>{title || `Timothy Curchod, a.k.a: timofeysie`}</title>
+        <title>{title || `Timothy Curchod`}</title>
       </Head>
 
       <Component {...pageProps} />

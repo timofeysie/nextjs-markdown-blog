@@ -7,8 +7,7 @@ This project uses [react-markdown](https://github.com/rexxars/react-markdown) to
 ## Workflow
 
 ```bash
-
-
+npm run dev
 ```
 
 To ship a new version, merge a pull request to the master branch. Vercel will automatically create a production deployment.
