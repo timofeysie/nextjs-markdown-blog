@@ -9,9 +9,9 @@ author:
   name: "Timothy Curchod"
 ---
 
-* Testing Ngrx
-* Fix the failing tests
-* Using the NgRx MockStore
+## TL;DR
+
+* Testing Ngrx using the existing code examples to fix the failing tests and use the NgRx MockStore.
 
 The counter example from the official documents which I discussed in detail in a previous article is a good place to start with the basics of unit tests for Angular using NgRx.
 
@@ -350,3 +350,10 @@ this.store.dispatch(increment());
 ```
 
 Also, these tests for the reducers are in the counter component tests. Should these tests be moved to the store directory? I think the component tests might want to do something like snapshot testing. Is that done in Angular?  It becoming standard in the React world.
+
+## Summary
+
+NgRx is a powerful enterprise way to deal with complexity in large applications.
+Examples of actually how to test this kind of code is less covered.  Even the official code examples wont function without some help.
+
+I hope you enjoyed the read. Use the hashtag #testing-ngrx and the link below on Twitter for any comments or feedback.

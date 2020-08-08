@@ -9,6 +9,10 @@ author:
   name: "Timothy Curchod"
 ---
 
+## TL;DR
+
+This article covers using a Nx/Nrwl workspace to implement the official NgRx counter example code and the Redux devtools.
+
 ## The NgRx Counter example
 
 - Angular and Redux versus React
@@ -198,3 +202,9 @@ npm install @ngrx/store-devtools --save
 In the app.module.ts file, import StoreDevtoolsModule and add it to your NgModule’s imports:
 
 After this, in the Chrome inspector/Redux tab, we see the actions working on the counter. How great is that?!
+
+## Summary
+
+Nx with NgRx is a powerful enterprise way to deal with complexity in large applications using a monorepo approach.  Examples of actually how to test this kind of code is less covered.  Even the official code examples wont function without some help.
+
+Use the hashtag #classic-counter-example and the link below on Twitter for any comments or feedback.
