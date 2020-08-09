@@ -13,19 +13,16 @@ author:
 
 The article discusses test driven software development (TDD) using a technique known as red-green-refactor.
 It talks about an online group programming approach to practicing TDD.
-There is also a real world example using React with Typescript.
 
 ## Red-Green-Refactor, Repeat, Dojo
 
 I recently joined a [coding dojo meetup](https://www.meetup.com/coding-dojo-sydney) where we practice Test Driven Development (TDD).  The group is centered in Sydney, Australia, but since the Coronavirus has us all stuck at home, it's moved online.  
 
-This blog will go through a basic anagram generating example in Javascript using React and TypeScript.  I will cover TDD, how the group works, how to set up the stack and then step through the exercise.  If you just want to look at the coding example, you can skip ahead.
-
 ### About TDD
 
-Testing can be hard to get into and easy to skip.  But when done right, it give confidence in a code base and you can rest easier at night, which is actually a real health benefit.
+Testing can be hard to get into and easy to skip.  But when done right, it give confidence in a code base, enables safer refactoring and lets you rest easier at night, which is actually a real health benefit.
 
-Learning how to practice test driven development (TDD) is a great way to do testing right.
+Learning how to practice TDD is a great way to do testing right.
 
 The particular type of TDD we will be talking about here is called Red-Green-Refactor.  The steps for this are.
 
@@ -58,9 +55,11 @@ But the term comes from Buddhism originally, and the discipline gained by practi
 
 ### About the stack
 
-We will be using React with TypeScript and Jest for this exercise.  I come from an Angular/Java background, but find React a great simple way to get started with web apps, and simple in this complex world is something even greater.
+We will be using React with TypeScript and Jest for an example exercise in the next article.  Here I will give some details about what the starting point for that looks like.
 
 The vanilla JavaScript approach uses a basic test runner made by Kynan that is even simpler.  All you do is open the index.html file in the browser and edit the test and function files and refresh.  That in itself is refreshingly simple.
+
+** to do - vanilla test runner stackblitz example **
 
 I code for work, so for me, using React/TS/Jest is similar to a regular frontend work environment and makes sense for the kind of practice I want to do.
 

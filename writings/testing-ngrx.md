@@ -3,7 +3,7 @@ title: "Testing NgRx"
 date: "2020-05-23"
 og:
   description: "Unit Testing the NgRx counter example"
-  image: "https://telmo.im/og/persistdarkmodereact.png"
+  image: "https://timothycurchod.com/og/Capture-react-tdd.png"
 author:
   twitter: "timofey"
   name: "Timothy Curchod"

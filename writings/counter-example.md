@@ -3,7 +3,7 @@ title: "The Classic Counter Example"
 date: "2020-05-22"
 og:
   description: "A detailed walk through of the official NgRx counter example"
-  image: "https://telmo.im/og/persistdarkmodereact.png"
+  image: "https://timothycurchod.com/og/Capture-react-tdd.png"
 author:
   twitter: "timofey"
   name: "Timothy Curchod"
