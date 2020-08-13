@@ -13,7 +13,7 @@ author:
 
 * Testing Ngrx using the existing code examples to fix the failing tests and use the NgRx MockStore.
 
-The counter example from the official documents which I discussed in detail in a previous article is a good place to start with the basics of unit tests for Angular using NgRx.
+The counter example from the official documents which I discussed in detail in [a previous article](https://timothycurchod.com/writings/testing-ngrx) is a good place to start with the basics of unit tests for Angular using NgRx in a monorepo using the [nx cli](https://nx.dev/angular/getting-started/why-nx).
 
 ## Testing Ngrx
 
@@ -21,7 +21,7 @@ The counter example from the official documents which I discussed in detail in a
 
 _The provideMockStore() function registers providers that allow you to mock out the Store for testing functionality that has a dependency on Store without setting up reducers. You can write tests validating behaviors corresponding to the specific state snapshot easily. All dispatched actions don't affect the state, but you can see them in the Actions stream._
 
-The docs start off with testing a fictional auth component. Lets apply the mock store as shown there to the counter example.
+The docs start off with testing a fictional auth component. Lets apply the mock store as shown there to the counter example.  This is a the link to the [clades repo](https://github.com/timofeysie/clades) you're interested in where the complete code samples are.
 
 Start up the tests in a terminal:
 
@@ -106,7 +106,7 @@ Get used to working apps but failing tests with Angular. An improvement for this
 
 ### Using the NgRx MockStore
 
-Now there is a clean set of passing "smoke tests". The default 'should create' tests will at least tell us if the template is breaking and some other errors. It's time to write some more meaningful tests that confirm the behavior of the counter features.
+Now there is a clean set of passing smoke tests. They are not particularly meaningful but the default 'should create' tests will at least tell us if the template is breaking or something else breaks in the future in the class. Now it's time to write some more meaningful tests that confirm the behavior of the counter features.
 
 Again starting with [the official NgRx testing docs](https://ngrx.io/guide/store/testing) as a guide.
 
@@ -187,7 +187,7 @@ let mockCounterReducer: MemoizedSelector<fromCount.State, number>;
 The TypeScript error is:
 
 ```text
-Namespace '"c:/Users/timof/repos/timofeysie/clades/apps/stratum/src/app/store/counter.reducer"' has no exported member 'State'.ts(2694)
+Namespace '"clades/apps/stratum/src/app/store/counter.reducer"' has no exported member 'State'.ts(2694)
 ```
 
 This is what is exported exported:
