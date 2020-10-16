@@ -356,4 +356,4 @@ Also, these tests for the reducers are in the counter component tests. Should th
 NgRx is a powerful enterprise way to deal with complexity in large applications.
 Examples of actually how to test this kind of code is less covered.  Even the official code examples wont function without some help.
 
-I hope you enjoyed the read. Use the hashtag #testing-ngrx and the link below on Twitter for any comments or feedback.
+I hope you enjoyed the read. Use the hashtag #TestingNgRx and the link below on Twitter for any comments or feedback.
