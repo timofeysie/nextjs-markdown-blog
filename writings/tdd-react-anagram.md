@@ -277,7 +277,7 @@ it("should display anagrams of given input", () => {
 });
 ```
 
-This test will fail in the same way our manual test of the function failed.  I wont go into an actual real life solution here.  I'm sure you could find a better function that the one we used above.  Or you could take the challenge and fix the function yourself.  If you do, use the hashtag #tdd-react-anagram and the link below on Twitter to let me know how it goes!
+This test will fail in the same way our manual test of the function failed.  I wont go into an actual real life solution here.  I'm sure you could find a better function than the one we used above.  Or you could take the challenge and fix the function yourself.  If you do, use the hashtag #TDDReactAnagram and the link below on Twitter to let me know how it goes!
 
 ## Summary
 

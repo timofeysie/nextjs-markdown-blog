@@ -135,6 +135,42 @@ Now you would be ready to get started writing your first failing test. I wont co
 
 Kynan actually goes a bit further these days and uses [Flow types](https://flow.org/) which is a static type checker.  Flow is easy to pick up and a popular choice.  For me, I work with [TypeScript](https://www.typescriptlang.org/), and often forget what it's like to work with vanilla JavaScript.  For better or worse, I want to practice TDD with the same frameworks I use professionally, which is [React](https://reactjs.org/) and [Angular](https://angular.io/).
 
+### Using Git
+
+The basic three files shown above as a starting point can be found [in this project](https://github.com/timofeysie/Red-Green-Refactor).  This would require knowledge of git to be used effectively beyond say just copying the raw files and running them locally.  This requires installing git, having a github account and understanding the basics of git branching.  Depending on the goals of the players, this could actually be a good thing.  Using git in this way is a major requirement for developers these days, and having these skills is a definite plus.
+
+An example game would require players to clone the repo:
+
+```shell
+git clone https://github.com/timofeysie/Red-Green-Refactor.git
+cd Red-Green-Refactor
+```
+
+Create a new branch for a new challenge, such as anagrams, write a failing test then push the branch (note this would require the -set-upstream flag the first time the branch is pushed):
+
+```shell
+git checkout -b anagrams
+git add .
+git commit -m "first failing test"
+git push
+```
+
+The second player then makes the test pass in the simplest way then writes another failing test, commits the changes and pushes the branch.  THe next player pulls the changes, and refactors the code to make the second failing test pass and then writes a new failing test for another round.
+
+### Using an online code-sharing platform
+
+To avoid turing a game into a git lesson, it's also possible to take advantage of a plethora of online platforms for developers to share code and work together.  These come in many shapes and sizes.  I have used all kinds and I'm sure there will be more options coming up all the time.
+
+A  starting point can be found here
+
+Blank starter based on Kynan's test runner for the "Balanced Parenthesis" challenge can be [found on Stackblitz here](https://stackblitz.com/edit/vanilla-js-playground-spxxvb?file=index.js).  This has an added basic UI instead of using the console log.  I have found though that people spend time looking at how this is done which like learning git can be distracting from the basic goals of the exercise.
+
+Here is a sorting challenge in progress on [js fiddle by Kynan](https://jsfiddle.net/k7n4n5t3w4rt/92m1facn/11/).
+
+A basic starting point with [two tests is here](https://stackblitz.com/edit/vanilla-js-playground-kq1kcx?file=index.js)
+
+Another good choice with a free option is [Git Pod](https://www.gitpod.io/).
+
 ### Using a framework
 
 There is a bit more involved when using a framework.  I will go through how to set things up with React using TypeScript and Jest as a test runner.  Some might point out that React is not a framework like Angular is, so I should probably say it's a *React-based framework* and skip that debate for now.
