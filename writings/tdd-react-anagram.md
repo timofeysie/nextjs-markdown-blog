@@ -1,6 +1,6 @@
 ---
 title: "React TDD Anagram example"
-date: "2020-08-09"
+date: "2020-08-09 (updated 2022-11-08)"
 og:
   description: "A detailed walk through of TDD using React with TypeScript to solve a simple anagram coding challenge"
   image: "https://timothycurchod.com/og/Capture-react-tdd.png"
@@ -353,7 +353,18 @@ Yes, someone had to go through all the variations of biro to make that expected 
 
 You can see the above step in the anagrams-custom-hook-meaningful-test branch of the [Github repo](https://github.com/timofeysie/react-tdd-dojo) from above.
 
-This test will fail in the same way our manual test of the function failed.  I wont go into an actual real life solution here.  I'm sure you could find a better function than the one we used above.  Or you could take the challenge and fix the function yourself.  If you do, use the hashtag #TDDReactAnagram and the link below on Twitter to let me know how it goes!
+This test will fail in the same way our manual test of the function failed.  The output will say something like this:
+
+```shell
+  ● useAnagrams hook › checking state updates for four letter inputs
+    expect(received).toBe(expected) // Object.is equality
+    Expected: ["biro", "bior", "brio", "broi", "boir", "bori", "ibro", "ibor", "irbo", "irob", "iobr", "iorb", "rbio", "rboi", "ribo", "riob", "roib", "robi", "obir", "obri", "oibr", "oirb", "orbi", "orib"]
+    Received: "bi,br,bo ib,ir,io rb,ri,ro ob,oi,or"
+```
+
+As you can see, our anagrams implementation is only handling two letters correctly.  Time to refactor that to make the test green again.
+
+I wont go into an actual real life solution here.  I'm sure you could find a better function than the one we used above.  Or you could take the challenge and fix the function yourself.  If you do, use the hashtag #TDDReactAnagram and the link below on Twitter to let me know how it goes!
 
 ## Summary
 
