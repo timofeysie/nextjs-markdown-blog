@@ -68,7 +68,7 @@ I will refer to these steps when we get to the code in a moment.
 
 ## Create a new project with the nx CLI
 
-Trying this our on the counter example form the official docs.
+Trying this out on the counter example form the official docs.
 
 ```bash
 nx g @nrwl/angular:app stratum

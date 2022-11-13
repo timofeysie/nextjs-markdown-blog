@@ -6,7 +6,7 @@ date: "2020-01-07"
 
 ## Implementing the counter example from the official docs
 
-Trying this our on the counter example form the official docs.
+Trying this out on the counter example form the official docs.
 
 ```bash
 nx g @nrwl/angular:app stratum
