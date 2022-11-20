@@ -19,7 +19,7 @@ function Uses({ og }) {
           <li>git</li>
           <li>
             nx/monorepo (not standard but should be for enterprise level
-            development.
+            development)
           </li>
         </ul>
         <h2 className="uses-list">Software</h2>

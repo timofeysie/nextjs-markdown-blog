@@ -1,5 +1,5 @@
 ---
-title: "The Classic Counter Example"
+title: "The Classic Counter Example with NgRx"
 date: "2020-05-22"
 og:
   description: "A detailed walk through of the official NgRx counter example"

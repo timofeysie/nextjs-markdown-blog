@@ -99,6 +99,7 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -.3rem;
   text-align: center;
   margin: 100px 0 50px;
+  letter-spacing: normal;
 }
 
 .writing-row a {
@@ -172,6 +173,7 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 56px;
   letter-spacing: -.2rem;
   margin: 50px 0 30px;
+  letter-spacing: normal;
 }
 
 .about-h1 {

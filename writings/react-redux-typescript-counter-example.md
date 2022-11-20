@@ -1,5 +1,5 @@
 ---
-title: "The React Redux Counter Example with TypeScript"
+title: "React Redux Counter Example with TypeScript"
 date: "2022-11-13"
 og:
   description: "A detailed walk through of the official React Redux counter example using TypeScript"
@@ -255,3 +255,5 @@ There is a discussion of using connect with hooks which the counter example does
 - [Redux Toolkit docs: TypeScript Quick start](https://redux-toolkit.js.org/tutorials/typescript): shows how to use RTK and the React-Redux hooks API with TypeScript
 - [React+TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet): a comprehensive guide to using React with TypeScript
 - [React + Redux in TypeScript Guide](https://github.com/piotrwitek/react-redux-typescript-guide): extensive information on patterns for using React and Redux with TypeScript
+
+Use the hashtag #ReactReduxTypescriptExample and the link below on Twitter for any comments or feedback.
