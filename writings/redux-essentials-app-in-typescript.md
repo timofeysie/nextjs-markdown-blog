@@ -14,9 +14,21 @@ author:
 - The Redux Essentials tutorial creates a small social media feed app in React using vanilla JavaScript.
 - This article aims to convert that app into TypeScript and add unit testing with Jest.
 
-## Starting the social media feed app
+## Introducing the Redux Toolkit
 
-In a [previous post](https://timothycurchod.com/writings/react-redux-typescript-counter-example) I walked through [step 2 of the Redux Essentials](https://redux.js.org/tutorials/essentials/part-2-app-structure) counter example app introducing TypeScript and unit testing.
+Redux is getting simpler and more stream-lined all the time.  The Redux Toolkit (RTK) is a simpler approach with less boiler plate code that still carries the power of state management.
+
+[Part 1 of the official Redux Essentials](https://redux.js.org/tutorials/essentials/part-1-overview-concepts) tutorial goes over the basics of Redux and the new simplified toolkit.
+
+In a [previous post](https://timothycurchod.com/writings/react-redux-typescript-counter-example) I walked through [step 2 of the Redux Essentials](https://redux.js.org/tutorials/essentials/part-2-app-structure) which builds a counter example app using the basic toolkit methods.  In my article I introduce adding TypeScript and unit testing to this example app.
+
+In this article I will do the same for the sample app for the next few steps of the tutorial.  In the future I will continue this approach using RTK Query, which goes even further to simplify state management by adding data fetching and caching to simplify the process of fetching data and using it in components.
+
+[Part 7 of the Redux Essentials tutorial](https://redux.js.org/tutorials/essentials/part-7-rtk-query-basics) says *RTK Query takes inspiration from other tools that have pioneered solutions for data fetching, like Apollo Client, React Query, Urql, and SWR, but adds a unique approach to its API design*.
+
+But first, let's go step by step through the creating of the sample app using TypeScript and adding unit tests as we go.
+
+## Starting the social media feed app
 
 At the start of [part three](https://redux.js.org/tutorials/essentials/part-3-data-flow) of the tutorial the reader is introduced to the goal of the next few steps: *a small social media feed app, which will include a number of features that demonstrate some real-world use cases.*
 
@@ -444,8 +456,6 @@ Test Suites: 3 passed, 3 total
 Tests:       7 passed, 7 total
 ```
 
-(To add to the page writings\redux-essentials-app-in-typescript.md)
-
 ## Summary so far
 
 This is the end of step three.  I hope you have a good idea now of how to incorporate TypeScripts and unit testing into a React app using the Redux toolkit.
@@ -507,7 +517,7 @@ The first error on the *match* object in the SinglePostPage highlights an import
 
 The error reads: Binding element 'match' implicitly has an 'any' type.ts(7031)
 
-Objects with props need types like this: 
+Objects with props need types like this:
 
 ```javascript
 {a,b} : {a:any, b:any}
@@ -1108,6 +1118,22 @@ This gives one confidence that the app is working, which helps when refactoring.
 
 [Here](https://github.com/timofeysie/redux-typescript-example/tree/part-4-edit-post) is the branch for the completed code from this section.
 
-## Refactoring with reducer prepare
+## Refactoring with reducer prepare (coming soon)
 
-In the [Preparing Action Payloads](https://redux.js.org/tutorials/essentials/part-4-using-data#preparing-action-payloads) there is a discussion about where to put the logic to create the id.  The solution is to use a "prepare callback" which takes multiple arguments, generate random values like unique IDs, and run whatever other synchronous logic is needed to decide what values go into the action object.
+In the next section titled "[Preparing Action Payloads](https://redux.js.org/tutorials/essentials/part-4-using-data#preparing-action-payloads)" there is a discussion about where to put the logic to create the id.  The solution is to use a "prepare callback" which takes multiple arguments, generate random values like unique IDs, and run whatever other synchronous logic is needed to decide what values go into the action object.
+
+## Useful links
+
+Here are some links from the tutorial that I found useful when working on this article.
+
+- [Redux docs: Usage with TypeScript](https://redux.js.org/recipes/usage-with-typescript): Examples of how to use Redux Toolkit, the Redux core, and React Redux with TypeScript
+- [Redux Toolkit docs: TypeScript Quick start](https://redux-toolkit.js.org/tutorials/typescript): shows how to use RTK and the React-Redux hooks API with TypeScript
+- [React+TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet): a comprehensive guide to using React with TypeScript
+- [React + Redux in TypeScript Guide](https://github.com/piotrwitek/react-redux-typescript-guide): extensive information on patterns for using React and Redux with TypeScript
+
+## Summary
+
+I think this exercise app is a great way to keep up to date with best practices when using React with the Redux toolkit along with Typescript and unit testing.  The sample app provides a model that can be used as a starting point for an enterprise grade application with sophisticated state management.
+
+If you have any questions or comments, use the hashtag #ReduxEssentialsApp and reach out to start the conversation on Twitter.
+
