@@ -372,4 +372,205 @@ It's fun to do pair programming or "mobbing" with larger groups online to solve 
 
 TDD is a big field with many opinions.  Red-green-refactor provides a great framework which puts this powerful technique to good use.  Other benefits include learning to express your ideas about coding and testing better.
 
+I have various branches on [this repo](https://github.com/timofeysie/react-tdd-dojo) which explore the anagrams challenge.  Have a look at some of the branches that start with the word anagrams, and make a merge request if you have a solution you think is better that one of those.
+
 Use the hashtag #TDDReactAnagram and the link below on Twitter for any comments or feedback.
+
+## A ChatGPT version
+
+As an extra exercise for this challenge I asked ChatGPT to solve this problem: "Please create a javascript function that creates all anagrams for input text."
+
+```js
+function generateAnagrams(str) {
+  if (str.length === 1) {
+    return [str];
+  }
+
+  const anagrams = [];
+  for (let i = 0; i < str.length; i++) {
+    const char = str[i];
+    const remainingChars = str.slice(0, i) + str.slice(i + 1);
+    const subAnagrams = generateAnagrams(remainingChars);
+    subAnagrams.forEach(sub => {
+      anagrams.push(char + sub);
+    });
+  }
+  return anagrams;
+}
+```
+
+*This function uses recursion to generate all the possible anagrams of the input string. It works by taking a string and then iterating over each character in the string, removing it from the string, and generating all the anagrams of the remaining string. It then appends the removed character to the beginning of each anagram and adds it to the anagrams array. When the length of the input string is 1, the function returns the string as an array, since there is only 1 anagram of a string with 1 character.*
+
+*Here is an example of how you can use this function:*
+
+```js
+const anagrams = generateAnagrams('abc');
+console.log(anagrams); // [ 'abc', 'acb', 'bac', 'bca', 'cab', 'cba' ]
+```
+
+I realized that in the context of a custom hook, a recursive function is not straight forward to implement, as the setState(newVal) will erase the work each time.  I was about to fix that but then decided to let ChatGPT fix it and make the code for this specific situation.
+
+I asked [ChatGPT](https://chat.openai.com/chat) this: "Please create a React custom hook in Typescript that creates all anagrams for input text."
+
+This is it's response.
+
+```js
+import { useState, useEffect } from "react";
+
+function useAnagrams(input: string) {
+  const [anagrams, setAnagrams] = useState<string[]>([]);
+
+  useEffect(() => {
+    // Function to generate all anagrams for a given string
+    function generateAnagrams(str: string, anagram = "", visited = {}) {
+      // If the anagram is complete, add it to the list of anagrams
+      if (str.length === 0) {
+        setAnagrams((prevAnagrams) => [...prevAnagrams, anagram]);
+        return;
+      }
+
+      // Iterate through each character in the string
+      for (let i = 0; i < str.length; i++) {
+        // Skip characters that have already been used in the anagram
+        if (visited[i]) continue;
+
+        // Create a new visited object for this recursive call
+        // We use the spread operator to create a new object, rather than modifying the old one
+        const newVisited = { ...visited };
+        newVisited[i] = true;
+
+        // Recursively call the function with the character added to the anagram, and the new visited object
+        generateAnagrams(
+          str.substring(0, i) + str.substring(i + 1),
+          anagram + str[i],
+          newVisited
+        );
+      }
+    }
+
+    // Reset the anagrams array and generate new anagrams
+    setAnagrams([]);
+    generateAnagrams(input);
+  }, [input]); // Only re-run the effect if the input changes
+
+  return anagrams;
+}
+
+export default useAnagrams;
+```
+
+This time, the comments are all inline instead of in a commentary.  Also, the formatting was missing for the start and end of the file.  It only recognized the for loop as code.  This might just be a formatting issue of the frontend site.
+
+Two other issues with the code are shown in the VSCode editor:
+
+```js
+if (visited[i]) continue;
+```
+
+```err
+Element implicitly has an 'any' type because expression of type 'number' can't be used to index type '{}'.
+  No index signature with a parameter of type 'number' was found on type '{}'.ts(7053)
+```
+
+The quick and dirty solution here is to cast the type of visited to any.  I think possibly ChatGPT is using an older version of TypeScript.
+
+Using ChatGPT as a kind of assistant tool makes sense.  In this case it has validated the use of a recursive solution to this problem.  It's answers provide a good general approach and explains the rationale for it.  A seasoned developer can the appraise the code and make adjustments needed.  Knowing your syntax becomes more important, not less, as model wont know your exact usage context unless you know how to acutely explain it.
+
+Then how to pose the best question becomes the key, and things like the best way to specify a version of a particular lib to the ML model are important as they are in a Google search.  I can see why Google is concerned about this eating into their search business.
+
+It's similar to a StackOverflow answer.  It would be better to solve the problem yourself in order to understand it.  Reading a tutorial with code samples allows the reader to cut and past of breeze past the learning part and fail to internalize the material.  Google, StackOverflow and now ChatGPT are tools but cannot do the job by themselves.
+
+In this context, unit testing solutions that a developer may not fully understand becomes even more urgent.  I suppose ChatGPT can also help create the tests.
+
+To see what kind of test ChatGPT would make, I started over again from the start since the ChatGPT frontend can continue in a conversational way to expand upon what it has done.  The solution and comments changed somewhat but are basically the same as the TypeScript version above.  Here is that session.
+
+Me: Please create a TypeScript function that creates all anagrams for input text.
+
+ChatGPT: *Certainly! Here is a function that takes a string as input and returns an array of all the anagrams of that string:*
+
+```js
+function getAnagrams(text: string): string[] {
+  // base case: if the text is empty, there are no anagrams
+  if (text.length === 0) {
+    return [];
+  }
+
+  // base case: if the text has only one character, there is only one anagram
+  if (text.length === 1) {
+    return [text];
+  }
+
+  // initialize an empty array to store the anagrams
+  const anagrams: string[] = [];
+
+  // loop through each character in the text
+  for (let i = 0; i < text.length; i++) {
+    // get the current character and the remaining characters
+    const char = text[i];
+    const remainingChars = text.slice(0, i) + text.slice(i + 1);
+
+    // get the anagrams of the remaining characters
+    const subAnagrams = getAnagrams(remainingChars);
+
+    // add the current character to the beginning of each anagram of the remaining characters
+    subAnagrams.forEach((subAnagram) => {
+      anagrams.push(char + subAnagram);
+    });
+  }
+
+  return anagrams;
+}
+```
+
+*This function uses recursion to generate all the anagrams of the input text. It works by looping through each character in the text, getting the anagrams of the remaining characters, and adding the current character to the beginning of each of those anagrams.*
+
+*I hope this helps! Let me know if you have any questions or if you need further clarification.*
+
+Me: Can you please create a meaningful unit test using Jest and the React testing-library for your anagrams function.
+
+ChatGPT: *Certainly! Here is a unit test using Jest and the React testing-library for the getAnagrams function:*
+
+```js
+import { getAnagrams } from './anagrams';
+
+test('getAnagrams returns correct anagrams for input text', () => {
+  const anagrams = getAnagrams('abc');
+  expect(anagrams).toEqual(['abc', 'acb', 'bac', 'bca', 'cab', 'cba']);
+});
+```
+
+*This test checks that the getAnagrams function returns the correct array of anagrams for the input text 'abc'.*
+
+*To test this function using the React testing-library, you would need to first render a component that calls the getAnagrams function and displays the result, and then use the testing-library's functions to interact with the rendered component and make assertions about its state.*
+
+*Here is an example of how you might do this:*
+
+```js
+import { render, screen } from '@testing-library/react';
+import App from './App';
+
+test('renders anagrams for input text', () => {
+  render(<App />);
+
+  const input = screen.getByLabelText('input');
+  const button = screen.getByText('Generate Anagrams');
+
+  // enter 'abc' into the input field and click the button
+  fireEvent.change(input, { target: { value: 'abc' } });
+  fireEvent.click(button);
+
+  // check that the anagrams are displayed
+  const anagrams = screen.getAllByText(/abc|acb|bac|bca|cab|cba/);
+  expect(anagrams).toHaveLength(6);
+});
+```
+
+*This test renders the App component, enters 'abc' into the input field, clicks the 'Generate Anagrams' button, and checks that the anagrams are displayed.*
+
+*I hope this helps! Let me know if you have any questions or if you need further clarification.*
+
+So that validates the test we made to confirm the anagrams function.
+
+Note that ChatGPT is not the only option for developers.  Here is a good article by By Prathamesh Ingle titled [Top Artificial Intelligence (AI) Tools That Can Generate Code To Help Programmers](https://www.marktechpost.com/2023/01/01/top-artificial-intelligence-ai-tools-that-can-generate-code-to-help-programmers/ ) published yesterday on January 1st, 2023.
+
+I probably need to write a new article now playing the Red Green Refactor game with various tools and find the out the best practices for integrating these new tools into a developers workflow.  I will update this article after that to provide the link here!
