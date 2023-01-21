@@ -1,6 +1,25 @@
+---
+title: "MUI Themes"
+date: "2022-12-25"
+og:
+  description: "Implementing a theme using the official React Redux example app in TypeScript"
+  image: "images/Capture-react-tdd.PNG"
+author:
+  twitter: "timofey"
+  name: "Timothy Curchod"
+---
 
+This article is a work in progress.
+
+In this article I describe using Material UI in React within the Redux Essentials app re-written in TypeScript.  I explore the best practices for creating a theme which will require minimum alteration for specific components throughout the app.
+
+The app in question is a small social media feed app with a number of features that demonstrate some real-world use cases.  The app is originally built bit by bit in the lengthy Redux Essentials tutorials using vanilla JavaScript.  As a fan of TypeScript, I wanted to explore the issues encountered when using TypeScript with the same code.
+
+I show how this is done in my [Redux Essentials Example App with TypeScript](http://localhost:3000/writings/redux-essentials-app-in-typescript) blog post.  That article is actually part two for the project which is started from the beginning in the [React Redux Counter Example with TypeScript](http://localhost:3000/writings/react-redux-typescript-counter-example)
 
 ## Analysis of the Posts List card components
+
+Starting off, let's look at how a component is initially styled in the app.
 
 Here is a post 'card' from src\features\posts\PostsList.js
 
@@ -68,7 +87,7 @@ Using rem can help ensure consistency of font size and spacing throughout your U
 
 In the 2010s, UI frameworks such as Bootstrap inspired CSS flex-box and grid layouts which didn't come out until late 2018.  So before this time, if you wanted the power of these kinds of responsive layouts, then you had to write your own, or use Bootstrap or some other now legacy framework.  Developers often then had to fight the framework to implement the vision of a graphic designer using an app like Figma.
 
-<rant>In my opinion, now that we have a very mature css specification, UI frameworks are not needed for serious projects.  Graphic designers only need to make arrangements of items on a page dictated by the needs of the user as highlighted by a UX designer.  Really, UX should come first, and for the most part, graphic designers should only create a theme and not specific layouts that then serve as fodder for testers to fail issues and create wasteful churn driving up the cost of projects.</rant>
+In my opinion, now that we have a very mature css specification, UI frameworks are not needed for serious projects.  Graphic designers only need to make arrangements of items on a page dictated by the needs of the user as highlighted by a UX designer.  Really, UX should come first, and for the most part, graphic designers should only create a theme and not specific layouts that then serve as fodder for testers to fail issues and create wasteful churn driving up the cost of projects.
 
 Regardless of your opinion of using a UI framework over writing styles from scratch, as a developer you often get on-boarded to projects that you didn't start and have to do your best with the current code base.  To keep things consistent you need to continue to use the framework decided upon before your arrival.
 

@@ -74,7 +74,7 @@ It took a while to get the select statements working with the element props pass
 d3.select(element).select("#BarChart");
 ```
 
-Combining the two sample code bases shows a mature approach with decent D3 basics. However, the chart object is a class, and would ideally be a functional component. However, it's not immediately clear how to transform the "this" as it's being used:
+Combining the two sample code bases shows a mature approach with decent D3 basics. The chart object is a class, and would ideally be a functional component. However, it's not immediately clear how to transform the "this" as it's being used:
 
 ```javascript
 class D3Chart {
@@ -306,7 +306,7 @@ So along with the D3Chart dataSet and the array of line data from the line graph
 ### D3Chart dataSet
 
 ```js
-[{ subject: "Equity Indexes", count: 500 }, ... ];
+[{ subject: "Indexes", count: 500 }, ... ];
 ```
 
 ### Line graph container data
@@ -351,3 +351,5 @@ npm install @mui/icons-material
 https://mui.com/material-ui/react-card/#media
 
 <Card sx={{ maxWidth: 345 }}>
+
+(to be continued ...)

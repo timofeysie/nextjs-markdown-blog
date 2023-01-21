@@ -11,7 +11,7 @@ import CodeBlock from '../../components/CodeBlock'
 function Writing({ content, data }) {
   const frontmatter = data
   const { title, author } = frontmatter
-  const avatar = `https://images.weserv.nl/?url=https://unavatar.now.sh/twitter/${author.twitter}&w=40`
+  const avatar = `https://avatars.githubusercontent.com/u/2747740?v=4`;
 
   return (
     <>
