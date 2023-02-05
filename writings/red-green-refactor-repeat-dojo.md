@@ -1,5 +1,5 @@
 ---
-title: "Red-Green-Refactor, Repeat, Dojo"
+title: "Red-Green-Refactor, Repeat"
 date: "2020-07-19"
 og:
   description: "An article about TDD using red-green-refactor with a group programming approach."
@@ -16,7 +16,7 @@ It talks about an online group programming approach to practicing TDD.
 
 ### About TDD & Red-Green-Refactor
 
-I recently joined a [coding dojo meetup](https://www.meetup.com/coding-dojo-sydney) where we practice Test Driven Development (TDD).  The group is centered in Sydney, Australia, but since the Coronavirus has us all stuck at home, it's moved online.  
+I recently joined a [coding meetup](https://www.meetup.com/coding-dojo-sydney) where we practice Test Driven Development (TDD).  The group is centered in Sydney, Australia, but since the Coronavirus has us all stuck at home, it's moved online.  
 
 Testing can be hard to get into and easy to skip.  But when done right, it gives confidence in a code base, enables safer refactoring and lets you rest easier at night, which is actually a real health benefit.
 
@@ -71,7 +71,7 @@ obir obri oibr oirb orbi orib
 
 ### A vanilla JavaScript approach
 
-Using a basic test runner made by the event orgianizer [Kynan Stewart](https://github.com/k7n4n5t3w4rt), all you need to do is open the index.html file in the browser and edit the test and function files and refresh the page to see the results.  This is a refreshingly simple approach for those getting started with TDD.
+Using a basic test runner made by the event organizer [Kynan Stewart](https://github.com/k7n4n5t3w4rt), all you need to do is open the index.html file in the browser and edit the test and function files and refresh the page to see the results.  This is a refreshingly simple approach for those getting started with TDD.
 
 The html file looks like this:
 
