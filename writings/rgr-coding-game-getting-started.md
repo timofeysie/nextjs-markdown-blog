@@ -138,22 +138,27 @@ npm install –save-dev @testing-library/react
 
 ## Problem Solving
 
-Abraham Lincoln is quoted to have said, “Give me six hours to chop down a tree and I will spend the first four sharpening the axe.”
+*“Give me six hours to chop down a tree and I will spend the first four sharpening the axe.”* (Attributed to Abraham Lincoln)
 
-*This means spending time understanding the problem and finding high-level solutions before starting to code. In the average coding interview, candidates are expected to spend less than half of their time actually writing code, and the rest of the time understanding the problem.* (from [Forget about algorithms and models — learn how to solve problems first](https://thenextweb.com/news/forget-about-algorithms-and-models-learn-how-to-solve-problems-first) by Ari Joury)
+For developers, *this means spending time understanding the problem and finding high-level solutions before starting to code. In the average coding interview, candidates are expected to spend less than half of their time actually writing code, and the rest of the time understanding the problem.* (from [Forget about algorithms and models — learn how to solve problems first](https://thenextweb.com/news/forget-about-algorithms-and-models-learn-how-to-solve-problems-first) by Ari Joury)
 
 The main point is, before starting to code:
 
 • spend time understanding the problem
 • finding high-level solutions
+• iterating on the solution by refactoring
 
-In relation to RGR, don't spend too much time on each step.  It's better to make small improvements and pass the buck on to the next team.  It's not about showing off, it's about learning how to problem solve and collaborate.
+Regardless of you feelings about Test Driven Development (TDD), a major point for it's use in an agile development environment is to make us consider the behavior before we start writing code.
+
+In relation to RGR, we generally don't want to spend too much time on each step.  It's better to make small improvements and pass the buck on to the next team.  It's not about showing off, it's about learning how to problem solve and collaborate.
 
 The value of growth and feedback loops is so well established, it is considered the theoretical cornerstone of most modern theories of learning and metacognition. It can be practiced by deliberate experimentation.
 
 *It is in complex systems, ones in which we have little visibility of the chains of cause-consequences, that tinkering, bricolage, or similar variations of trial and error have been shown to vastly outperform the teleological — it is nature’s modus operandi.* - Nassim Taleb
 
 Bricolage means making small changes to something in an attempt to improve it.  If the first attempt works, that’s great. If it doesn’t, we try again.  This process sets in motion a cycle of deliberate experimentation: First, we commit to an action. Then, we execute the target behavior. Finally, we learn from our experience and adjust our future actions accordingly.
+
+Another note about refactoring and writing tests.  It's considered not good form to test implementation details.  This is because if you test the inner workings of a function, then it's a barrier to refactoring, and refactoring is a key of this iterative problem solving process.
 
 ## Further Reading
 
