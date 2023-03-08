@@ -2184,4 +2184,4 @@ Here are some links from the tutorial that I found useful when working on this a
 
 I think this exercise app is a great way to keep up to date with best practices when using React with the Redux toolkit along with Typescript and unit testing.  The sample app provides a model that can be used as a starting point for an enterprise grade application with sophisticated state management.
 
-If you have any questions or comments, use the hashtag #ReduxEssentialsApp and reach out to start the conversation on Twitter.
+If you have any questions or comments, use the hashtag #ReduxEssentialsTypescript and reach out to start the conversation on Twitter.

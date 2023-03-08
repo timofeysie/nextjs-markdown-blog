@@ -142,21 +142,27 @@ npm install –save-dev @testing-library/react
 
 For developers, *this means spending time understanding the problem and finding high-level solutions before starting to code. In the average coding interview, candidates are expected to spend less than half of their time actually writing code, and the rest of the time understanding the problem.* (from [Forget about algorithms and models — learn how to solve problems first](https://thenextweb.com/news/forget-about-algorithms-and-models-learn-how-to-solve-problems-first) by Ari Joury)
 
-The main point is, before starting to code:
+The main point is, before starting to code, spend time:
 
-• spend time understanding the problem
-• finding high-level solutions
-• iterating on the solution by refactoring
+1. understanding the problem
+2. finding high-level solutions
+3. iterating on the solution by refactoring
 
-Regardless of you feelings about Test Driven Development (TDD), a major point for it's use in an agile development environment is to make us consider the behavior before we start writing code.
+Regardless of you feelings about Test Driven Development (TDD), a major point for it's use in an agile development environment is to make us consider the behavior of the feature before we start writing code.
 
 In relation to RGR, we generally don't want to spend too much time on each step.  It's better to make small improvements and pass the buck on to the next team.  It's not about showing off, it's about learning how to problem solve and collaborate.
 
-The value of growth and feedback loops is so well established, it is considered the theoretical cornerstone of most modern theories of learning and metacognition. It can be practiced by deliberate experimentation.
+In [The Paradox of Goals](https://nesslabs.com/the-paradox-of-goals), Anne-Laure Le Cunff writes that cycles of deliberate experimentation are considered the theoretical cornerstone of most modern theories of learning and meta-cognition.
 
-*It is in complex systems, ones in which we have little visibility of the chains of cause-consequences, that tinkering, bricolage, or similar variations of trial and error have been shown to vastly outperform the teleological — it is nature’s modus operandi.* - Nassim Taleb
+In the article there is a quote by Nassim Taleb which says: *it is in complex systems, ones in which we have little visibility of the chains of cause-consequences, that tinkering, bricolage, or similar variations of trial and error have been shown to vastly outperform the teleological — it is nature’s modus operandi.*
 
-Bricolage means making small changes to something in an attempt to improve it.  If the first attempt works, that’s great. If it doesn’t, we try again.  This process sets in motion a cycle of deliberate experimentation: First, we commit to an action. Then, we execute the target behavior. Finally, we learn from our experience and adjust our future actions accordingly.
+Bricolage means making small changes to something in an attempt to improve it.  If the first attempt works, that’s great. If it doesn’t, try again.  This process sets in motion a cycle of deliberate experimentation:
+
+1. First, we commit to an action.
+2. Then, we execute the target behavior.
+3. Finally, we learn from our experience and adjust our future actions accordingly and repeat.
+
+This sounds a lot like the rules of the RGR game!
 
 Another note about refactoring and writing tests.  It's considered not good form to test implementation details.  This is because if you test the inner workings of a function, then it's a barrier to refactoring, and refactoring is a key of this iterative problem solving process.
 
