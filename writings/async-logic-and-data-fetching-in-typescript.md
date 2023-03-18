@@ -620,6 +620,20 @@ The options for going forward with this article then would be:
 
 To start I have [raised an issue here](https://github.com/reduxjs/redux-essentials-example-app/issues/51) so stay tuned to see what happens there.
 
+It was very nice for the maintainer [Mark Erikson](https://github.com/markerikson) to reply regarding the client fakeApi issue, as well as possible plans for a Typescript version:
+
+*I actually did recently make the decision to convert the entire "Essentials" tutorial to be TS-first.  However, I don't yet have any idea when I'll be able to spend the time to do that :) I am kinda confused on the request error you're describing. That doesn't seem anything that would be related to TS at all - that's some kind of a request/URL mismatch.*
+
+In the meantime, I decided to bite the bullet and create my own Typescript backend which can be used with the project.  Since I would eventually like to deploy the app after some changes, it can be used later for that.
+
+[Here is the repo](https://github.com/timofeysie/flash) and I will be creating another article about how to implement all the API calls with that when they are done.
+
+Now we can move on to the next part.
+
+### [Reducers and Loading Actions](https://redux.js.org/tutorials/essentials/part-5-async-logic#reducers-and-loading-actions)
+
+Coming soon.
+
 ## Useful links
 
 Here are some links from the tutorial that I found useful when working on this article.
