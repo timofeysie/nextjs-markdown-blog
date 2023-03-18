@@ -388,7 +388,7 @@ Next up, we [display the loading states](https://redux.js.org/tutorials/essentia
 
 There is already a spinner component in the '../../components/Spinner' file.  We import that into the posts list component.
 
-The tutorial shows adding a PostExcerpt that should really be in a separate file:
+The tutorial shows adding a PostExcerpt that should really be in a separate file, but in this case it's a separate component which would make it easy to extract later:
 
 ```js
 const PostExcerpt = ({ post }) => {
@@ -504,24 +504,30 @@ export const PostsList = () => {
 };
 ```
 
-There is an error from the fetch:
+### Fetching error
+
+After the changes for this section there is an error from the fetch when running the app:
 
 ```Unexpected token '<', "<!DOCTYPE "... is not valid JSON```
 
 In the network tab, headers sections it shows:
 
+```err
 Request URL: http://localhost:3000/fakeApi/posts
 Request Method: GET
 Status Code: 304 Not Modified
 Preview: You need to enable JavaScript to run this app.
+```
 
-This is a pretty new error.  I didn't have an issue like this when I went through with the vanilla Javascript code.  Why would the Typescript version cause this kind of error?  Maybe something is not being transpiled?
+This is a new error for me.  I didn't have an issue like this when I went through with the vanilla Javascript code.  Why would the Typescript version cause this kind of error?  Maybe something is not being transpiled?
 
 There are plenty of StackOverflow hits for this kind of error, such as [this](https://stackoverflow.com/questions/50286927/i-am-getting-error-in-console-you-need-to-enable-javascript-to-run-this-app-r) which recommends putting this in the package.json: ```"proxy": "http://localhost:3000",```.  But then the error is slightly different.
 
+```err
 Request URL: http://localhost:3000/fakeApi/posts
 Request Method: GET
 Status Code: 431 Request Header Fields Too Large
+```
 
 What we should get, as seen in the [live demo here](https://codesandbox.io/s/github/reduxjs/redux-essentials-example-app/tree/checkpoint-3-postRequests/?from-embed) is an array of posts like this:
 
@@ -530,7 +536,7 @@ What we should get, as seen in the [live demo here](https://codesandbox.io/s/git
     "id": "Z9SIaQsvAdrzwvf5UlNLj",
     "title": "soluta facere neque",
     "date": "2023-03-09T00:27:20.943Z",
-    "content": "Sequi sint molestias hic ad iure. Aspernatur officia eveniet hic qui exercitationem quis omnis minus et. Id maiores aut. Consequuntur molestias asperiores aut dolores natus. Sit facere est et dolores.\n \rLibero aut nihil enim. Voluptas dolores et. Sed a eveniet praesentium atque. Est natus et accusantium error odio eligendi esse exercitationem.\n \rNatus libero consequatur vitae reiciendis ab. Aliquam nemo qui alias autem eum. Dolorem aspernatur iste voluptatibus in sunt. Sunt non recusandae qui sint. Dolor totam non. Inventore laudantium cumque quae voluptatem qui.",
+    "content": "Sequi sint molestias hic ad iure ... voluptatem qui.",
     "reactions": {
         "id": "LTo_Sq0uInSqw2ivYOgtT",
         "thumbsUp": 0,
@@ -545,7 +551,7 @@ What we should get, as seen in the [live demo here](https://codesandbox.io/s/git
 
 It's time to consider that the fake api which is written in Javascript might not be working in our Typescript setting.
 
-Check out this file: src\api\server.js
+Check out this file: ```src\api\server.js```
 
 Changing that file extension to .ts reveals a nightmare of problems, starting with the first line such as:
 
@@ -565,9 +571,11 @@ An answer on [this StackOverflow question](https://stackoverflow.com/questions/7
 
 Status Code: 431 Request Header Fields Too Large
 
-It would be nice to have a simple solution like this.  Another thing I thought of would be to create a vanilla node.js app to run the server and client.
+It would be nice to have a simple solution like this, but it doesn't work.
 
-It would have been nice if I had thought about this problem before I started this whole Typescript conversion project.
+Another thing I thought of would be to create a vanilla node.js app to run the server and client.
+
+It would also have been nice if I had thought about this problem before I started this whole Typescript conversion project.
 
 Just trying the above npm command results in:
 
@@ -578,7 +586,7 @@ npm ERR! 404 Not Found - GET https://registry.npmjs.org/@types%2fmsw - Not found
 
 I'm not going to lie, this is a big unexpected problem.
 
-There are three APIs needed:
+These are APIs the app depends on:
 
 ```txt
 /fakeApi/posts GET
@@ -593,24 +601,24 @@ There are three APIs needed:
 
 Quite a bit of work there no matter what we do.
 
-The thing is, this is all about async data fetching with Typescript.  I could create a simple [Next.js](https://docs.nestjs.com/) backend for this app pretty easily.
+The thing is, this is all about async data fetching with Typescript.  I *could* create a simple [Next.js](https://docs.nestjs.com/) backend for this app pretty easily.
 
-I have an old Node.js app that I would like to upgrade, so it's not a bad idea.
+I have an old Node.js app that I would like to upgrade, so it's not a bad idea getting some practice in for that.
 
-I'm also interested in [MACH architecture](https://devops.com/introduction-to-mach-architecture/), which means a cloud based db solution.
+I'm also interested in [MACH architecture](https://devops.com/introduction-to-mach-architecture/), which means a cloud based db solution like a hosted database.
 
-MACH stands for:
+FYI, MACH stands for:
 
 - Microservices
 - API-first
 - Cloud-native
 - Headless
 
-It's pretty vague, and I'm wondering if Nest.js and say a Mongo db deployed on some free services fits with that?  We have our API, and just want crud functions to support it.
+It's pretty vague, and I'm wondering if Nest.js and say a Mongo db deployed on some free cloud services fits in with MACH.  We have our API, and just want CRUD functions to support it.
 
 Since we're in to Typescript here, it's not a bad idea.  [Nest](https://docs.nestjs.com/techniques/database) *uses TypeORM because it's the most mature Object Relational Mapper (ORM) available for TypeScript. Since it's written in TypeScript, it integrates well with the Nest framework.*
 
-The options for going forward with this article then would be:
+So as it is the options for going forward with this article then would be:
 
 1. Use .js files in a .ts project.
 2. Convert server.js and client.ts to .ts.
@@ -624,13 +632,169 @@ It was very nice for the maintainer [Mark Erikson](https://github.com/markerikso
 
 *I actually did recently make the decision to convert the entire "Essentials" tutorial to be TS-first.  However, I don't yet have any idea when I'll be able to spend the time to do that :) I am kinda confused on the request error you're describing. That doesn't seem anything that would be related to TS at all - that's some kind of a request/URL mismatch.*
 
-In the meantime, I decided to bite the bullet and create my own Typescript backend which can be used with the project.  Since I would eventually like to deploy the app after some changes, it can be used later for that.
+In the meantime, I decided to bite the bullet, go with option #3 and create my own Typescript backend which can be used with the project.  Since I would eventually like to deploy the app after some changes, it can be used later for that.
 
 [Here is the repo](https://github.com/timofeysie/flash) and I will be creating another article about how to implement all the API calls with that when they are done.
 
 Now we can move on to the next part.
 
-### [Reducers and Loading Actions](https://redux.js.org/tutorials/essentials/part-5-async-logic#reducers-and-loading-actions)
+## [Loading Users](https://redux.js.org/tutorials/essentials/part-5-async-logic#loading-users)
+
+The next step involves fixing the fact that the posts all have "Unknown author" instead of the user name.  To fix this the app needs to fetch the users on application start.
+
+This also means that for the backend app the CRUD endpoints for a users API will have to be scaffolded.  Using Nestjs with TypeORM makes that super easy.
+
+Adding a user interface and using fetchUsers with createAsyncThunk as well as adding that action to the extraReducers to mutate the state looks like this:
+
+```js
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { client } from "../../api/client";
+import { User } from './User';
+
+const initialState: User [] = [];
+
+export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
+    const response = await client.get("/fakeApi/users");
+    return response.data;
+});
+
+const usersSlice = createSlice({
+    name: "users",
+    initialState,
+    reducers: {},
+    extraReducers(builder) {
+        builder.addCase(fetchUsers.fulfilled, (state, action) => {
+            return action.payload;
+        });
+    },
+});
+
+export default usersSlice.reducer;
+```
+
+The builder returns the action.payload directly thanks to Immer which has two possibilities here:
+
+A. mutate the existing state value (which here was an empty array)
+B. return a new result (replace the existing state completely)
+
+If we return a new value, that will replace the existing state completely with whatever we return. (Note that if you want to manually return a new value, it's up to you to write any immutable update logic that might be needed.)
+
+The tutorial points out we could use ```state.push(...action.payload)``` to mutate but here we want to replace the users with the server response.
+
+Then, in the src\index.tsx we import that action at dispatch it there.
+
+### Scaffolding the users CRUD API
+
+With the Nestjs CLI, it's as easy as this:
+
+```txt
+> nest generate resource
+? What name would you like to use for this resource (plural, e.g., "users")? users
+? What transport layer do you use? REST API
+? Would you like to generate CRUD entry points? Yes
+CREATE src/users/users.controller.ts (894 bytes)
+CREATE src/users/users.controller.spec.ts (566 bytes)
+CREATE src/users/users.module.ts (247 bytes)
+CREATE src/users/users.service.ts (609 bytes)
+CREATE src/users/users.service.spec.ts (453 bytes)
+CREATE src/users/dto/create-user.dto.ts (30 bytes)
+CREATE src/users/dto/update-user.dto.ts (169 bytes)
+CREATE src/users/entities/user.entity.ts (21 bytes)
+UPDATE src/app.module.ts (1122 bytes)
+```
+
+Then we need to edit these four files:
+
+1. posts.entity.ts
+2. posts.module.ts
+3. posts.service.ts
+4. posts.controller.ts
+
+The user interface is super simple:
+
+```js
+export interface User {
+  id: any;
+  name: string;
+}
+```
+
+The entity file looks like this:
+
+```js
+@Entity()
+export class User {
+  @ObjectIdColumn()
+  id: ObjectID;
+
+  @Column()
+  name: string;
+}
+```
+
+The ObjectIdColumn decorator will create an ID for us, so that doesn't have to be in the POST to create a user.
+
+Next the entity is imported into the user module.  It can't get any more Angular than this (Angular may well yet survive on the server):
+
+```js
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+
+@Module({
+  imports: [TypeOrmModule.forFeature([User])],
+  ...
+})
+```
+
+The service provides the CRUD framework:
+
+```js
+@Injectable()
+export class UsersService {
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: MongoRepository<User>,
+  ) {}
+
+  create(createUserDto: CreateUserDto) {
+    return this.usersRepository.save(createUserDto);
+  }
+
+  findAll() {
+    return this.usersRepository.find();
+  }
+
+  findOne(id: any) {
+    return this.usersRepository.findOne(id);
+  }
+
+  update(id: any, updateUserDto: UpdateUserDto) {
+    return this.usersRepository.update(id, updateUserDto);
+  }
+
+  remove(id: any) {
+    return this.usersRepository.delete(id);
+  }
+}
+```
+
+Again, Angular up your ying-yang.  If you think classes are gross, this may not be for you.
+
+The controller doesn't really need to be modified much at all.  Mainly the ids might be a combination of numbers and letters, so we do this:
+
+```js
+  @Get(':id')
+  findOne(@Param('id') id: any) {
+    return this.usersService.findOne(id);
+  }
+```
+
+Then Bob is a close family relative.  With [Northflank](https://northflank.com/), we just make a commit and push to the master branch and create some Postman test calls to check it once the build is done.
+
+A little house keeping such as adding some users, deleting the old posts with random ids, adding new posts with actual ids, and then we can test out the user fetch.  It all looks good, and again, Bob is part of the family.  Of course, there is a lot of magic going on behind the scenes here.  If you run into problems, well, no one knows Bob and your on your own.  That's why sometimes boilerplate code some sometimes be a good thing.
+
+## [Adding New Posts](https://redux.js.org/tutorials/essentials/part-5-async-logic#loading-users)
 
 Coming soon.
 
