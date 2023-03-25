@@ -779,7 +779,9 @@ export class UsersService {
 }
 ```
 
-Again, Angular up your ying-yang.  If you think classes are gross, this may not be for you.
+Again with the Angular.  If you think classes are gross, this option may not be for you.
+
+A note on [decorators](https://devblogs.microsoft.com/typescript/announcing-typescript-5-0/#decorators), these have actually just been added to TypeScript 5, so not a bad thing getting used to them if you're interested in Typescript.
 
 The controller doesn't really need to be modified much at all.  Mainly the ids might be a combination of numbers and letters, so we do this:
 
@@ -796,7 +798,56 @@ A little house keeping such as adding some users, deleting the old posts with ra
 
 ## [Adding New Posts](https://redux.js.org/tutorials/essentials/part-5-async-logic#loading-users)
 
-Coming soon.
+make an API call that will create the new post
+
+we send a request body like { title, content, user: userId }
+
+the server will generate an IDs date and return the completed post.
+
+```js
+export const addNewPost = createAsyncThunk(
+    "posts/addNewPost",
+    // The payload creator receives the partial `{title, content, user}` object
+    async (initialPost) => {
+        // We send the initial data to the fake API server
+        const response = await axios.get(API_URL+"/posts", initialPost);
+        // The response includes the complete post object, including unique ID
+        return response.data;
+    }
+);
+```
+
+The initialPost arg causes this error: ```Argument of type 'void' is not assignable to parameter of type 'AxiosRequestConfig<any> | undefined'.ts(2345)```
+
+The type for the dispatch looks like this:
+
+```js
+createAsyncThunk<any, void>(typePrefix: string, payloadCreator: AsyncThunkPayloadCreator<any, void, AsyncThunkConfig>, options?: AsyncThunkOptions<void, AsyncThunkConfig> | undefined): AsyncThunk<...> (+1 overload)
+```
+
+```js
+  await dispatch(
+      addNewPost({ title, content, user: userId })
+  ).unwrap();
+```
+
+Argument of type 'AsyncThunkAction<any, any, AsyncThunkConfig>' is not assignable to parameter of type 'AnyAction'.ts(2345)
+
+We already have a ThunkAction which can be used to type the dispatch like this in the store.ts file:
+
+```js
+export type AppDispatch = typeof store.dispatch;
+```
+
+It's used like this:
+
+```js
+import { ThunkAction } from "redux-thunk";
+...
+const dispatch = useDispatch<AppDispatch>();
+```
+
+There is good discussion on the official [Type Checking Redux Thunks](https://redux.js.org/usage/usage-with-typescript#type-checking-redux-thunks) guide with a more in-depth solution shown.
 
 ## Useful links
 
