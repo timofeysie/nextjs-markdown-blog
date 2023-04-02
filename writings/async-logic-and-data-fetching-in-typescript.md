@@ -601,7 +601,7 @@ These are APIs the app depends on:
 
 Quite a bit of work there no matter what we do.
 
-The thing is, this is all about async data fetching with Typescript.  I *could* create a simple [Next.js](https://docs.nestjs.com/) backend for this app pretty easily.
+The thing is, this is all about async data fetching with Typescript.  I *could* create a simple [Nestjs](https://docs.nestjs.com/) backend for this app pretty easily.
 
 I have an old Node.js app that I would like to upgrade, so it's not a bad idea getting some practice in for that.
 
@@ -859,7 +859,7 @@ In this section, [Redux Essentials, Part 6: Performance and Normalizing Data](ht
 
 - Memoize selector functions to optimize performance
 - Optimize React component rendering with Redux
-- Normalization (no duplication of data) state structure, and keeping items stored in a lookup table by item ID
+- Normalization (no duplication) of data state structure, and keeping items stored in a lookup table by item ID
 - createEntityAdapter API helps manage normalized data in a slice
 
 Feature-wise, this will include:
@@ -974,6 +974,512 @@ export const UserPage = () => {
 And then both new pages work.
 
 Next up, [Adding Notifications](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#adding-notifications).
+
+### Notifications
+
+The [Notifications Slice](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#notifications-slice) section starts off with creating the notifications directory and adding the slice:
+
+- features/notifications/notificationsSlice.js -> notificationsSlice.ts
+
+There are a few Typescript errors in the extra reducers section.
+
+```js
+extraReducers(builder) {
+    builder.addCase(fetchNotifications.fulfilled, (state, action) => {
+        state.push(...action.payload);
+        // Sort with newest first
+        state.sort((a, b) => b.date.localeCompare(a.date));
+    });
+},
+```
+
+If you mouse over the red-squiggly line over state, you will see this error: ```Argument of type 'any' is not assignable to parameter of type 'never'.ts(2345)  No quick fixes available```
+
+According to [this StackOverflow answer](https://stackoverflow.com/questions/58823346/type-any-is-not-assignable-to-type-never) by noy having an [index signature](https://www.typescriptlang.org/docs/handbook/2/objects.html#index-signatures) on the type.  The solution shown is to use a computed property name.  I've seen this syntax before but can never remember the name that they go by.  It looks like this:
+
+```js
+const newState: SettingsState = { ...state, [action.parameter]: action.value };
+```
+
+Our situation is a little different than that, so not sure how to apply that to ```...action.payload```.
+
+Since we live in a ChatGPT world at the moment, I thought it would be worth asking, and the solution it gives looks interesting:
+
+```js
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+interface Notification {
+  date: string;
+  message: string;
+}
+
+interface NotificationsState extends Array<Notification> {}
+
+const notificationsSlice = createSlice({
+  name: 'notifications',
+  initialState: [] as NotificationsState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchNotifications.fulfilled, (state: NotificationsState, action: PayloadAction<Notification[]>) => {
+      state.push(...action.payload);
+      state.sort((a, b) => b.date.localeCompare(a.date));
+    });
+  },
+});
+```
+
+The payload action type from the tool kit has been used twice already in the app.  Once in the counter slice and once in the post slice:
+
+```js
+postAdded: {
+    reducer(state, action: PayloadAction<Post>) {
+        state.posts.push(action.payload);
+    },
+    ...
+}
+```
+
+It's worth seeing if this will work.
+
+What it is suggesting is replacing this:
+
+```js
+(state, action) => { ... })
+```
+
+with this:
+
+```js
+(state: NotificationsState, action: PayloadAction<Notification[]>) => { ... })
+```
+
+The only other error then requires using the RootState for the reducer.
+
+After this however, some new errors arise in the reducer:
+
+```js
+export const fetchNotifications = createAsyncThunk(
+    "notifications/fetchNotifications",
+    async (_, { getState }) => {
+        const allNotifications = selectAllNotifications(getState());
+        const [latestNotification] = allNotifications;
+        const latestTimestamp = latestNotification
+            ? latestNotification.date
+            : "";
+        const response = await client.get(
+            `/fakeApi/notifications?since=${latestTimestamp}`
+        );
+        return response.data;
+    }
+);
+```
+
+The ```getState()``` call has this error: ```Argument of type 'unknown' is not assignable to parameter of type '{ counter: CounterState; posts: InitialState; users: User[]; notifications: never[]; }'.ts(2345)```
+
+And the ```latestNotification.date``` has this error: ```Property 'date' does not exist on type 'never'.ts(2339)```
+
+Just pasting in the fetchNotifications above to prepare ChatGPT for the prompt shows that it already understands the error that I'm about to tell it about.
+
+*It looks like the errors you're seeing may be related to the use of selectAllNotifications. This function is likely a selector that's defined using the createSelector function from the reselect library.  To fix this error, you'll need to make sure that selectAllNotifications is typed correctly. You can define a type for the return value of the selector using the ReturnType utility type from TypeScript. Here's an example:*
+
+```js
+export const fetchNotifications = createAsyncThunk<
+  Notification[],
+  void,
+  {
+    getState: () => RootState;
+  }
+>("notifications/fetchNotifications", async (_, { getState }) => {
+  const allNotifications = selectAllNotifications(getState());
+  const [latestNotification] = allNotifications;
+  const latestTimestamp = latestNotification ? latestNotification.date : "";
+  const response = await client.get(`/fakeApi/notifications?since=${latestTimestamp}`);
+  return response.data;
+});
+```
+
+That's a pretty bizarre type!  However, it gives a new error: ```ype '{ getState: () => { counter: CounterState; posts: InitialState; users: User[]; notifications: never[]; }; }' has no properties in common with type 'AsyncThunkConfig'.ts(2559)```
+
+It's solution to that gets even worse.  But pointing this out, ChatGPT gives us this:
+
+```js
+
+export const fetchNotifications = createAsyncThunk<
+  Notification[],
+  void,
+  {
+    state: RootState;
+  }
+>("notifications/fetchNotifications", async (_, { getState }) => {
+  const allNotifications = selectAllNotifications(getState());
+  const [latestNotification] = allNotifications;
+  const latestTimestamp = latestNotification ? latestNotification.date : "";
+  const response = await client.get(`/fakeApi/notifications?since=${latestTimestamp}`);
+  return response.data;
+});
+```
+
+Now we only have the error on the .date.  After a bit more back and forth with ChatGPT, it ends up producing a more simplified version of the above.  I created a specific commit to preserve the recommended changes [here](https://github.com/timofeysie/redux-typescript-example/commit/db980347e7f7ad8147497dd1f660cbe268dcf5f5).
+
+There are now two interfaces:
+
+```js
+interface Notification {
+    id: any;
+    user: string;
+    date: string;
+    message: string;
+}
+
+export type AsyncThunkConfig = {
+    state: RootState;
+    rejectValue: {
+        error: Error;
+    };
+    extra: {
+        jwt: string;
+    };
+};
+```
+
+This:
+
+```js
+const allNotifications = selectAllNotifications(getState());
+```
+
+becomes this:
+
+```js
+const allNotifications = (getState() as RootState).notifications;
+```
+
+This:
+
+```js
+initialState: [],
+```
+
+becomes this:
+
+```js
+const allNotifications = (getState() as RootState).notifications;
+```
+
+Only time will tell if this will work, because first the backend CRUD actions for notifications will have to go in, and the feature needs to go into the UI.
+
+Here is the fetch post thunk:
+
+```js
+export const fetchPosts: any = createAsyncThunk(
+    "posts/fetchPosts",
+    async () => {
+        const response = await axios.get(API_URL+"/posts");
+        return response.data;
+    }
+);
+```
+
+Here again in the fetch notifications thunk:
+
+```js
+export const fetchNotifications = createAsyncThunk(
+    "notifications/fetchNotifications",
+    async (_, { getState }) => {
+        const allNotifications = (getState() as RootState).notifications;
+        const [latestNotification] = allNotifications;
+        const latestTimestamp = latestNotification
+            ? latestNotification.date
+            : "";
+        const response = await client.get(
+            `/fakeApi/notifications?since=${latestTimestamp}`
+        );
+        return response.data;
+    }
+);
+```
+
+Quite a but going on there.  There is an in-depth discussion of the second argument to our payload creator in fetchNotifications thunk which is a thunkAPI object that can contain *several useful functions and pieces of information*.  Have a read about that [here](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#thunk-arguments) if you want.
+
+### The notifications list
+
+Next we add a new <NotificationsList> component.  No Typescript specific changes are needed here apparently.
+
+When we add the link to the nav bar, there is some change needed.
+
+```js
+const fetchNewNotifications = () => {
+    dispatch(fetchNotifications());
+};
+```
+
+ChatGPT says: *To resolve this error, you can add a type assertion to the dispatch() call to let TypeScript know that you are certain that fetchNotifications() returns an AnyAction:*
+
+```js
+const fetchNewNotifications = () => {
+    dispatch(fetchNotifications() as any);
+};
+```
+
+Interesting to see it recommend the ```any```, but it's OK with me at this point to get on with it.
+
+Next, add a link to the App.tsx, which again looks a little different from the DOM router version 6:
+
+```js
+<Route path="/notifications" element={<NotificationsList />} />
+```
+
+This is the end of the section for Javascript, but for us, we need to add the CRUD operations to the back end.
+
+For now that can go [in the backend repo README](https://github.com/timofeysie/flash).
+
+You can find the full changes done in [this commit](https://github.com/timofeysie/flash/commit/c9d5ce28dc528f4b0aea81c13ca51a7b35a21568).
+
+And the fetch notifications works on the first go.  I must be getting the hang of this.
+
+The messages keep getting added to the list on each fetch, but I think making sure that doesn't happen is coming up later in this section.
+
+### [Showing New Notifications](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#showing-new-notifications)
+
+Here we implement a feature to show the count of unread notifications as a badge on the notifications tab in the navbar, and display new notifications in a different color.
+
+Just when the notifications CRUD API was working fine, now we need to add these two members to support this functionality:
+
+```js
+read: boolean;
+isNew: boolean;
+```
+
+Shouldn't be much of an issue.  I think we just have to update the entity file.
+
+*Our fake API is already sending back the notification entries with isNew and read fields, so we can use those in our code.*
+
+I actually don't see this is the [live app](https://codesandbox.io/s/github/reduxjs/redux-essentials-example-app/tree/checkpoint-4-entitySlices/?from-embed) linked to at the end of the tutorial.
+
+This is what I see being returned:
+
+```json
+{
+    "id": "5lCcHekrHiakOAVjnp_kF",
+    "date": "2023-04-01T05:13:44.982Z",
+    "message": "says hi!",
+    "user": "fK8j7R5hGgmSKMIJsRXKH"
+}
+```
+
+Not sure what to think, so just move on with the tutorial.
+
+There are no changes needed when updating the allNotificationsRead selector.
+
+The next issue is when adding the selector to the NotificationsList component.
+
+```js
+import classnames from "classnames";
+```
+
+Classnames has not been used before in the app, so causes this error: ```Cannot find module 'classnames' or its corresponding type declarations.ts(2307)```.
+
+This [npm package](https://www.npmjs.com/package/classnames) is described as a *simple JavaScript utility for conditionally joining classNames together.*
+
+This article is about Redux, but as a front end dev we should never avoid styling issues.  It's used like this:
+
+```js
+const notificationClassname = classnames('notification', {
+  new: notification.isNew
+})
+```
+
+There is one more issue with the changes from this section.  The allNotificationsRead action has a TS error.
+
+```js
+useLayoutEffect(() => {
+    dispatch(allNotificationsRead());
+});
+```
+
+There error is: ```Expected 1 arguments, but got 0.ts(2554)  createAction.d.ts(123, 6): An argument for 'payload' was not provided.```
+
+To solve this we need a type after the method, but we don't need one.  
+
+```js
+ allNotificationsRead(state, action) { ... }
+```
+
+The action is not being used and can be removed.
+
+```js
+ allNotificationsRead(state) { ... }
+```  
+
+My notes about the ```useLayoutEffect``` hook say it is run before the browser updates the screen and is used to avoid the flashing of old data.
+
+But the tutorial says this: *The <NotificationsList> component will mount, and the useLayoutEffect callback will run after that first render and dispatch allNotificationsRead.*
+
+The [official docs say](https://react.dev/reference/react/useLayoutEffect) *useLayoutEffect is a version of useEffect that fires before the browser repaints the screen* which matches my understanding.  It also points out a pitfall: *useLayoutEffect can hurt performance. Prefer useEffect when possible.*
+
+It's part of the discussion about the issue that when you select hit the refresh notifications button, the list of notifications duplicates.
+
+The situation is described like this: *Our notificationsSlice will handle that by updating the notification entries in the store. This creates a new state.notifications array containing the immutably-updated entries, which forces our component to render again because it sees a new array returned from the useSelector, and the useLayoutEffect hook runs again and dispatches allNotificationsRead a second time. The reducer runs again, but this time no data changes, so the component doesn't re-render.*
+
+One solution to this is to split the dispatch logic once when the component mounts, and again if the notifications array size changes.
+
+But the approach in the book is that nothing can to happen as a valid action for a reducer.
+
+The last part then shows adding a notifications badge for unread messages.  This doesn't fix the duplication issue.
+
+And I should also point out at this state that since introducing the backend Nextjs/TypeOrm/Mongo CRUD API, the posts are also duplicated each time the app loads the list.
+
+This will only happens in dev mode. If the app is deployed, it will not happen.  Or, we could remove the strict mode ```<React.StrictMode>``` from the index.tsx.  But I have a feeling we are going to get another Redux lesson to solve this.
+
+If you remember, one of the points covered in part 6 is *Normalization (no duplication) of data state structure, and keeping items stored in a lookup table by item ID*.  That sounds like what we needs.
+
+In the [Improving Render Performance](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#improving-render-performance)
+section next, we see the use of the [Redux Developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) profiler tab to show that the <UserPage> re-renders when the notifications button is triggered.  However, it doesn't read any notifications.
+
+  const postsForUser = useSelector code:
+
+```js
+const postsForUser = useSelector(state => {
+  const allPosts = selectAllPosts(state)
+  return allPosts.filter(post => post.user === userId)
+})
+```
+
+The circular logic here goes:
+
+- useSelector will re-run every time an action is dispatched and forces a re-render if for new values.
+- calling filter() inside of our useSelector hook means that useSelector always returns a new array reference
+- so the component will re-render after every action even if the posts data hasn't changed
+
+The answer to this is given in the [Memoizing Selector Functions](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#memoizing-selector-functions) section.
+
+Memoization is described here as a way to save a previous set of inputs and the calculated result, and if the inputs are the same, return the previous result instead of recalculating it again.
+
+My notes on ```useMemo``` say:
+
+- it only runs when one of its dependencies update
+- improves performance
+- used for values such as objects or arrays
+- Primitives that require a minimal computation don't need to be memoized since they are easily comparable
+
+The article however shows that the toolkit has ```createSelector``` function which generates memoized selectors by using the Reselect library.
+
+The change then goes at the end of the post selector file:
+
+```js
+export const selectPostsByUser = createSelector(
+  [selectAllPosts, (state, userId) => userId],  // <-- input selector functions
+  (posts, userId) => posts.filter(post => post.user === userId) // <-- output selector function
+)
+```
+
+What the input selectors return becomes the arguments for the output selector.
+
+In this case we:
+
+- reuse the existing selectAllPosts selector to extract the posts array.
+- the output selector takes posts and userId, and returns the filtered array of posts for just that user.
+- it will only re-run the output selector if either posts or userId has changed
+
+So in the user page, this:
+
+```js
+const postsForUser = useSelector((state: RootState) => {
+    const allPosts = selectAllPosts(state);
+    return allPosts.filter((post) => post.user === userId);
+});
+```
+
+Becomes this:
+
+```js
+const postsForUser = useSelector((state: RootState) =>
+    selectPostsByUser(state, userId)
+);
+```
+
+However, with this change, I don't see the same effect in the dev tools profiler that is discussed in the app.  There are a few extra layers such as
+
+- Provider
+- ReactRedux.Provider
+- BrowserRouter
+- Router
+- Navigation.Provider
+- Location.Provider
+- App
+
+The articles only shows
+
+- Provider
+- ReactRedux.Provider
+- App
+
+I'm not sure if the router version, React or Redux account for these changes.  It's been about two years since this tutorial was written, so hard to tell if this particular detail is still relevant.  But worth thinking about understanding and using the createSelector in my own work.
+
+There is a section on selectors linked to [here](https://redux.js.org/usage/deriving-data-selectors).
+
+In the next section, [Investigating the Posts List](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#investigating-the-posts-list), the same kind of discussion happens for the posts lists.
+
+The problem is defined as this: *clicking a reaction button on one of the posts while capturing a React profiler trace, we'll see that not only did the <PostsList> and the updated <PostExcerpt> instance render, all of the <PostExcerpt> components rendered*
+
+This is because when a parent component renders, all child components inside of it also re-render by default.  Some options to fix this considered are:
+
+1. wrap the <PostExcerpt> component in React.memo()
+2. rewrite <PostsList> so that it only selects a list of post IDs from the store
+3. have the reducer keep a separate array of IDs for all the posts, and only modify that array when posts are added or removed
+
+This last method I am familiar with from using the Angular version of Redux, the [NgRx EntityAdapter](https://v7.ngrx.io/guide/entity/adapter).
+
+The Redux Toolkit has createEntityAdapter to take care of business.
+
+## The Entity Adapter Solution
+
+The [Normalized State Structure](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#normalized-state-structure) it discusses objects used as lookup tables, a.k.a. maps or dictionaries where item IDs are keys and objects are the values.
+
+The example used looks like this:
+
+```js
+{
+  users: {
+    ids: ["user1", "user2", "user3"],
+    entities: {
+      "user1": {id: "user1", firstName, lastName},
+      "user2": {id: "user2", firstName, lastName},
+      "user3": {id: "user3", firstName, lastName},
+    }
+  }
+}
+```
+
+As you see, the ids property is a lookup table to access the keys.  This is called normalizing data.
+
+Managing Normalized State with createEntityAdapter
+
+The [Managing Normalized State with createEntityAdapter](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#managing-normalized-state-with-createentityadapter) section shows how the function creates a ```{ ids: [], entities: {} }``` structure in the slice and automatically generates reducers and selectors to work with the data.  Nice.
+
+This all gets put into action in the next [Updating the Posts Slice](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#updating-the-posts-slice) section.
+
+We need to replace out initial state and interface in the post slice with this:
+
+```js
+interface InitialState {
+    posts: EntityState<Post>;
+    status: "idle" | "loading" | "succeeded" | "failed";
+    error: string | null;
+}
+
+const postsAdapter = createEntityAdapter({
+    sortComparer: (a: any, b: any) => b.date.localeCompare(a.date),
+});
+
+const initialState: InitialState = {
+    posts: postsAdapter.getInitialState(),
+    status: "idle",
+    error: null,
+};
+```
+
+(to be continued...)
 
 ## Useful links
 
