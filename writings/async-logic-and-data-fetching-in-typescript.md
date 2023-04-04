@@ -1453,39 +1453,179 @@ The example used looks like this:
 
 As you see, the ids property is a lookup table to access the keys.  This is called normalizing data.
 
-Managing Normalized State with createEntityAdapter
+## Managing Normalized State with createEntityAdapter
 
 The [Managing Normalized State with createEntityAdapter](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#managing-normalized-state-with-createentityadapter) section shows how the function creates a ```{ ids: [], entities: {} }``` structure in the slice and automatically generates reducers and selectors to work with the data.  Nice.
 
 This all gets put into action in the next [Updating the Posts Slice](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#updating-the-posts-slice) section.
 
-We need to replace out initial state and interface in the post slice with this:
+We need to replace out initial state and interface in the post slice.  After reading the official "Usage with Tyescript" docs about [Typing createEntityAdapter](https://redux.js.org/usage/usage-with-typescript#typing-createentityadapter), I confirmed all that needs to change: *Typing createEntityAdapter only requires you to specify the entity type as the single generic argument.*
+
+So the Post type should be all that is needed:
 
 ```js
-interface InitialState {
-    posts: EntityState<Post>;
-    status: "idle" | "loading" | "succeeded" | "failed";
-    error: string | null;
-}
-
-const postsAdapter = createEntityAdapter({
-    sortComparer: (a: any, b: any) => b.date.localeCompare(a.date),
+const postsAdapter = createEntityAdapter<Post>({
+    sortComparer: (a, b) => b.date.localeCompare(a.date),
 });
 
-const initialState: InitialState = {
-    posts: postsAdapter.getInitialState(),
+const initialState = postsAdapter.getInitialState({
     status: "idle",
     error: null,
-};
+});
 ```
 
-(to be continued...)
+But there are a number of errors now in other parts of the file, such as this:
+
+```js
+const postEntity = existingPost(state);
+```
+
+There are actually three errors on the existingPost function:
+
+- This expression is not callable.  Type 'WritableDraft<Post>' has no call signatures.ts(2349)
+- Cannot invoke an object which is possibly 'undefined'.ts(2722)
+- 'existingPost' is possibly 'undefined'.ts(18048)
+
+I think this is a problem with the highlighting in the example code.  That part should be removed, and the whole snipped should be this:
+
+```js
+const existingPost = state.entities[postId];
+if (existingPost) {
+  existingPost.reactions[reaction]++
+}
+```
+
+Isn't it nice to see the reducer directly look up the right posts by its IDs instead of having to loop over the old posts array.
+
+But there are still a few more issues to resolve.
+
+```js
+reducer(state, action: PayloadAction<Post>) {
+  state.posts.push(action.payload);
+},
+```
+
+But again this error: *Property 'posts' does not exist on type 'WritableDraft<EntityState<Post> & { status: string; error: null; }>'.ts(2339)*
+
+```js
+reducer(state: Draft<EntityState<Post>>, action: PayloadAction<Post>) {
+  state.posts.push(action.payload);
+},
+```
+
+This finally works, using the immer ```product``` function and explicitly typing the draftState parameter of the produce function as an object with a posts property that's an array of Post objects.
+
+```js
+reducer(state, action: PayloadAction<Post>) {
+  return produce(state, (draftState: { posts: Post[] }) => {
+    draftState.posts.push(action.payload);
+  });
+},
+
+export const selectAllPosts = (state: RootState) => state.posts.posts;
+```
+
+Property 'posts' does not exist on type 'WritableDraft<EntityState<Post> & { status: string; error: null; }>'.ts(2339)
+
+Apply the same fix here:
+
+```js
+export const selectAllPosts = (state: { posts: { posts: Post[] } }) => state.posts.posts;
+```
+
+The last error on the page comes from this:
+
+```js
+export const selectPostById = (state: RootState, postId: string) =>
+  state.posts.posts.find((post) => post.id === postId);
+```
+
+Two errors here, the first on the second .posts: *Property 'posts' does not exist on type 'WritableDraft<EntityState<Post> & { status: string; error: null; }>'.ts(2339)*
+
+And this on the (post) arg: *Parameter 'post' implicitly has an 'any' type.ts(7006)*
+
+```js
+export const selectPostById = (state: { posts: { posts: Post[] } }, postId: string) =>
+  state.posts.posts.find((post: Post) => post.id === postId);
+```
+
+We explicitly type the state parameter as an object with a posts property that's also an object with a posts property that's an array of Post objects. We're also adding a type annotation for the post parameter in the find method to tell TypeScript that it's a Post object.  I actually don't think this is the best way to do this.  It might be possible to update the root state to handle this situation, or use an action instead of a selector.  But it works, and this is all about learning about Typescript, so let's move on.
+
+The last change is to replace these functions:
+
+```js
+export const selectAllPosts = (state: { posts: { posts: Post[] } }) => state.posts.posts;
+
+export const selectPostById = (state: { posts: { posts: Post[] } }, postId: string) =>
+  state.posts.posts.find((post: Post) => post.id === postId);
+```
+
+Then export the customized selectors for this adapter using `getSelectors`
+
+```js
+export const {
+    selectAll: selectAllPosts,
+    selectById: selectPostById,
+    selectIds: selectPostIds
+    // Pass in a selector that returns the posts slice of state
+  } = postsAdapter.getSelectors(state => state.posts)
+```
+
+However, there is an odd error on the state.posts: *'state' is of type 'unknown'.ts(18046)*
+
+This just requires using the old root state adapter:
+
+```js
+postsAdapter.getSelectors((state: RootState) => state.posts)
+```
+
+And with this, the app compiles, and the duplicates are gone from the posts list.  Outstanding!
+
+Along with the sorting abilities, entity adapters are really useful.  It's kind of like using a structured database on the frontend.
+
+Next we update the posts lists to use an id instead of the post object prop.
+
+We get a lot of these errors: *'post' is possibly 'undefined'.ts(18048)*
+
+Optional chaining is the easy way out:
+
+```js
+<h3>{post?.title}</h3>
+```
+
+BUt passing the object as a prop to a child component can't use that cheat:
+
+```js
+<ReactionButtons post={post} />
+```
+
+The errors here are: *Type 'Post | undefined' is not assignable to type 'Post'. Type 'undefined' is not assignable to type 'Post'.ts(2322) ReactionButtons.tsx(14, 5): The expected type comes from property 'post' which is declared here on type 'IntrinsicAttributes & Props'*
+
+This will fix that, but looks pretty hacky:
+
+```js
+{post && <ReactionButtons post={post} />}
+```
+
+Now we are getting ordered posts like this:
+
+```js
+const orderedPostIds = useSelector(selectPostIds);
+...
+content = orderedPostIds.map((postId) => (
+    <PostExcerpt key={postId} postId={postId} />
+));
+```
+
+Also, when clicking a reaction button only that one component re-rendered.
+
+Next up [Converting Other Slices](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#converting-other-slices)
 
 ## Useful links
 
 Here are some links from the tutorial that I found useful when working on this article.
 
-- [Redux docs: Usage with TypeScript](https://redux.js.org/recipes/usage-with-typescript): Examples of how to use Redux Toolkit, the Redux core, and React Redux with TypeScript
+- [Redux docs: Usage with TypeScript](https://redux.js.org/recipes/usage-with-typescript): Examples of how to use Redux Toolkit, the Redux core,and React Redux with TypeScript
 - [Redux Toolkit docs: TypeScript Quick start](https://redux-toolkit.js.org/tutorials/typescript): shows how to use RTK and the React-Redux hooks API with TypeScript
 - [React+TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet): a comprehensive guide to using React with TypeScript
 - [React + Redux in TypeScript Guide](https://github.com/piotrwitek/react-redux-typescript-guide): extensive information on patterns for using React and Redux with TypeScript
