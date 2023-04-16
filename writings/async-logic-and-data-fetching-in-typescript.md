@@ -1928,6 +1928,86 @@ Expected 1 arguments, but got 0.ts(2554) createAction.d.ts(123, 6): An argument 
 
 We need to remove the action argument to the reducer like this: ```allNotificationsRead(state)```
 
+The last error is once again the map issue: *Property 'map' does not exist on type 'EntityState<Notification>'.ts(2339)*
+
+We have to use the ids now to get the notifications.
+
+Without thinking about changing the EntityAdapter this time, the simple solution is to handle the case where notification is undefined by returning null or any default value or appropriate handling for notifications.  We also had to deal with possible null dates to avoid this error: ```Property 'date' does not exist on type 'string'.ts(2339)```
+
+```js
+    const notificationIds = Object.keys(notifications.entities);
+
+    const renderedNotifications = notificationIds.map((notificationId) => {
+        const notification = notifications.entities[notificationId];
+        if (!notification) {
+            // handle case where notification is undefined
+            return null; // or any default value or appropriate handling
+        }
+
+        const date = notification?.date ? parseISO(notification.date) : null;
+        const timeAgo = date ? formatDistanceToNow(date) : null;
+```
+
+### the Navbar
+
+Running the app now, we see some more issues.
+
+```err
+Compiled with problems:X
+ERROR in src/app/Navbar.tsx:11:50
+TS2339: Property 'filter' does not exist on type 'EntityState<Notification>'.
+     9 |     const dispatch = useDispatch();
+    10 |     const notifications = useSelector(selectAllNotifications);
+  > 11 |     const numUnreadNotifications = notifications.filter((n) => !n.read).length;
+       |                                                  ^^^^^^
+    12 |
+    13 |     const fetchNewNotifications = () => {
+    14 |         dispatch(fetchNotifications() as any);
+
+ERROR in src/app/Navbar.tsx:11:58
+TS7006: Parameter 'n' implicitly has an 'any' type.
+     9 |     const dispatch = useDispatch();
+    10 |     const notifications = useSelector(selectAllNotifications);
+  > 11 |     const numUnreadNotifications = notifications.filter((n) => !n.read).length;
+       |                                                          ^
+    12 |
+    13 |     const fetchNewNotifications = () => {
+    14 |         dispatch(fetchNotifications() as any);
+```
+
+
+## Wrapping up
+
+And with that, we are done with part 6.  It's been a long ride.  Unit tests fell along the wayside, but the core purpose to explore this example app using Typescript has been a great benifit.  I hope whoever reads this also gets some benifit from it.
+
+### The futuere of the Redux essentials app
+
+During the writing of this article, the situation with React has changed a bit.  Create React App as a starting point is no longer supported in the [new official docs](https://react.dev/learn/start-a-new-react-project). 
+
+The official options are now:
+
+- Next.js
+- Remix
+- Gatsby
+- Expo (for native apps)
+
+Instead, Next.js is now the preferred method for getting started.
+
+### Using Nextjs with Redux
+
+[This question](https://stackoverflow.com/questions/60626451/is-using-redux-with-next-js-an-anti-pattern) says *if you have a custom App with getInitialProps then the Automatic Static Optimization that Next.js provides will be disabled for all pages.*
+
+The solution provided there is to create a Redux Provider as a wrapper to wrap components so the redux context will be automatically initialized and provided within that component.
+
+I have updated my [issue](https://github.com/reduxjs/redux-essentials-example-app/issues/51) regarding the official Javascript version of this app and it's future with Typescript to see what Mark Erickson is thinking about the future of this project.  Stay tuned for an answer there.
+
+## What's next?
+
+The Redux Essentials, Part 7 & 8 are [RTK Query Basics](https://redux.js.org/tutorials/essentials/part-7-rtk-query-basics)
+ and [RTK Query Advanced Patterns](https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced).
+
+Give the length of this piece, the RTK Query in Typescript changes can be discussed in another aticle, so stay tuned for that as well.
+
 ## Useful links
 
 Here are some links from the tutorial that I found useful when working on this article.
@@ -1939,4 +2019,10 @@ Here are some links from the tutorial that I found useful when working on this a
 
 ## Summary
 
-Using selectors can help to hide implementations in the state.  Using them in Typescript is pretty easy.  Use the hashtag #ReduxEssentialsTypescript to reach and start a discussion.
+Using selectors can help to hide implementations in the state.  Using them in Typescript is pretty easy.
+
+Using entity adapters powers up a Redux app with and can solve re-render issues and duplications in lists as well assiting in sorting the lists.  They need a only a little bit more effort to use them with Typescript.
+
+The createEntityAdapter function provided by the Redux Tooklit automatically generates reducers and selectors to work with the data using ids in a lookup table to access the keys which is called normalizing data.
+
+Use the hashtag #ReduxEssentialsTypescript to reach and start a discussion.
