@@ -1619,7 +1619,314 @@ content = orderedPostIds.map((postId) => (
 
 Also, when clicking a reaction button only that one component re-rendered.
 
-Next up [Converting Other Slices](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#converting-other-slices)
+### Applying the entity adapter to other features
+
+Next up [Converting Other Slices](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#converting-other-slices) does the same thing for the users feature as was done to the posts list.
+
+We ```import createEntityAdapter```, replace the initialState with ```usersAdapter.getInitialState()``` and use ```const usersAdapter = createEntityAdapter()``` to replace the ```extraReducers(builder) { builder.addCase(fetchUsers.fulfilled, usersAdapter.setAll)}``` to fetch all the users.
+
+The only thing that needs to be done is to type the store.  Here we get two reducers for one:
+
+```js
+export const { selectAll: selectAllUsers, selectById: selectUserById } =
+  usersAdapter.getSelectors((state: RootState) => state.users)
+``` 
+
+#### Typing the user
+
+After a few weeks of not working on this project, running it now shows the following errors:
+
+```txt
+Compiled with problems:X
+ERROR in src/features/notifications/NotificationsList.tsx:23:43
+TS2571: Object is of type 'unknown'.
+    21 |         const date = parseISO(notification.date);
+    22 |         const timeAgo = formatDistanceToNow(date);
+  > 23 |         const user = users.find((user) => user.id === notification.user) || {
+       |                                           ^^^^
+    24 |             name: "Unknown User",
+    25 |         };
+    26 |
+```
+
+Trying to type the user causes an even larger error:
+
+```js
+const user= users.find((user: User) => user.id === notification.user) || {
+  name: "Unknown User",
+};
+```
+
+```err
+No overload matches this call.
+  Overload 1 of 2, '(predicate: (this: void, value: unknown, index: number, obj: unknown[]) => value is unknown, thisArg?: any): unknown', gave the following error.
+    Argument of type '(user: User) => boolean' is not assignable to parameter of type '(this: void, value: unknown, index: number, obj: unknown[]) => value is unknown'.
+      Types of parameters 'user' and 'value' are incompatible.
+        Type 'unknown' is not assignable to type 'User'.
+  Overload 2 of 2, '(predicate: (value: unknown, index: number, obj: unknown[]) => unknown, thisArg?: any): unknown', gave the following error.
+    Argument of type '(user: User) => boolean' is not assignable to parameter of type '(value: 
+    unknown, index: number, obj: unknown[]) => unknown'.
+      Types of parameters 'user' and 'value' are incompatible.
+        Type 'unknown' is not assignable to type 'User'.ts(2769)
+```
+
+I hate this kind of error.  It makes doing ```(user: any)``` an appealing option.  But since this is a learning experience, lets figure this out.  To save time I asked ChatGPT first.
+
+*The error you're encountering is due to the find method not being able to infer the type of the user parameter based on the type of elements in the users array. You can resolve this error by providing a type assertion for the users array, like this:*
+
+```js
+const user = (users.find((user: User) => user.id === notification.user) as User) || {
+  name: "Unknown User",
+};
+```
+
+*By using the type assertion (user: User), you're telling TypeScript that the elements in the users array are of type User, and therefore the user parameter in the find method is also of type User. This will allow TypeScript to correctly infer the type of the user variable and resolve the error. However, please note that using type assertions should be done with caution, as it bypasses TypeScript's type checking and may result in runtime errors if the assumption about the type is incorrect. It's always best to ensure that the type information is accurate and consistent throughout your code to avoid such issues.*
+
+I still don't understand why I have to type user twice here, and even then it bypasses TypeScript's type checking.
+
+I specify that I do not want to bypass typechecking, and Chat throws up this:
+
+```js
+const user = users.find((user): user is User => user.id === notification.user) || defaultUser;
+```
+
+However, this still causes this error: *'user' is of type 'unknown'.ts(18046)*
+
+Pointing this out and getting the everpresent "I apologize for the confusion", we get to this:
+
+```js
+const user = users.find((user): user is User => (user as User).id === notification.user);
+```
+
+It works, but what kind of syntax is "user is User"?  "User as User" I understand.  This is a bit comical.  Luckily I am being paid to use Typescript, so I wont complain.
+
+Another similar error now is this:
+
+```js
+  const author = useSelector((state: RootState) =>
+    state.users.find((user: User) => user.id === userId)
+  );
+```
+
+Causes this error: *roperty 'find' does not exist on type 'EntityState<unknown>'.ts(2339)*
+
+```txt
+Argument of type 'EntityState<unknown>' is not assignable to parameter of type '{ counter: CounterState; posts: WritableDraft<EntityState<Post> & { status: string; error: null; }>; users: EntityState<unknown>; notifications: Notification[]; }'.
+  Type 'EntityState<unknown>' is missing the following properties from type '{ counter: CounterState; posts: WritableDraft<EntityState<Post> & { status: string; error: null; }>; users: EntityState<unknown>; notifications: Notification[]; }': counter, posts, users, notificationsts(2345)
+No quick fixes available
+```
+
+ChatGPT suggests this, which doesn't work either:
+
+```js
+type UsersState = EntityState<User>;
+
+// Use the `createSelector` function to define a selector for fetching user by id
+export const selectUserById = (state: RootState, userId: string): User => {
+    return selectUserById(state.users, userId);
+};
+
+export const selectPostsByUser = (state: RootState, userId: string) => {
+    const user = selectUserById(state, userId);
+    if (user) {
+        return selectAllPosts(state).filter((post) => post.user === user.id);
+    }
+    return [];
+};
+```
+
+After getting fed up with ChatGPT, I went back to StackOverflow and found this which works to solve the ```'user' is of type 'unknown'.ts(18046)``` error on user.name:
+
+```html
+<h2>{(user as User).name}</h2>
+```
+
+The thing I like about StackOverflow is the attitue to answers there.  As an old school dev, I remember the days of RTFM answers (look it up if you don't know that acronym).  StackOverflow pioneerd the attitude of finding the best answer to each question.  They let the users decide what the best answer is.  In the face of ChatGPT, it still does well.
+
+However, it doesn't help with this one: 
+
+
+```export const PostAuthor = ({ userId }: PostAuthorProps) => {
+  const author = useSelector((state: RootState) =>
+    state.users.find((user: User) => user.id === userId)
+  );
+```
+
+The error: *Property 'find' does not exist on type "'EntityState<" unknown>'.ts(2339) site:stackoverflow.com*.  No results at all that include ```EntityState```.
+
+I can't find any mention of EntityState in any of the useful links section below either.  So much for doing it by the book.
+
+I could use this to fix that error: ```state: any```.  That indicates that maybe RootState needs some work.
+
+The same error appears here:
+
+```js
+const usersOptions = users.map((user) => (
+```
+
+There is no RootState used there, but ```users``` is coming from the store like this: ```const users = useSelector((state: RootState) => state.users);```
+
+There we go.  ```RootState``` again.  Time for a deep dive.
+
+In the [Define Root State and Dispatch Types]() section of *Usage with Typescript* officially it's shown as created like this:
+
+```export type RootState = ReturnType<typeof store.getState>;```
+
+This is *inferring these types from the store itself*.
+
+The mouseover info for it shows this:
+
+```js
+const store: ToolkitStore<{
+    counter: CounterState;
+    posts: WritableDraft<EntityState<Post> & {
+        status: string;
+        error: null;
+    }>;
+    users: EntityState<unknown>;
+    notifications: Notification[];
+}, AnyAction, [...]>
+```
+
+This is happening now because of our use of the entity adapter: ```const usersAdapter = createEntityAdapter()```.  That's why these errors weren't showing up before.  There must be a way to type the user entity state there and get rid of the unknown.  After all, the posts is typed.
+
+Posts does it like this:
+
+```js
+const postsAdapter = createEntityAdapter<Post>({
+    sortComparer: (a, b) => b.date.localeCompare(a.date),
+});
+```
+
+So then it seams we could do this:```createEntityAdapter<User>()```
+
+or this: ```createEntityAdapter<User[]>()```
+
+But no, that does not change the error.  Or at least not much: *Property 'map' does not exist on type 'EntityState<User>'.ts(2339)*
+
+If users comes from a selector.
+
+const users = useSelector((state: RootState) => state.users);
+
+There is really not much at all in the way of Typescript with EntityAdapter help.  Options here are to disable that line:
+
+// @ts-ignore: Property 'map' does not exist on type 'EntityState<User>'.ts(2339)
+
+Or use the any escape hatch:
+
+const users: any = useSelector((state: RootState) => state.users);
+
+However, both of these still result in a runtime error:
+
+dPostForm.tsx:44 Uncaught TypeError: users.map is not a function
+    at AddPostForm (AddPostForm.tsx:44:1)
+
+Even commenting out that usage results in another user related error:
+
+PostAuthor.tsx:11 Uncaught TypeError: state.users.find is not a function
+    at PostAuthor.tsx:11:1
+
+Then I go back to the tutorial trail and read this:
+
+*Our <AddPostForm> is still trying to read state.users as an array, as is <PostAuthor>. Update them to use selectAllUsers and selectUserById, respectively.*
+
+So of course, map doesn't exist anymore, as the shape of users is now:
+
+```js
+entities: {}
+ids: []
+```
+
+Posts uses the entity adapter like this:
+
+```js
+const orderedPostIds = useSelector(selectPostIds)
+...
+    content = orderedPostIds.map(postId => (
+      <PostExcerpt key={postId} postId={postId} />
+    ))
+```
+
+In the AddPostForm, all we have to do then is this:
+
+```js
+const users = useSelector(selectAllUsers)
+```
+
+Then is the PostAuthor component:
+
+```js
+const author = useSelector((state: RootState) => selectUserById(state, userId!))
+```
+
+The "!" mark there is the [non-null assertion operator](Argument of type 'string | undefined' is not assignable to parameter of type 'EntityId'.
+  Type 'undefined' is not assignable to type 'EntityId'.ts(2345)).
+
+Otherwise we would get this error: *Argument of type 'string | undefined' is not assignable to parameter of type 'EntityId'.
+  Type 'undefined' is not assignable to type 'EntityId'.ts(2345)*
+
+Lots of drama with TypeScript if you run off the rails.  It helps to take a step back and consider what it is you are trying to do and do that proplerly instead of going down the rabbit hole of looking at the error messages sometimes.
+
+### Entity adapter for the notifications
+
+The last section is [Converting the Notifications Slice](https://redux.js.org/tutorials/essentials/part-6-performance-normalization#converting-the-notifications-slice).
+
+As with the other slices, we use the ```createEntityAdapter``` and replace the initial state with version automatcially generated by it.
+
+```js
+const notificationsAdapter = createEntityAdapter({
+  sortComparer: (a, b) => b.date.localeCompare(a.date)
+})
+...
+  initialState: notificationsAdapter.getInitialState(),
+
+  allNotificationsRead(state, action) {
+      Object.values(state.entities).forEach(notification => {
+        notification.read = true
+      })
+    }
+    ...
+    extraReducers(builder) {
+    builder.addCase(fetchNotifications.fulfilled, (state, action) => {
+      notificationsAdapter.upsertMany(state, action.payload)
+      Object.values(state.entities).forEach(notification => {
+        // Any notifications we've read are no longer new
+        notification.isNew = !notification.read
+      })
+    })
+  }
+```
+
+After these changes, there is an error on this line:
+
+```js
+const [latestNotification] = allNotifications;
+```
+
+The error: *Type 'EntityState<Notification>' is not an array type.ts(2461)*
+
+I kind of gave up on this one and took the any escape hatch:
+
+```js
+        const allNotifications: any = (getState() as RootState).notifications;
+        const [latestNotification] = allNotifications;
+```
+
+It might come back to this.  I kind of think EntityAdapter needs a whole article devoted to it, as a core skill for Redux, and handling all the Typescript issues associated with it.  It takes too long to go through this whole tutorial to get to this stage, and it could be a kind of accellerated quick start into using the tool kit.
+
+The last thing to do is use the new slice reducer in the notifications list.
+
+```js
+    useLayoutEffect(() => {
+        dispatch(allNotificationsRead());
+    });
+```
+
+Causes these errors: *Calling this redux#ActionCreator with an argument will return a PayloadAction of type T with a payload of P
+
+Expected 1 arguments, but got 0.ts(2554) createAction.d.ts(123, 6): An argument for 'payload' was not provided.*
+
+We need to remove the action argument to the reducer like this: ```allNotificationsRead(state)```
 
 ## Useful links
 
