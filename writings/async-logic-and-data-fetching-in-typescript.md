@@ -1743,10 +1743,10 @@ After getting fed up with ChatGPT, I went back to StackOverflow and found this w
 
 The thing I like about StackOverflow is the attitue to answers there.  As an old school dev, I remember the days of RTFM answers (look it up if you don't know that acronym).  StackOverflow pioneerd the attitude of finding the best answer to each question.  They let the users decide what the best answer is.  In the face of ChatGPT, it still does well.
 
-However, it doesn't help with this one: 
+However, it doesn't help with this one:
 
-
-```export const PostAuthor = ({ userId }: PostAuthorProps) => {
+```js
+export const PostAuthor = ({ userId }: PostAuthorProps) => {
   const author = useSelector((state: RootState) =>
     state.users.find((user: User) => user.id === userId)
   );
@@ -1975,14 +1975,11 @@ TS7006: Parameter 'n' implicitly has an 'any' type.
     14 |         dispatch(fetchNotifications() as any);
 ```
 
+## The future of the Redux essentials app
 
-## Wrapping up
+And with that, we are done with part 6.  It's been a long ride.  Unit tests fell along the wayside, but the core purpose to explore this example app using Typescript has been a great benefit.  I hope whoever reads this also gets some benefit from it.
 
-And with that, we are done with part 6.  It's been a long ride.  Unit tests fell along the wayside, but the core purpose to explore this example app using Typescript has been a great benifit.  I hope whoever reads this also gets some benifit from it.
-
-### The futuere of the Redux essentials app
-
-During the writing of this article, the situation with React has changed a bit.  Create React App as a starting point is no longer supported in the [new official docs](https://react.dev/learn/start-a-new-react-project). 
+During the writing of this article, the situation with React has changed a bit.  Create React App as a starting point is no longer supported in the [new official docs](https://react.dev/learn/start-a-new-react-project).
 
 The official options are now:
 
@@ -1999,7 +1996,19 @@ Instead, Next.js is now the preferred method for getting started.
 
 The solution provided there is to create a Redux Provider as a wrapper to wrap components so the redux context will be automatically initialized and provided within that component.
 
-I have updated my [issue](https://github.com/reduxjs/redux-essentials-example-app/issues/51) regarding the official Javascript version of this app and it's future with Typescript to see what Mark Erickson is thinking about the future of this project.  Stay tuned for an answer there.
+I have updated my [issue](https://github.com/reduxjs/redux-essentials-example-app/issues/51) regarding the official Javascript version of this app and it's future with Typescript to see what Mark Erickson is thinking about the future of this project.
+
+As Mark is the maintainer of this example app, his view is crucial as to where we go from here.  With that in mind I will show his full reply here:
+
+*@timofeysie : yeah, I recently made up my mind to redo the "Essentials" tutorial as TS-first. Related to that, we also ought to add an official Vite RTK+TS template, and I would redo the tutorial content on top of that.*
+*Don't have time to do either of those any time soon, though - work is busy, got several conferences coming up, and all my maintainer time is focused on RTK 2.0 right now.*
+*I do not want to base the tutorial off of Next, because that adds significantly more complexity in terms of setup.*
+
+That interesting about Vite, as there is only this mention of Vite in the [official docs](hhttps://react.dev/learn/start-a-new-react-project#can-i-use-react-without-a-framework).  It comes as an aside when discussing using React without a framework, and says: *Grab react and react-dom from npm, set up your custom build process with a bundler like Vite or Parcel, and add other tools as you need them for routing, static generation or server-side rendering, and more.*
+
+So my initial thoughts are to give this a go.  Create a project similar to a create-react-app Typescript boilerplate using RTK and see how that compares with the new docs and example app once Mark and the team get around to publishing RTK 2.0.  I'm definitely looking forward to that!
+
+For a more in-depth read about starting a React app in this new age, checkout [How to start a React Project in 2023](https://www.robinwieruch.de/react-starter/) by ROBIN WIERUCH.  He says: *Vite is the clear successor of create-react-app*.
 
 ## What's next?
 
