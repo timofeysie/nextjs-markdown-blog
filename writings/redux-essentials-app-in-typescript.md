@@ -1297,6 +1297,116 @@ TS2554: Expected 2 arguments, but got 1.
 
 Even though the app should run, it's a shame that an out of date test will break it.
 
+### Expected 2 arguments, but got 1
+
+I'm going to take a minute to talk about this Typescript error before moving on, as there is not much out there to help get past this.
+
+The code:
+
+```js
+dispatch(updateMenuAction("export-png"));
+```
+
+The action definition:
+
+```js
+const chartSlice = createSlice({
+    name: "charts",
+    initialState,
+    reducers: {
+        updateMenuAction(state, action: any) {
+            state.chartAction = action.payload;
+          },
+    },
+});
+```
+
+The error:
+
+```err
+Expected 2 arguments, but got 1.ts(2554)
+index.d.ts(104, 3): An argument for 'action' was not provided.
+The API: 
+(alias) updateMenuAction(state: ChartMenuState | undefined, action: AnyAction): ChartMenuState
+import updateMenuAction
+```
+
+One solution:
+
+```js
+import { AnyAction } from 'redux';
+...
+dispatch(updateMenuAction(undefined, {type: "export-png"} as AnyAction));
+```
+
+This will compile, but throws a runtime Error:
+
+```err
+VM188:1 Uncaught Error: Actions may not have an undefined "type" property. Have you misspelled a constant?
+    at Object.performAction (<anonymous>:1:31799)
+```
+
+I'm not sure why dispatching a string is different from dispatching a boolean.  This one does work:
+
+```js
+dispatch(projectSetupValid(false));
+```
+
+```js
+projectSetupValid(state, action) {
+  state.projectForm.validSetup = action.payload;  
+},
+```
+
+Then I see this mention sagas in another error.  Not sure exactly what the context of this was, as I was trying many thing to get it to work, but I did copy the error:
+
+```js
+Actions may not have an undefined "type" property. Have you misspelled a constant?
+    at Object.performAction (<anonymous>:1:31799)
+    at A (<anonymous>:1:33672)
+    at e (<anonymous>:1:38913)
+    at index.js:20:1
+    at Object.dispatch (redux-saga-core.esm.js:1410:1)
+```
+
+The app in question (not this repo) started off with Saga's.  I introduced Thunks, which as far as I know are supposed to work side-by-side.  Possibly I have found an exception to that.
+
+Trying another approach an making a thunk action:
+
+```js
+extraReducers: (builder) => {
+    builder.addCase(updateMenuActionThunk.fulfilled, (state, action) => {
+      console.log('action', action);
+    })
+  },
+```
+
+But saw this error:
+
+```err
+Argument of type '{ manuAction: string; }' is not assignable to parameter of type 'AnyAction'.
+  Property 'type' is missing in type '{ manuAction: string; }' but required in type 'AnyAction'.ts(2345)
+```
+
+To make it work, I basically copied an action that was working and changed the name.  It still doesn't appear any different.
+
+```js
+    reducers: {
+        updateMenuAction(state, action) {
+            state.chartAction = action.payload;
+        },
+    },
+```
+
+And use it like this:
+
+```js
+const actionType = {
+    menuAction: "export-png"
+}
+dispatch(updateMenuAction(actionType));
+```
+
 ### Fixing the slice unit test
 
 The unit test has been working of incremental numbers previously.  Run the tests and you will get something like this:

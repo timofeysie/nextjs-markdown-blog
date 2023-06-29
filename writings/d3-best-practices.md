@@ -16,13 +16,25 @@ author:
 
 ## Introduction
 
+Getting started with D3 in React is easy:
+
+```shell
 npm install d3
+```
+
+However, D3 is considered to have a has a very steep learning curve.  It is a veteran library of chart visualization created at a time when the frontend world was a different place.
+
+
+https://blog.logrocket.com/introduction-to-visx/
+
 
 ### D3 API links
 
-https://d3-wiki.readthedocs.io/zh_CN/master/Scales/
+- [Scales](https://d3-wiki.readthedocs.io/zh_CN/master/Scales/)
 
-https://github.com/d3/d3/blob/main/API.md#scales-d3-scale
+- [Scales-D#](https://github.com/d3/d3/blob/main/API.md#scales-d3-scale)
+
+- [visx](https://airbnb.io/visx)
 
 ### Source articles
 
@@ -48,19 +60,19 @@ There are two basic methods for using D3 with React as discussed in the [D3 star
 
 Keep most of D3’s utility and combine it with React. The faux DOM is placed to allow D3 a virtual DOM so you can still access all of D3’s API. At the same time, React remains in control of the virtual DOM and ultimately the real DOM, allowing it to control state and transitions.
 
-2. React for the DOM and D3 for Calculations
+2. React for the DOM and D3 for Calculations (There are two different approaches for this type).
 
-There are two different approaches for this type.
+3. Use a library of visualization primitives such as Airbnb's visx
 
 #### A: D3 within React
 
-In this option we will use D3’s data-driven layouts and style but data will be passed on to React for eventual rendering. Likewise, the user input will be taken in by React, recorded in state and passed to D3 for recalculation. The tradeoff: we lose the D3 transition suit and updating but are still able to have dynamically changing charts due to React’s DOM instant updates. Let me break down two ways to do this:
+In this option we will use D3’s data-driven layouts and style but data will be passed on to React for eventual rendering. Likewise, the user input will be taken in by React, recorded in state and passed to D3 for recalculation. The tradeoff: we lose the D3 transition suit and updating but are still able to have dynamically changing charts due to React’s DOM instant updates.
 
 This method is the useEffect( ) way that is discussed in detail in the Medium article [Creating Data Visualizations with D3 and ReactJS](https://medium.com/codesphere-cloud/creating-data-visualizations-with-d3-and-reactjs-c288d7890390) published by Codesphere.
 
 #### B: Lifecycle Methods Wrapping
 
-This allows more of a modularized implementation. It’s also the approach I took for Extreme Reader. If you are already good at D3 and a beginner to React, this method allows you to take a chart or visualization with which you are purely using D3 and easily implement it in your React project by importing the JavaScript class into a React container component. The container component then wraps the visualization in its React lifecycle methods.
+This allows more of a modularized implementation. This method allows you to take a chart or visualization with which you are purely using D3 and implement in React by importing the JavaScript class into a React container component. The container component then wraps the visualization in its React lifecycle methods.
 
 ## The layered approach
 
@@ -353,3 +365,9 @@ https://mui.com/material-ui/react-card/#media
 <Card sx={{ maxWidth: 345 }}>
 
 (to be continued ...)
+
+## visx
+
+Airbnb wrote the book on coding standards for React.  They also publish their style sheet for React best practices, so that makes other things they do highly regarded in the community.
+
+Their component wrappers for D3 are top notch and really help React developers use them in a context they are familiar with.

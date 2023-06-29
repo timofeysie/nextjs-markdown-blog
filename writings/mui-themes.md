@@ -286,11 +286,33 @@ shape: {
 },
 ```
 
-### GlobalStyles component
+### Global styles component
 
-There ps://mui.com/material-ui/customization/how-to-customize/
+There are four suggested ways to [customize components](https://mui.com/material-ui/customization/how-to-customize/) in CSS.
 
-One-off customization
-Reusable component
-Global theme overrides
-Global CSS override
+1. One-off customization
+2. Reusable component
+3. Global theme overrides
+4. Global CSS override
+
+### 3. Global theme overrides
+
+File: src\config\Theme.ts
+
+```js
+    MuiToggleButton: {
+      styleOverrides: {
+        root: {
+          fontSize: '14px',
+        },
+      },
+    },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: {
+          fontSize: '14px',
+        },
+      },
+    },
+```
+

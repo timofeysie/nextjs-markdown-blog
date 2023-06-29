@@ -1993,6 +1993,8 @@ The official options are now:
 
 Instead, Next.js is now the preferred method for getting started.
 
+I can also point out that this blog is written in Next.js, as it existed three years ago using v9.4.1, whereas now Next.js 13 was recently released with many new upgrades.  I chose Next.js during a time when I was still working with Angular and wanted at least my blogging to be in React.  Creating a directory based markdown blog proved a simple solution that has worked well.  With the new changes in Next.js and it's rise to the top of the React ecosystem, it might be time to migrate my blog itself to the latest and greatest.
+
 ### Using Nextjs with Redux
 
 [This question](https://stackoverflow.com/questions/60626451/is-using-redux-with-next-js-an-anti-pattern) says *if you have a custom App with getInitialProps then the Automatic Static Optimization that Next.js provides will be disabled for all pages.*
