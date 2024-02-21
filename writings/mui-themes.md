@@ -1,6 +1,6 @@
 ---
 title: "MUI Themes"
-date: "2022-12-25"
+date: "2023-01-25"
 og:
   description: "Implementing a theme using the official React Redux example app in TypeScript"
   image: "images/Capture-react-tdd.PNG"

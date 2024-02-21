@@ -1,6 +1,6 @@
 ---
 title: "You don't need effects to transform data"
-date: "2022-12-25"
+date: "2024-02-21"
 og:
   description: "Hooks like useEffect are a complex subject.  Here I explore best practices for their use."
   image: "images/Capture-react-tdd.PNG"
@@ -103,9 +103,26 @@ A rule of state management is if something can be calculated from the existing p
 
 But what happens in the above example when the settings a triggered after the component renders?  Wont the full name then be out of date?
 
+## A Redux example of deriving data
+
+Relating to the rule above that we should derive additional values from that state whenever possible, [here is another example](https://redux.js.org/usage/deriving-data-selectors#deriving-data) of avoiding a useEffect.
+
+The example shows says: *Many times users tried to define a useEffect hook that waits for a state value to change, and then sets state with some derived value like setAllCompleted(allCompleted). Instead, that value can be derived during the rendering process and used directly, without having to save the value into state at all:*
+
+```js
+function TodoList() {
+  const [todos, setTodos] = useState([])
+
+  // Derive the data while rendering
+  const allTodosCompleted = todos.every(todo => todo.completed)
+
+  // render with this value
+}
+```
+
 ## Cascading updates
 
-It says *avoid the extra “cascading” updates*
+Back to the [You Might Not Need an Effect](https://react.dev/learn/you-might-not-need-an-effect) article, it says *avoid the extra “cascading” updates*
 
 When you update a component during rendering, React throws away the returned JSX and immediately retries rendering. To avoid very slow cascading retries, React only lets you update the same component’s state during a render. If you update another component’s state during a render, you’ll see an error. A condition like items !== prevItems is necessary to avoid loops. You may adjust state like this, but any other side effects (like changing the DOM or setting timeouts) should stay in event handlers or Effects to keep components pure.
 
@@ -214,3 +231,16 @@ It then says, for #15 [read this article](https://dev.to/sathishskdev/part-3-com
 
 Here the author is separating the state and event handling into custom hooks or components.  It's well worth it to get clear on the examples in this article and how to apply that in your own work.
 
+### Custom hook warning: Don't share state
+
+Creating a custom hook doesn't mean the data is shared, it is just so code can be shared.
+
+While component 1 is rendering, if it calls ```const [data, setData] = useState<boolean>(false)```, it creates a state variable for component 1.
+
+This is the case whether it's written inline or extracted to a helper function (aka, a custom hook).
+
+Similarly, when component 2 calls useState, it creates state for component 2. The two states are not shared.
+
+The standard approach is to lift the state up to a common ancestor components and then pass it down.
+
+If the common ancestor is nearby, props can be used; if it's far away, context or Redux can be used.
