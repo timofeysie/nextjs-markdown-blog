@@ -60,12 +60,12 @@ function About() {
             <Row>
               <Col md={12}>
                 I'm a JavaScript developer with a focus on the front end using React and Angular.
-                I also like doing full-stack work if it involves NodeJS. I started my career as a Java developer many years ago, moved to native Android work before going purely into JavaScript in 2013
+                I also like doing full-stack work if it involves NodeJS and Python with Django. I started my career as a Java developer many years ago, moved to native Android work before going purely into JavaScript in 2013.
 
                 <br /><br />
 
-                Since developer blogs quickly get out of date, this blog is devoted to updated content about real world issues from my web development job.
-                Enterprise Angular and React are currently the main focus.
+                Since developer blogs quickly get out of date, this blog does still contain some old content that will not be updated, such as the Angular content.  I am however devoted to updated content about real world issues from my web development jobs.
+                Enterprise React and full-stack development with PyTorch and Django are currently the main focus.
               </Col>
             </Row>
 

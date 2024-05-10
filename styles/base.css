@@ -396,7 +396,7 @@ footer {
 }
 
 [data-icon="Next.js"] svg,
-[data-icon="Zeit"] svg,
+[data-icon="Django"] svg,
 [data-icon="CoffeeScript"] svg {
   fill: var(--heading-color);
 }

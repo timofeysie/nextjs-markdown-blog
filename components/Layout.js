@@ -82,6 +82,7 @@ function Layout({ children, isHomepage, secondaryPage, noHead = false }) {
               <h1 className={`blog-title`} style={isHomepage && { textAlign: 'left', fontSize: "40px" }}>
                 Timothy Curchod, Web Dev
               </h1>
+              
             )}
 
             {children}
