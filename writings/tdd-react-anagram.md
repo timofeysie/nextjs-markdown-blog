@@ -364,7 +364,7 @@ This test will fail in the same way our manual test of the function failed.  The
 
 As you can see, our anagrams implementation is only handling two letters correctly.  Time to refactor that to make the test green again.
 
-I wont go into an actual real life solution here.  I'm sure you could find a better function than the one we used above.  Or you could take the challenge and fix the function yourself.  If you do, use the hashtag #TDDReactAnagram and the link below on Twitter to let me know how it goes!
+I wont go into an actual real life solution here.  I'm sure you could find a better function than the one we used above.  Or you could take the challenge and fix the function yourself.  If you do, use the hashtag #TDDReactAnagram and the link below on [Twitter](https://twitter.com/) to let me know how it goes!
 
 ## Summary
 
@@ -374,7 +374,7 @@ TDD is a big field with many opinions.  Red-green-refactor provides a great fram
 
 I have various branches on [this repo](https://github.com/timofeysie/react-tdd-dojo) which explore the anagrams challenge.  Have a look at some of the branches that start with the word anagrams, and make a merge request if you have a solution you think is better that one of those.
 
-Use the hashtag #TDDReactAnagram and the link below on Twitter for any comments or feedback.
+Use the hashtag #TDDReactAnagram and the link below on [Twitter](https://twitter.com/) for any comments or feedback.
 
 ## A ChatGPT version
 

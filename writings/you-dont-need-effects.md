@@ -244,3 +244,9 @@ Similarly, when component 2 calls useState, it creates state for component 2. Th
 The standard approach is to lift the state up to a common ancestor components and then pass it down.
 
 If the common ancestor is nearby, props can be used; if it's far away, context or Redux can be used.
+
+## Summary
+
+The useEffect hook is an essential part of a React, but that doesn't mean it should be used everywhere.  As always, clean code should avoid unessesary complexity, so knowing when not to use more code is just as important as knowing when to use it.
+
+Use the hashtag #YouDontNeedEffects and the link below on [Twitter](https://twitter.com/) for any comments or feedback.

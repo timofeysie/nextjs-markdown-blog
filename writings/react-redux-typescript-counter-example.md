@@ -256,4 +256,4 @@ There is a discussion of using connect with hooks which the counter example does
 - [React+TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react-typescript-cheatsheet): a comprehensive guide to using React with TypeScript
 - [React + Redux in TypeScript Guide](https://github.com/piotrwitek/react-redux-typescript-guide): extensive information on patterns for using React and Redux with TypeScript
 
-Use the hashtag #ReactReduxTypescriptExample and the link below on Twitter for any comments or feedback.
+Use the hashtag #ReactReduxTypescriptExample and the link below on [Twitter](https://twitter.com/) for any comments or feedback.

@@ -184,4 +184,4 @@ I also wrote [an article](https://timothycurchod.com/writings/red-green-refactor
 
 ## Summary
 
-Use the hashtag #RedGreenRefactorGame and the link below on Twitter for any comments or feedback.
+Use the hashtag #RedGreenRefactorGame and the link below on [Twitter](https://twitter.com/) for any comments or feedback.

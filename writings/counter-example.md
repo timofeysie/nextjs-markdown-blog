@@ -207,4 +207,4 @@ After this, in the Chrome inspector/Redux tab, we see the actions working on the
 
 Nx with NgRx is a powerful enterprise way to deal with complexity in large applications using a monorepo approach.  Examples of actually how to test this kind of code is less covered.  Even the official code examples wont function without some help.
 
-Use the hashtag #ClassicCounterExample and the link below on Twitter for any comments or feedback.
+Use the hashtag #ClassicCounterExample and the link below on [Twitter](https://twitter.com/) for any comments or feedback.

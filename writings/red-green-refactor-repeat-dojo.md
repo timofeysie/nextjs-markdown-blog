@@ -197,4 +197,4 @@ It's fun to do pair programming or "mobbing" with larger groups online to solve 
 
 TDD is a big field with many opinions.  Red-green-refactor provides a great framework which puts this powerful technique to good use.  Other benefits include learning to express your ideas about coding and testing better.
 
-Use the hashtag #RedGreenRefactorRepeatDojo and the link below on Twitter for any comments or feedback.
+Use the hashtag #RedGreenRefactorRepeatDojo and the link below on [Twitter](https://twitter.com/) for any comments or feedback.

@@ -471,7 +471,7 @@ In [the next step](https://redux.js.org/tutorials/essentials/part-4-using-data) 
 - Sorting the Posts List
 - Post Reaction Buttons
 
-Use the hashtag #ReactReduxTypescriptExample and the link below on Twitter for any comments or feedback.
+Use the hashtag #ReactReduxTypescriptExample and the link below on [Twitter](https://twitter.com/) for any comments or feedback.
 
 ## Showing Single Posts
 
