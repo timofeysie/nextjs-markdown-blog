@@ -71,7 +71,7 @@ function About() {
 
             <hr />
 
-            <h3>Everybody loves front end tech logos</h3>
+            <h3>Everybody loves tech logos</h3>
 
             <Row style={{ marginTop: 30 }}>
               {PRESENT.map(s => (
