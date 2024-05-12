@@ -12,7 +12,6 @@
   "license": "ISC",
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
-    "@zeit/next-sass": "^1.0.1",
     "gray-matter": "^4.0.2",
     "next": "^9.5.5",
     "next-transpile-modules": "^2.3.1",
@@ -26,6 +25,7 @@
     "react-scroll-progress-bar": "^1.1.12",
     "react-syntax-highlighter": "^12.2.1",
     "react-text-transition": "^1.0.2",
+    "sass": "^1.77.1",
     "simple-icons": "^2.9.0"
   }
 }

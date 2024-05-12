@@ -1,6 +1,6 @@
 ---
 title: "E2E Testing with Cypress and Cucumber"
-date: "2023-01-25"
+date: "2024-03-25"
 og:
   description: "End-to-end testing with Cypress and Cucumber using the plain English Gherkin syntax for Behavior Driven Development."
   image: "images/Capture-react-tdd.PNG"
