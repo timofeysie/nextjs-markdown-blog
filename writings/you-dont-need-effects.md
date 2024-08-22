@@ -43,14 +43,16 @@ An Effect that updates a state variable when the list changes will re-run whenev
 
 The recommendation is to transform all the data at the top level of components which will re-run whenever props or state change.
 
-But when doing this, I was getting an error like this:
+## Cannot update a component while rendering a different component
+
+When using an effect, sometimes I was getting an errors like this:
 
 ```txt
 Warning: Cannot update a component (Setup) while rendering a different component (Setup). To locate the bad setState() call inside Setup, follow the stack trace as described in [Bug: too hard to fix "Cannot update a component from inside the function body of a different component." · Issue #18178 · facebook/react](https://github.com/facebook/react/issues/18178#issuecomment-595846312)
 at Setup (http://localhost:3001/static/js/bundle.js:28411:76))
 ```
 
-That's usually not the kind of thing you want to see in your console: *Bug: too hard to fix*.
+That's usually not the kind of thing you want to see in your console.  The article link is titled: *Bug: too hard to fix*.
 
 The link there shows a screenshot of how to use the stack trace to find the error, but since the app uses Redux, there is no setState() in the app at all.
 

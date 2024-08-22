@@ -193,7 +193,7 @@ The important thing is that language in the Cucumber Expression matches the Gher
 
 The [official Cucumber docs say](https://cucumber.io/docs/cucumber/step-definitions/?lang=javascript): *A Step Definition is a method with an expression that links it to one or more Gherkin steps. When Cucumber executes a Gherkin step in a scenario, it will look for a matching step definition to execute.*
 
-## A real work example
+## A real world example
 
 I have a demo social network site I want to test.
 
