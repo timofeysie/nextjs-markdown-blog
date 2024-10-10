@@ -18,9 +18,9 @@ author:
 
 This article is inspired by the awesome [Algorithms and Data Structures in JavaScript](https://github.com/trekhleb/javascript-algorithms) GitHub repo by Oleksii Trekhleb.
 
-There, it has a basic introduction and code examples and defines the terms and has a large number of class-based examples.  Lets dive in to this codebase and then apply the concepts there to React using Typescript.
+It is a popular project that introduces the concepts with well defined class-based code examples.  Lets dive in to this codebase and then apply the concepts there to React using Typescript.
 
-First, lets describe the terms.
+First, here is a brief overview of the subject.
 
 ### Data structures
 
@@ -28,7 +28,7 @@ First, lets describe the terms.
 
 ### Algorithms
 
-*Algorithms an unambiguous specification of how to solve a class of problems. It is a set of rules that precisely define a sequence of operations.*
+*Algorithms are an unambiguous specification of how to solve a class of problems. It is a set of rules that precisely define a sequence of operations.*
 
 >[Fun fact] The etymology of the term came from the name of a Persian scientist and polymath Muḥammad ibn Mūsā al-Khwārizmī who wrote *kitāb al-ḥisāb al-hindī* ("Book of Indian computation") around 825 AD.  He is also credited for the term algebra comes from *Al-Jabr* in the same book (meaning "completion" or "rejoining").  Readers might know that our number system is also based on the Hindu–Arabic numeral system (or decimal system) which replaced the cumbersome Roman numerals in the early 16thj century.
 
@@ -42,7 +42,7 @@ As a collection of data values with relationships and functions to work with the
 
 ### The Trekhleb
 
-The aforementioned Algorithms and Data Structures in JavaScript I call The Trekhleb is a very exhaustive list of data structures and algorithms with pseudo code, vanilla JavaScript examples with unit tests and even links to Wikipedia pages and videos from the [hacker rank channel](https://www.youtube.com/@HackerrankOfficial).  There are many contributors, 1,115 commits so far, the last only two months ago.  These seem to mainly be translations of the content into the 18 languages available.  So they are really trying to spread the word there.
+The aforementioned Algorithms and Data Structures in JavaScript repo (which I call The Trekhleb here) is a very exhaustive list of data structures and algorithms with pseudo code, vanilla JavaScript examples with unit tests and even links to Wikipedia pages and videos from the [hacker rank channel](https://www.`yo`utube.com/@HackerrankOfficial).  There are many contributors, 1,115 commits so far, the last only two months ago.  These seem to mainly be translations of the content into the 18 languages available.  So they are really trying to spread the word there.
 
 One limitation I see with it is that it does not fit in with the way I code these days, which is usually in TypeScript and in a React/Node setting.
 
@@ -87,6 +87,12 @@ It should also be said that there are different requirements for working with da
 The backend has more resources and flexibility when it comes to data.  It can be seamlessly re-deployed and thoroughly unit tested.
 
 The frontend in a mix of layout, styles and business logic that relies on a single threaded JavaScript model where long running functions can actually block the UI and result in a frozen web page.
+
+## The goal of this article
+
+First I will look at some of the most popular data types, such as hash tables, linked lists and trees.
+
+I will discuss
 
 ## Hash table
 
@@ -141,7 +147,7 @@ I counted 18 answers there.
 
 when do you need to do a lot of insertions and removals at the middle of a sequence, but not very many lookups in the list by ordinal?
 
-Discussions about LLs often revolve around memory use and languages other than JavaScript.  It comes down to a discussion of Big O notation.
+Discussions about LLs often revolve around memory use and languages other than JavaScript.  It comes down to a discussion of Big O notation (more on that later).
 
 Adding an element: O(1)
 Indexing: O(n)
@@ -319,7 +325,7 @@ const traverseInOrder = <T>(node: BinaryTreeNode<T> | null, callback: (node: Bin
 };
 ```
 
-#### Example usage:
+#### Example usage
 
 ```js
 const rootNode = createNode<number>(10);
@@ -361,7 +367,448 @@ Question: How would you use a BST to implement a feature in a real-world applica
 
 Answer: A BST can be used to maintain a sorted list of scores in a leader board, allowing for efficient insertion of new scores and retrieval of top scores.
 
-## Fundamental and frequently asked about in frontend interviews
+## Algorithms (how to solve a class of problems)
+
+An algorithm is an unambiguous specification of how to solve a class of problems with a set of rules or steps that define a sequence of operations.
+
+The list is marked for beginner and advanced and grouped by topics or by by paradigms.
+
+### Topic groupings
+
+- Math
+- Sets
+- Strings
+- Searches
+- Sorting
+- Linked Lists
+- Trees
+- Graphs
+- Cryptography
+- Machine Learning
+- Image Processing
+- Statistics
+- Evolutionary algorithms
+- Un-categorized
+
+### Paradigm groupings
+
+- Brute Force - look at all the possibilities and selects the best solution
+- Greedy - choose the best option at the current time, without any consideration for the future
+- Divide and Conquer - divide the problem into smaller parts and then solve those parts
+- Dynamic Programming - build up a solution using previously found sub-solutions
+- Backtracking - similarly to brute force, try to generate all possible solutions, but each time you generate next solution you test if it satisfies all conditions, and only then continue generating subsequent solutions. Otherwise, backtrack, and go on a different path of finding a solution. Normally the DFS traversal of state-space is being used.
+- Branch & Bound - remember the lowest-cost solution found at each stage of the backtracking search, and use the cost of the lowest-cost solution found so far as a lower bound on the cost of a least-cost solution to the problem, in order to discard partial solutions with costs larger than the lowest-cost solution found so far. Normally BFS traversal in combination with DFS traversal of state-space tree is being used.
+
+## Algorithm Example
+
+To get an idea of how algorithms are described, here is an example of a popular sorting algorithm, Quicksort.
+
+### Quicksort
+
+[Quicksort](https://github.com/trekhleb/javascript-algorithms/tree/master/src/algorithms/sorting/quick-sort) is a divide and conquer algorithm. Quicksort first divides a large array into two smaller sub-arrays: the low elements and the high elements. Quicksort can then recursively sort the sub-arrays
+
+The steps are:
+
+1. Pick an element, called a pivot, from the array.
+
+2. Partitioning: reorder the array so that all elements with values less than the pivot come before the pivot, while all elements with values greater than the pivot come after it (equal values can go either way). After this partitioning, the pivot is in its final position. This is called the partition operation.
+
+3. Recursively apply the above steps to the sub-array of elements with smaller values and separately to the sub-array of elements with greater values.
+
+### Quicksort complexity
+
+Complexity is measured in a system called [Big O notation](https://en.wikipedia.org/wiki/Big_O_notation) which tracks how the running time or space requirements grow as the input size grows.
+
+```txt
+Best/Average: n log(n)
+Worst: n2 (n squared)
+Memory: n log(n)
+Stable: no
+Comments: usually done in-place with O(log(n)) stack space
+```
+
+The `Stable: no` means that when Quicksort encounters elements of equal value, their relative order in the final sorted array may be different from their original order in the unsorted array.
+
+### The example code
+
+Here is what the steps above look like in the class-based code example.  I have removed the comments for brevity and tightened up the layout so please visit the Quicksort link above for the full code.
+
+Most of the examples use the Comparator class which looks like this:
+
+```js
+export default class Comparator {
+  constructor(compareFunction) {
+    this.compare = compareFunction || Comparator.defaultCompareFunction;
+  }
+
+  static defaultCompareFunction(a, b) {
+    if (a === b) {
+      return 0;
+    }
+    return a < b ? -1 : 1;
+  }
+
+  equal(a, b) { return this.compare(a, b) === 0 }
+  lessThan(a, b) { return this.compare(a, b) < 0 }  
+  greaterThan(a, b) { return this.compare(a, b) > 0 }
+  lessThanOrEqual(a, b) { return this.lessThan(a, b) || this.equal(a, b) }
+  greaterThanOrEqual(a, b) { return this.greaterThan(a, b) || this.equal(a, b) }
+  reverse() { const compareOriginal = this.compare; this.compare = (a, b) => compareOriginal(b, a) }
+}
+```
+
+Then there is a Sort class which will be extended by the QuickSort class after this.
+
+```js
+import Comparator from '../../utils/comparator/Comparator';
+
+export default class Sort {
+  constructor(originalCallbacks) {
+    this.callbacks = Sort.initSortingCallbacks(originalCallbacks);
+    this.comparator = new Comparator(this.callbacks.compareCallback);
+  }
+
+  static initSortingCallbacks(originalCallbacks) {
+    const callbacks = originalCallbacks || {};
+    const stubCallback = () => {};
+    callbacks.compareCallback = callbacks.compareCallback || undefined;
+    callbacks.visitingCallback = callbacks.visitingCallback || stubCallback;
+    return callbacks;
+  }
+
+  sort() {
+    throw new Error('sort method must be implemented');
+  }
+}
+```
+
+Then this is what the QuickSort class looks like.
+
+```js
+import Sort from '../Sort';
+
+export default class QuickSort extends Sort {
+  sort(originalArray) {
+    const array = [...originalArray];
+
+    if (array.length <= 1) {
+      return array;
+    }
+
+    const leftArray = [];
+    const rightArray = [];
+
+    const pivotElement = array.shift();
+    const centerArray = [pivotElement];
+
+    while (array.length) {
+      const currentElement = array.shift();
+      this.callbacks.visitingCallback(currentElement);
+      if (this.comparator.equal(currentElement, pivotElement)) {
+        centerArray.push(currentElement);
+      } else if (this.comparator.lessThan(currentElement, pivotElement)) {
+        leftArray.push(currentElement);
+      } else {
+        rightArray.push(currentElement);
+      }
+    }
+
+    const leftArraySorted = this.sort(leftArray);
+    const rightArraySorted = this.sort(rightArray);
+
+    return leftArraySorted.concat(centerArray, rightArraySorted);
+  }
+}
+```
+
+### A functional TypeScript approach
+
+Lets create a TypeScript functional version of the above sample code.
+
+If you want to see the code below implemented in a React with Typescript project, checkout my [example code project](https://github.com/timofeysie/acknowledge/tree/master/examples/javascript/react-ts-redux/src/features/quicksort).
+
+Here is a TypeScript Comparator utility: comparator.ts
+
+```ts
+export type CompareFunction<T> = (a: T, b: T) => number;
+
+export const createComparator = <T>(compareFunction?: CompareFunction<T>) => {
+  const defaultCompareFunction: CompareFunction<T> = (a, b) => {
+    if (a === b) return 0;
+    return a < b ? -1 : 1;
+  };
+
+  const compare = compareFunction || defaultCompareFunction;
+
+  return {
+    compare,
+    equal: (a: T, b: T) => compare(a, b) === 0,
+    lessThan: (a: T, b: T) => compare(a, b) < 0,
+    greaterThan: (a: T, b: T) => compare(a, b) > 0,
+    lessThanOrEqual: (a: T, b: T) => compare(a, b) <= 0,
+    greaterThanOrEqual: (a: T, b: T) => compare(a, b) >= 0,
+    reverse: () => createComparator<T>((a, b) => compare(b, a))
+  };
+};
+```
+
+And then the Sort utility: sortUtils.ts
+
+```ts
+import { CompareFunction, createComparator } from "./comparator";
+
+type SortCallbacks<T> = {
+  compareCallback?: CompareFunction<T>;
+  visitingCallback?: (element: T) => void;
+};
+
+// Initialize sorting callbacks with default values if not provided
+const initSortingCallbacks = <T>(originalCallbacks?: SortCallbacks<T>): Required<SortCallbacks<T>> => {
+  const callbacks = originalCallbacks || {};
+  const stubCallback = () => {};
+  return {
+    compareCallback: callbacks.compareCallback || ((a: T, b: T) => 0),
+    visitingCallback: callbacks.visitingCallback || stubCallback
+  };
+};
+
+const createSort = <T>(originalCallbacks?: SortCallbacks<T>) => {
+  const callbacks = initSortingCallbacks(originalCallbacks);
+  const comparator = createComparator(callbacks.compareCallback);
+
+  return {
+    callbacks,
+    comparator,
+    // Placeholder sort method to be implemented by specific sorting algorithms
+    sort: () => {
+      throw new Error('sort method must be implemented');
+    }
+  };
+};
+
+export type { SortCallbacks };
+export { initSortingCallbacks, createSort };
+```
+
+And finally, a quicksort function: quicksort.ts
+
+```js
+import { SortCallbacks, createSort } from "./sort";
+
+export const quickSort = <T>(originalArray: T[], originalCallbacks?: SortCallbacks<T>): T[] => {
+    const { comparator, callbacks } = createSort(originalCallbacks);
+    const visitedElements = new Set<T>();
+
+    const sort = (array: T[]): T[] => {
+      if (array.length <= 1) {
+        // Call visitingCallback for single-element arrays
+        if (array.length === 1 && !visitedElements.has(array[0])) {
+          callbacks.visitingCallback(array[0]);
+          visitedElements.add(array[0]);
+        }
+        return array;
+      }
+  
+      // Step 1: Pick an element, called a pivot, from the array.
+      const [pivot, ...rest] = array;
+  
+      // Call visitingCallback for the pivot
+      if (!visitedElements.has(pivot)) {
+        callbacks.visitingCallback(pivot);
+        visitedElements.add(pivot);
+      }
+  
+      // Step 2: Partitioning
+      const leftArray: T[] = [];
+      const rightArray: T[] = [];
+      const centerArray: T[] = [pivot];
+  
+      // Reorder the array so that all elements with values less than the pivot
+      // come before the pivot, while all elements with values greater than
+      // the pivot come after it. Equal values can go either way.
+      for (const element of rest) {
+        if (!visitedElements.has(element)) {
+          callbacks.visitingCallback(element);
+          visitedElements.add(element);
+        }
+        if (comparator.equal(element, pivot)) {
+          centerArray.push(element);
+        } else if (comparator.lessThan(element, pivot)) {
+          leftArray.push(element);
+        } else {
+          rightArray.push(element);
+        }
+      }
+  
+      // Step 3: Recursively apply the above steps to the sub-arrays
+      const leftArraySorted = sort(leftArray);   // Sub-array with smaller values
+      const rightArraySorted = sort(rightArray); // Sub-array with greater values
+  
+      // Combine the sorted sub-arrays and the pivot
+      return [...leftArraySorted, ...centerArray, ...rightArraySorted];
+    };
+  
+    // Start the sorting process with a copy of the original array
+    return sort([...originalArray]);
+  };
+```
+
+### Example usage of the quickSort function
+
+This will console log out the results.
+
+```js
+const numbers = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5];
+const sortedNumbers = quickSort(numbers, {
+  compareCallback: (a, b) => a - b,
+  visitingCallback: (element) => console.log(`Visiting: ${element}`)
+});
+console.log(sortedNumbers);
+
+// Example with custom comparator (sorting strings by length)
+const words = ['apple', 'banana', 'cherry', 'date', 'elderberry'];
+const sortedWords = quickSort(words, {
+  compareCallback: (a, b) => a.length - b.length
+});
+console.log(sortedWords);
+```
+
+### Unit tests
+
+What feature is complete without unit tests?  Instead of using the console log, here is a set of tests for the quick sor code above.
+
+```ts
+describe('quickSort', () => {
+  it('should sort numbers in ascending order', () => {
+    const numbers = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5];
+    const sortedNumbers = quickSort(numbers, {
+      compareCallback: (a, b) => a - b,
+    });
+    expect(sortedNumbers).toEqual([1, 1, 2, 3, 3, 4, 5, 5, 5, 6, 9]);
+  });
+
+  it('should call visitingCallback for each element', () => {
+    const numbers = [3, 1, 4];
+    const visitingCallback = jest.fn();
+    quickSort(numbers, {
+      compareCallback: (a, b) => a - b,
+      visitingCallback,
+    });
+    expect(visitingCallback).toHaveBeenCalledTimes(numbers.length);
+    numbers.forEach(num => {
+      expect(visitingCallback).toHaveBeenCalledWith(num);
+    });
+  });
+
+  it('should sort an already sorted array', () => {
+    const sortedArray = [1, 2, 3, 4, 5];
+    const result = quickSort(sortedArray, {
+      compareCallback: (a, b) => a - b,
+    });
+    expect(result).toEqual([1, 2, 3, 4, 5]);
+  });
+
+  it('should sort a reverse-sorted array', () => {
+    const reverseSortedArray = [5, 4, 3, 2, 1];
+    const result = quickSort(reverseSortedArray, {
+      compareCallback: (a, b) => a - b,
+    });
+    expect(result).toEqual([1, 2, 3, 4, 5]);
+  });
+});
+```
+
+### The Binary Search Algorithms (aka half-interval search, logarithmic search, or binary chop)
+
+A [binary search](https://github.com/trekhleb/javascript-algorithms/tree/master/src/algorithms/search/binary-search) is described as: *It finds the position of a target value within a sorted array. Binary search compares the target value to the middle element of the array; if they are unequal, the half in which the target cannot lie is eliminated and the search continues on the remaining half until it is successful. If the search ends with the remaining half being empty, the target is not in the array.*
+
+The example code looks like this:
+
+```js
+import Comparator from '../../../utils/comparator/Comparator';
+
+/**
+ * Binary search implementation.
+ *
+ * @param {*[]} sortedArray
+ * @param {*} seekElement
+ * @param {function(a, b)} [comparatorCallback]
+ * @return {number}
+ */
+
+export default function binarySearch(sortedArray, seekElement, comparatorCallback) {
+  // Let's create comparator from the comparatorCallback function.
+  // Comparator object will give us common comparison methods like equal() and lessThan().
+  const comparator = new Comparator(comparatorCallback);
+
+  // These two indices will contain current array (sub-array) boundaries.
+  let startIndex = 0;
+  let endIndex = sortedArray.length - 1;
+
+  // Let's continue to split array until boundaries are collapsed
+  // and there is nothing to split anymore.
+  while (startIndex <= endIndex) {
+    // Let's calculate the index of the middle element.
+    const middleIndex = startIndex + Math.floor((endIndex - startIndex) / 2);
+
+    // If we've found the element just return its position.
+    if (comparator.equal(sortedArray[middleIndex], seekElement)) {
+      return middleIndex;
+    }
+
+    // Decide which half to choose for seeking next: left or right one.
+    if (comparator.lessThan(sortedArray[middleIndex], seekElement)) {
+      // Go to the right half of the array.
+      startIndex = middleIndex + 1;
+    } else {
+      // Go to the left half of the array.
+      endIndex = middleIndex - 1;
+    }
+  }
+
+  // Return -1 if we have not found anything.
+  return -1;
+}
+```
+
+## The Leader board example
+
+(*This is a work in progress, check back later to see how it goes.*)
+
+When adding scores binary Search algorithm is used to find the correct position for a new score in the BST. It ensures that the tree remains sorted.
+
+Reverse Traversal: To get the top scores, we can perform a reverse in-order traversal (right, root, left)
+
+To show a user their score position in the leader board along with the four scores above and the five scores below, we can use the Binary Search algorithm from your list. Here’s how it can be applied:
+
+### Binary Search
+
+Purpose: Efficiently find the position of the user’s score in the sorted list of scores.
+
+### Description
+
+Perform a binary search to locate the user’s score in the BST. Once the score is found, you can then retrieve the surrounding scores by traversing the tree.
+
+Steps:
+
+1. Binary Search: Use binary search to find the exact position of the user’s score in the sorted list.
+2. In-order Traversal: Perform an in-order traversal to get the scores in sorted order.
+3. Retrieve Surrounding Scores: Once the position is found, retrieve the four scores above and the five scores below the user’s score.
+
+### Example Process
+
+1. Find User’s Score: Use binary search to find the user’s score in the BST.
+2. In-order Traversal: Traverse the BST in in-order to get all scores in ascending order.
+3. Extract Surrounding Scores: From the list of scores obtained from the in-order traversal, extract the four scores above 
+and the five scores below the user’s score.
+
+### Complexity
+
+- Binary Search: O(log n) on average, O(n) in the worst case (unbalanced tree).
+In-order Traversal: O(n) to get the sorted list of scores.
+Extracting Surrounding Scores: O(1) once the position is found.
+
+## Frequently asked about data structures and algorithm in frontend interviews
 
 The Hacker Rank links in the Trekhleb are a great resource for both developers and those hiring them.  However, since there are over a hundred topics to cover, it might be more realistic to start with the most used.
 
