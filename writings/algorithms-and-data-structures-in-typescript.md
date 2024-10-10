@@ -92,15 +92,15 @@ The frontend in a mix of layout, styles and business logic that relies on a sing
 
 First I will look at some of the most popular data types, such as hash tables, linked lists and trees.
 
-I will discuss
+I will discuss the example code at suggest some sample implementations using functional TypeScript approach.
+
+I will then try to implement a real world solution and see how that goes.  The scop of this article has already increased quite a bit just with this, so possibly I will include the real world example in a separate article.
 
 ## Hash table
 
-A [Hash table (hash map)](https://github.com/trekhleb/javascript-algorithms/tree/master/src/data-structures/hash-table) is a data structure which implements an associative array abstract data type.
+A [Hash table (hash map)](https://github.com/trekhleb/javascript-algorithms/tree/master/src/data-structures/hash-table) is a data structure which implements an associative array abstract data type.  It contains a structure that can map keys to values.
 
-It contains a structure that can map keys to values.
-
-uses a hash function to compute an index into an array of buckets or slots, from which the desired value can be found
+The data type uses a hash function to compute an index into an array of buckets or slots, from which the desired value can be found
 For fast lookups O(1) constant time (usually, could also be O(n) linear time)
 
 Ideally, the hash function will assign each key to a unique bucket, but most hash table designs employ an imperfect hash function, which might cause hash collisions where the hash function generates the same index for more than one key. Such collisions must be accommodated in some way.
@@ -111,6 +111,7 @@ Todo:
     - Implement simple solution
     - Practice questions
 
+It is possible to use a JavaScript object as a hash table, or a Map.
 Map stores key-value pairs, where keys can be of any data type, including objects and functions.
 
 Order of Insertion maintained
@@ -120,32 +121,30 @@ Why Use Map Over Object?
 
 No Key Collisions: Unlike objects, Map keys are not limited to strings and symbols, reducing the risk of key collisions.
 Size Property: Map has a size property that directly returns the number of key-value pairs.
-Better Performance: Map is generally more performant for frequent additions and deletions of key-value pairs123.
+Better Performance: Map is generally more performant for frequent additions and deletions of key-value pairs.
 
-Implementing an LRU (Least Recently Used) Cache
+Another common use case is implementing an LRU (Least Recently Used) Cache.
+
 An LRU Cache is a data structure that stores a limited number of items and removes the least recently used item when the cache reaches its capacity. This is a great way to showcase your skills with hash tables and linked lists.
+
+When hash tables encounter collisions, they can use a technique called chaining to store multiple key-value pairs in the same bucket which is often done with a linked list.
 
 ## Linked list
 
-This is a linear collection of data elements, in which linear order is not given by their physical placement in memory. Instead, each element points to the next. It is a data structure consisting of a group of nodes which together represent a sequence. 
+This is a linear collection of data elements, in which linear order is not given by their physical placement in memory. Instead, each element points to the next. It is a data structure consisting of a group of nodes which together represent a sequence.
 
-each node is composed of data and a reference (link) to the next node in the sequence.
+- Each node is composed of data and a reference (link) to the next node in the sequence.
+- It offers efficient insertion or removal of elements from any position in the sequence during iteration.
+- More complex variants add additional links, allowing efficient insertion or removal from arbitrary element references.
+- A drawback of linked lists is that access time is linear (and difficult to pipeline).
+- Faster access, such as random access, is not feasible.
+- Arrays have better cache locality as compared to linked lists.
 
-efficient insertion or removal of elements from any position in the sequence during iteration.
+Under what circumstances are linked lists useful?  This [StackOverflow question](https://stackoverflow.com/questions/14311786/when-do-you-need-to-do-a-lot-of-insertions-and-removals-at-the-middle-of-a-se) has some good answers.
 
-More complex variants add additional links, allowing efficient insertion or removal from arbitrary element references.
-A drawback of linked lists is that access time is linear (and difficult to pipeline). 
-Faster access, such as random access, is not feasible. 
-Arrays have better cache locality as compared to linked lists.
+It was Asked 14 years, 6 months ago and viewed 32k times. I counted 18 answers there.
 
-Under what circumstances are linked lists useful?
-https://stackoverflow.com/questions/2429217/under-what-circumstances-are-linked-lists-useful
-Asked 14 years, 6 months ago
-Modified 2 months ago
-Viewed 32k times
-I counted 18 answers there.
-
-when do you need to do a lot of insertions and removals at the middle of a sequence, but not very many lookups in the list by ordinal?
+One answer: when do you need to do a lot of insertions and removals at the middle of a sequence, but not very many lookups in the list by ordinal?
 
 Discussions about LLs often revolve around memory use and languages other than JavaScript.  It comes down to a discussion of Big O notation (more on that later).
 
@@ -161,21 +160,13 @@ Rope Strings are a good example to start with. It's a popular data structure in 
 
 The Python data type called deque found in collections.deque uses a doubly linked list.
 
- a vector or deque would typically be slow to add at either end, requiring (at least in my example of two distinct appends) that a copy be taken of the entire list (vector), or the index block and the data block being appended to (deque).
-
-The Carousel Example
-Do we really need to insert/delete items a lot in it?
-The main point with the carousel is that it has to loop, so there might be a simpler algorithm that can be used.
-
-Linked Lists
-B Straight Traversal
-B Reverse Traversal
+A vector or deque would typically be slow to add at either end, requiring (at least in my example of two distinct appends) that a copy be taken of the entire list (vector), or the index block and the data block being appended to (deque).
 
 ## Map & Set
 
-In JavaScript, both Map and Set are closely related to the concept of a hashtable, but they serve different purposes:
+In JavaScript, both Map and Set are closely related to the concept of a hash table, but they serve different purposes:
 
-Map: This is a collection of key-value pairs where the keys can be of any type. It is implemented using a hashtable under the hood, which allows for efficient retrieval, addition, and deletion of key-value pairs. You can think of Map as a more versatile and powerful version of the plain JavaScript object ({}), with better performance for frequent additions and deletions.
+Map: This is a collection of key-value pairs where the keys can be of any type. It is implemented using a hash table under the hood, which allows for efficient retrieval, addition, and deletion of key-value pairs. You can think of Map as a more versatile and powerful version of the plain JavaScript object ({}), with better performance for frequent additions and deletions.
 
 ```js
 const map = new Map();
@@ -183,7 +174,7 @@ map.set('key1', 'value1');
 console.log(map.get('key1')); // Outputs: 'value1'
 ```
 
-Set: This is a collection of unique values, meaning it does not allow duplicate entries. It is also implemented using a hashtable, which ensures that each value is stored only once and allows for efficient checks for the presence of a value2.
+Set: This is a collection of unique values, meaning it does not allow duplicate entries. It is also implemented using a hash table, which ensures that each value is stored only once and allows for efficient checks for the presence of a value2.
 
 ```js
 const set = new Set();
@@ -191,7 +182,7 @@ set.add('value1');
 console.log(set.has('value1')); // Outputs: true
 ```
 
-So, while both Map and Set use hashtables internally, Map is used for key-value pairs, and Set is used for unique values.
+So, while both Map and Set use hash tables internally, Map is used for key-value pairs, and Set is used for unique values.
 
 Since a Set is a collection of unique values. You can convert an array to a Set and then back to an array to remove duplicates:
 
