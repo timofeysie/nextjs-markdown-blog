@@ -40,6 +40,8 @@ They could be seen as a short cut to struggling through a problem to find a solu
 
 As a collection of data values with relationships and functions to work with them, each type has important trade-offs. During a coding technical test we need to pay attention more to why a certain data structure is appropriate for the challenge.
 
+For more about why they are important, read this short piece called [1 Year of Consistent LeetCoding](https://dev.to/davinderpalrehal/1-year-of-consistent-leetcoding-26d0) by Davinderpal Singh Rehal.  He calls them DSA (Data Structures and Algorithms) and goes over some of the most common ones and how he loves testing himself with them.
+
 ### The Trekhleb
 
 The aforementioned Algorithms and Data Structures in JavaScript repo (which I call The Trekhleb here) is a very exhaustive list of data structures and algorithms with pseudo code, vanilla JavaScript examples with unit tests and even links to Wikipedia pages and videos from the [hacker rank channel](https://www.`yo`utube.com/@HackerrankOfficial).  There are many contributors, 1,115 commits so far, the last only two months ago.  These seem to mainly be translations of the content into the 18 languages available.  So they are really trying to spread the word there.
@@ -162,11 +164,21 @@ The Python data type called deque found in collections.deque uses a doubly linke
 
 A vector or deque would typically be slow to add at either end, requiring (at least in my example of two distinct appends) that a copy be taken of the entire list (vector), or the index block and the data block being appended to (deque).
 
-## Map & Set
+## Map & Set & modern JavaScript
 
-In JavaScript, both Map and Set are closely related to the concept of a hash table, but they serve different purposes:
+The Set object was introduced in ECMAScript 2015 (ES6), which was officially released in June 2015.  Note the dates were used to embarrass browsers who might implement the features years later.
 
-Map: This is a collection of key-value pairs where the keys can be of any type. It is implemented using a hash table under the hood, which allows for efficient retrieval, addition, and deletion of key-value pairs. You can think of Map as a more versatile and powerful version of the plain JavaScript object ({}), with better performance for frequent additions and deletions.
+This was a significant update to JavaScript that introduced many new features and data structures, including Set, Map, WeakSet, WeakMap, arrow functions, let and const declarations, and more.
+
+In JavaScript, both Map and Set are closely related to the concept of a hash table, but they serve different purposes.
+
+### Map
+
+This is a collection of key-value pairs where the keys can be of any type.
+
+It is implemented using a hash table under the hood, which allows for efficient retrieval, addition, and deletion of key-value pairs.
+
+You can think of Map as a more versatile and powerful version of the plain JavaScript object ({}), with better performance for frequent additions and deletions.
 
 ```js
 const map = new Map();
@@ -174,7 +186,9 @@ map.set('key1', 'value1');
 console.log(map.get('key1')); // Outputs: 'value1'
 ```
 
-Set: This is a collection of unique values, meaning it does not allow duplicate entries. It is also implemented using a hash table, which ensures that each value is stored only once and allows for efficient checks for the presence of a value2.
+### Set
+
+This is a collection of unique values, meaning it does not allow duplicate entries. It is also implemented using a hash table, which ensures that each value is stored only once and allows for efficient checks for the presence of a value.
 
 ```js
 const set = new Set();
@@ -189,6 +203,8 @@ Since a Set is a collection of unique values. You can convert an array to a Set 
 ```js
 const array = [1, 2, 2, 3, 4, 4, 5];
 const uniqueArray = [...new Set(array)];
+// Older JavaScript version:
+const uniqueArray = Array.from(new Set(array));
 ```
 
 ## Trees
@@ -197,11 +213,11 @@ Trees are abstract data type/structure that **simulates a hierarchical tree stru
 
 There are four trees listed:
 
-- Binary Search Trees (ordered or sorted)
-- AVL Tree (named after inventors Adelson-Velsky and Landis)
-- Red-Black Tree (self-balancing)
-- Segment Tree (statistic tree used for storing information about intervals/segments)
-- Fenwick Tree / Binary Indexed Tree (efficiently update elements and calculate prefix sums in a table of numbers)
+- Binary Search Trees: Ordered tree structure where each node has at most two children, with left subtree values less than the node and right subtree values greater.
+- AVL Tree: Self-balancing binary search tree where the heights of child subtrees differ by at most one.
+- Red-Black Tree: Self-balancing binary search tree with color-based balancing properties to ensure logarithmic operations.
+- Segment Tree: Tree data structure for storing information about intervals or segments, allowing for efficient range queries.
+- Fenwick Tree / Binary Indexed Tree: Data structure that efficiently updates elements and calculates prefix sums in a table of numbers.
 
 ### The Binary Search Tree (aka ordered or sorted binary trees)
 
@@ -257,7 +273,9 @@ The class also includes various methods for manipulating the node and traversing
 
 ### A Functional Approach
 
-Let’s define a TypeScript interface for the node:
+I usually work with TypeScript in a React or Node.js setting.
+
+So with that in mind let’s define a TypeScript interface for the node:
 
 ```TypeScript
 interface BinaryTreeNode<T> {
@@ -331,13 +349,63 @@ traverseInOrder(rootNode, (node) => console.log(node.value));
 
 #### Explanation
 
-createNode: Function to create a new node.
-setLeft and setRight: Functions to set the left and right children of a node.
-setValue: Function to set the value of a node.
-traverseInOrder: Function to traverse the tree in order and apply a callback to each node.
-This functional approach provides a more modular and flexible way to work with binary trees in TypeScript.
+The createNode function creates a new node.
+
+The setLeft and setRight Functions to set the left and right children of a node.  There is also a setValue function to set the value of a node.
+
+The traverseInOrder function is a recursive function that traverses the tree in order and applies a callback to each node (that's the ```(node) => console.log(node.value)``` part).
+
+When creating a binary tree node, the decision to create a left or right node typically depends on the specific requirements of the tree structure you're building. In a Binary Search Tree (BST), which is a common type of binary tree, the decision is based on the value of the new node compared to the value of the existing node. Here's how it generally works:
+
+##### For a Binary Search Tree
+
+If the new value is less than the current node's value, it goes to the left.
+If the new value is greater than the current node's value, it goes to the right.
+If the value is equal, it can go either left or right, depending on how you want to handle duplicates (or you might choose not to add duplicates at all).
+
+##### For a balanced tree (like AVL or Red-Black tree)
+
+The same principle as BST applies, but additional balancing operations are performed after insertion to maintain the tree's balance.
+
+##### For a general binary tree
+
+The decision might be based on the specific problem or data you're representing. For example, in a [Huffman coding tree](https://en.wikipedia.org/wiki/Huffman_coding), the decision might be based on frequency or probability.
+
+Here's an example of how you might implement this decision in TypeScript:
+
+```ts
+function insertNode<T>(root: BinaryTreeNode<T> | null, value: T): BinaryTreeNode<T> {
+  if (root === null) {
+    return createNode(value);
+  }
+
+  if (value < root.value) {
+    root.left = insertNode(root.left, value);
+  } else if (value > root.value) {
+    root.right = insertNode(root.right, value);
+  }
+
+  // If value is equal, you can choose to insert it to the left, right, or not at all
+  // Here we're choosing not to insert duplicates
+  
+  return root;
+}
+
+// Usage
+let root = createNode(10);
+root = insertNode(root, 5);  // This will become the left child
+root = insertNode(root, 15); // This will become the right child
+root = insertNode(root, 3);  // This will become the left child of 5
+root = insertNode(root, 7);  // This will become the right child of 5
+```
+
+In this example, the insertNode function recursively traverses the tree, comparing the new value with each node's value to decide whether to go left or right.
+
+When it finds an empty spot (null node), it creates a new node there.
 
 ### Use Cases of Binary Search Trees
+
+Here are some examples of how binary search trees are used in the real world.
 
 - Implementing efficient search and retrieval for autocomplete suggestions.
 - Maintaining a dynamically sorted list of elements, such as a list of users or products.
@@ -345,7 +413,9 @@ This functional approach provides a more modular and flexible way to work with b
 - Representing hierarchical data structures like file systems or organizational charts.
 - Implementing efficient search functionalities, such as finding a specific user in a large dataset.
 
-### Interview Questions
+### Interview Questions for BSTs
+
+Here are some example interview questions asking about BSTs.
 
 - Explain how a BST can be used to improve search efficiency in a large dataset.
 - Can you explain the basic operations of a BST (insertion, deletion, search) and their time complexities?
@@ -354,9 +424,53 @@ This functional approach provides a more modular and flexible way to work with b
 
 ### Real-World Application
 
+This is a sample question and answer involving a BST.
+
 Question: How would you use a BST to implement a feature in a real-world application, such as a leader board?
 
 Answer: A BST can be used to maintain a sorted list of scores in a leader board, allowing for efficient insertion of new scores and retrieval of top scores.
+
+### Other Tree type examples
+
+#### AVL trees
+
+While not as commonly used directly in frontend development as some other data structures, AVL trees can still have practical applications in certain scenarios. Here are some examples of how an AVL tree might be relevant to a front-end developer:
+
+- Autocomplete suggestions: efficiently store and retrieve words or phrases, maintaining them in sorted order for quick prefix-based searches.
+- Maintaining a dynamically sorted list of elements, such as a leaderboard or a list of users/products that need to be kept in order.
+- Range queries: When you need to efficiently find elements within a specific range, such as filtering products by price or date range.
+
+#### Red-Black Trees
+
+- Implementing an efficient state management system, especially for large applications with complex state structures.
+- Efficient event scheduling in complex UIs: For apps that need to manage many scheduled events or animations, a Red-Black Tree can provide efficient insertion, deletion, and lookup of scheduled items.
+- Implementing an efficient undo/redo system, especially for applications with complex state changes.
+
+#### Segment Tree
+
+- Interactive Data Visualization: efficiently handle range queries on large datasets for data visualization tools. This allows for quick updates and responsive user interactions when zooming, panning, or selecting specific data ranges on charts or graphs.
+- Performance Monitoring Dashboard: store and query performance metrics over time. This enables efficient retrieval of min, max, or average values for metrics like response times, error rates, or resource usage within user-selected time ranges.
+- Dynamic Content Loading: efficiently handle content pagination and "infinite scrolling" features. This allows for quick calculations of total content length, finding the shortest/longest items, or summing up attributes (like read times) for dynamically loaded content sections.
+
+#### Fenwick Tree
+
+- Real-time Leaderboard
+- Efficient Range Sum Queries in Data Grids.
+- Interactive Histogram with Cumulative Frequency that allows users to select ranges and instantly see cumulative frequencies with efficient prefix sum calculations.
+
+### Leaderboards and trees
+
+You might notice that a leaderboard is listed in both AVL and Fenwick Tree examples.  They can also be a good use case for a BST.  In fact, they could apply to all tree types.So what's the difference in these implementations?
+
+A BST can be a good choice for a leaderboard when you want a simpler implementation than an AVL tree and can tolerate occasional performance degradation. It's a middle ground between the consistent but complex AVL tree and the specialized Fenwick tree.
+
+For smaller to medium-sized leaderboards or those with frequent updates and varied query types, a BST could be an excellent choice.
+
+Why not use a Red-Black Tree?
+
+For a leaderboard, a Red-Black tree doesn't offer significant advantages over an AVL tree. Both provide similar performance guarantees, so the choice often comes down to implementation preference.
+
+Why not use a Segment trees?  They excel at range queries, which could be useful for certain types of leaderboards, especially those requiring frequent updates to ranges of scores.  But why not use it?  For a typical leaderboard that primarily needs individual updates and rank queries, a segment tree might be overkill. It's more complex to implement and maintain than necessary for basic leaderboard operations.
 
 ## Algorithms (how to solve a class of problems)
 
@@ -390,7 +504,7 @@ The list is marked for beginner and advanced and grouped by topics or by by para
 - Backtracking - similarly to brute force, try to generate all possible solutions, but each time you generate next solution you test if it satisfies all conditions, and only then continue generating subsequent solutions. Otherwise, backtrack, and go on a different path of finding a solution. Normally the DFS traversal of state-space is being used.
 - Branch & Bound - remember the lowest-cost solution found at each stage of the backtracking search, and use the cost of the lowest-cost solution found so far as a lower bound on the cost of a least-cost solution to the problem, in order to discard partial solutions with costs larger than the lowest-cost solution found so far. Normally BFS traversal in combination with DFS traversal of state-space tree is being used.
 
-## Algorithm Example
+## Algorithm Example: Quicksort
 
 To get an idea of how algorithms are described, here is an example of a popular sorting algorithm, Quicksort.
 
@@ -790,7 +904,7 @@ Steps:
 
 1. Find User’s Score: Use binary search to find the user’s score in the BST.
 2. In-order Traversal: Traverse the BST in in-order to get all scores in ascending order.
-3. Extract Surrounding Scores: From the list of scores obtained from the in-order traversal, extract the four scores above 
+3. Extract Surrounding Scores: From the list of scores obtained from the in-order traversal, extract the four scores above
 and the five scores below the user’s score.
 
 ### Complexity
@@ -803,7 +917,24 @@ Extracting Surrounding Scores: O(1) once the position is found.
 
 The Hacker Rank links in the Trekhleb are a great resource for both developers and those hiring them.  However, since there are over a hundred topics to cover, it might be more realistic to start with the most used.
 
-With that in mind, here's the ordered list of algorithms by the most likely to appear in frontend job interviews, based on frequency:
+With that in mind, here's the ordered list of the top ten algorithms by the most likely to appear in frontend job interviews, based on frequency:
+
+1. Depth-First Search (DFS)
+2. Breadth-First Search (BFS)
+3. Binary Search
+4. Quicksort
+5. Merge Sort
+6. Insertion Sort
+7. Selection Sort
+8. Bubble Sort
+9. Fibonacci Number
+10. Euclidean Algorithm
+
+I tend to like the articles at the bottom, such as the Rain Terraces problem, so definitely worth having a look around and explore some of the use-cases of data structures and algorithms in depth.
+
+It's good to know what each of these are good for by memory, such as Merge sort for Linked list, Quick sort for arrays.  I'll go over why a little later.
+
+Here is a list of the top ten data structures:
 
 1. Hash Table
 2. Stack
@@ -815,105 +946,6 @@ With that in mind, here's the ordered list of algorithms by the most likely to a
 8. Priority Queue
 9. Trie
 10. Tree
-11. LRU Cache
-12. Graph
-13. Depth-First Search (DFS)
-14. Breadth-First Search (BFS)
-15. Binary Search
-16. Quicksort
-17. Merge Sort
-18. Insertion Sort
-19. Selection Sort
-20. Bubble Sort
-21. Fibonacci Number
-22. Euclidean Algorithm
-23. Sieve of Eratosthenes
-24. Knuth–Morris–Pratt Algorithm (KMP Algorithm)
-25. Rabin Karp Algorithm
-26. Longest Common Substring
-27. Regular Expression Matching
-28. Dijkstra Algorithm
-29. Prim’s Algorithm
-30. Topological Sorting
-31. Kruskal’s Algorithm
-32. Bellman-Ford Algorithm
-33. Floyd-Warshall Algorithm
-34. Detect Cycle
-35. Segment Tree
-36. Fenwick Tree
-37. Disjoint Set
-38. Bloom Filter
-39. Bit Manipulation
-40. Factorial
-41. Prime Factors
-42. Primality Test
-43. Least Common Multiple (LCM)
-44. Is Power of Two
-45. Pascal's Triangle
-46. Complex Number
-47. Radian & Degree
-48. Fast Powering
-49. Horner's method
-50. Matrices
-51. Euclidean Distance
-52. Integer Partition
-53. Square Root
-54. Liu Hui π Algorithm
-55. Discrete Fourier Transform
-56. Cartesian Product
-57. Fisher–Yates Shuffle
-58. Power Set
-59. Permutations
-60. Combinations
-61. Longest Common Subsequence (LCS)
-62. Longest Increasing Subsequence
-63. Shortest Common Supersequence (SCS)
-64. Knapsack Problem
-65. Maximum Subarray
-66. Combination Sum
-67. Hamming Distance
-68. Palindrome
-69. Levenshtein Distance
-70. Z Algorithm
-71. Linear Search
-72. Jump Search
-73. Interpolation Search
-74. Heap Sort
-75. Shellsort
-76. Counting Sort
-77. Radix Sort
-78. Bucket Sort
-79. Straight Traversal
-80. Reverse Traversal
-81. Articulation Points
-82. Bridges
-83. Eulerian Path and Eulerian Circuit
-84. Hamiltonian Cycle
-85. Strongly Connected Components
-86. Travelling Salesman Problem
-87. Polynomial Hash
-88. Rail Fence Cipher
-89. Caesar Cipher
-90. Hill Cipher
-91. NanoNeuron
-92. k-NN
-93. k-Means
-94. Seam Carving
-95. Weighted Random
-96. Genetic algorithm
-97. Tower of Hanoi
-98. Square Matrix Rotation
-99. Jump Game
-100. Unique Paths
-101. Rain Terraces
-102. Recursive Staircase
-103. Best Time To Buy Sell Stocks
-104. N-Queens Problem
-105. Knight's Tour
-
-This list prioritizes algorithms and data structures that are fundamental and frequently asked about in frontend interviews.
-
-I tend to like the articles at the bottom, such as the Rain Terraces problem, so definitely worth having a look around and explore some of the use-cases of data structures and algorithms in depth.
 
 ## The Top Ten
 
@@ -937,6 +969,157 @@ Most of these are data structures, strictly speaking.  The specific algorithms i
 Binary Search Tree: Often used with algorithms for searching and sorting.
 Heap: Used in heap sort and priority queue operations.
 Trie: Used in algorithms for prefix-based searches.
+
+## An example LeetCode problem
+
+Remember the article I mentioned at the start of this: [1 Year of Consistent LeetCoding](https://dev.to/davinderpalrehal/1-year-of-consistent-leetcoding-26d0)?
+
+An example of what he is talking about is this classic [Two Sum problem](https://leetcode.com/problems/two-sum/description/).
+
+The question goes like this:  *Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.*
+
+Have a think about how you would solve this problem.  Then read on.
+
+There is a follow-up condition: *Can you come up with an algorithm that is less than O(n2) time complexity?*
+
+The LeetCode format is pretty good I think.  It has hints, a video discussion, a forum, lots and lots of solutions in many different programming languages, a solution article and more.
+
+> Spoiler alert!  I go over the answer here, so if you want to try the problem yourself first, stop reading now.
+
+There are plenty of questions to answer, but it's good to get an overview of what a full fledged three step solution looks like.  So let's dive in.
+
+### Hint 1
+
+The hints seem to mirror my thought process.
+
+*A really brute force way would be to search for all possible pairs of numbers but that would be too slow. Again, it's best to try out brute force solutions for just for completeness. It is from these brute force solutions that you can come up with optimizations.*
+
+This was my first thought also.  Loop through each element x and find if there is another value that equals to target−x.
+
+The TypeScript solution looks like this:
+
+```js
+function twoSum(nums: number[], target: number): number[] {
+    for (let i = 0; i < nums.length; i++) {
+        for (let j = i + 1; j < nums.length; j++) {
+            if (nums[j] === target - nums[i]) {
+                return [i, j];
+            }
+        }
+    }
+    // Return an empty array if no solution is found
+    return [];
+}
+```
+
+This is exactly how I would have done it, as it's usually a timed test, and it seems obvious and can be written out quickly.
+
+The problem here is that it doesn't meet the follow-up condition.
+
+#### Complexity Analysis
+
+Time complexity: O(n squared).  Here, n is the number of elements in the nums array.  We were asked to make it less that this.
+
+For each element, we try to find its complement by looping through the rest of the array which takes O(n) time. Therefore, the time complexity is O(n squared).
+
+Space complexity: O(1). This is because the space required does not depend on the size of the input array, so only constant space is used.
+
+We can see here that time complexity is a lot more than the space complexity.
+
+So can you think how this could be improved?  I bet it involves an algorithm!
+
+### Hint 2
+
+This says: *So, if we fix one of the numbers, say x, we have to scan the entire array to find the next number y which is value - x where value is the input parameter. Can we change our array somehow so that this search becomes faster?*
+
+The article section says this: *A hash table is well suited for this purpose because it supports fast lookup in near constant time.*
+
+Remember that in JavaScript, a Map is a hash table implementation.  That's our data structure for this problem.
+
+A simple implementation uses two iterations. In the first iteration, we add each element's value as a key and its index as a value to the hash table.
+
+Then, in the second iteration, we check if each element's complement (target−nums[i]) exists in the hash table. If it does exist, we return current element's index and its complement's index.
+
+```js
+function twoSum(nums: number[], target: number): number[] {
+    const map: Map<number, number> = new Map();
+    for (let i = 0; i < nums.length; i++) {
+        map.set(nums[i], i);
+    }
+    for (let i = 0; i < nums.length; i++) {
+        const complement = target - nums[i];
+        if (map.has(complement) && map.get(complement) !== i) {
+            return [i, map.get(complement)];
+        }
+    }
+    // If no valid pair is found, return an empty array
+    return [];
+}
+```
+
+### Hint 3
+
+This says: *The second train of thought is, without changing the array, can we use additional space somehow? Like maybe a hash map to speed up the search?*
+
+The editorial section lays it out for us: *It turns out we can do it in one-pass. While we are iterating and inserting elements into the hash table, we also look back to check if current element's complement already exists in the hash table. If it exists, we have found a solution and return the indices immediately.*
+
+That's our algorithm.  Let's look at the TypeScript example given.
+
+```js
+function twoSum(nums: number[], target: number): number[] {
+    const map: Map<number, number> = new Map();
+    for (let i = 0; i < nums.length; i++) {
+        const complement = target - nums[i];
+        if (map.has(complement)) {
+            // this is the solution, so return the two indices
+            return [map.get(complement), i];
+        }
+        // remember the current value and its index
+        map.set(nums[i], i);
+    }
+    return [];
+}
+```
+
+There we are, a single loop.  Sweet.
+
+I dream of being able to write something like this the first time through.  I suppose that is my goal here - you have to pretty much know these by heart to then choose the correct solution right away.  What better way than to write an article about it?
+
+If current + x = target, then we know we have a solution, and since there is guaranteed to be only one solution, we can return immediately.  We use algebra to turn this into target - current, or ```complement = target - nums[i]```.
+
+When the map has that complement (because we have saved all the values in the hash table), we return the two indices.  The ```map.has(complement)``` looks at the indexes of the hash table.
+
+The [has() method of Map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/has) returns a boolean indicating whether an element with the specified key exists in this map or not.
+
+There is actually a [link in the comments](https://leetcode.com/problems/two-sum/solutions/1527009/o-n-javascript-typescript-with-detailed-explanatory-comments/) to a very well commented TypeScript solution with a lot of replies on it also.
+
+#### Final complexity analysis
+
+Time complexity: O(n).
+We traverse the list containing n elements only once. Each lookup in the table costs only O(1) time.
+
+Space complexity: O(n).
+The extra space required depends on the number of items stored in the hash table, which stores at most n elements.
+
+Time is usually more important than space, because space means memory, and that can always be increased (I mean, to a point).
+
+We can't however buy more time, which is why time complexity is more critical.
+
+### Single-Pass Hash Table
+
+This algorithm is also known as the Two-Sum Hash Table algorithm.
+
+It's a specific implementation of a more general problem-solving pattern called the "Complement/Pair Finding" pattern.
+
+I know, this one is not on the Trekhleb list.  I guess despite it thoroughness, it's not a complete list.  This would indicate that at this point we have to get our feet wet and dive into the real world of algorithms in action.
+
+As I've been told, this is a classic example of the space-time tradeoff in algorithms, where extra space (the hash table) is used to achieve better time complexity (a single loop with constant time lookups).
+
+It's a common pattern in coding interviews and is often used as a building block for more complex problems like Three Sum, Four Sum, etc.
+
+It's a good idea to also dive into the comments at the end of the editorial section.  There are extensive ideas there:
+
+Someone asks: *How does the HashMap solution work if the elements are not unique in the array and the target is a addition of two duplicate integers?*  They also show their own solution.
 
 ## Summary
 
