@@ -36,15 +36,15 @@ First, here is a brief overview of the subject.
 
 Coders have to solve problems, many of which fit archetypes that have been solved many times before.  Why not stand on the shoulders of the giants and pick and choose a solution that has known tradeoffs rather than re-inventing the wheel and discovering the tradeoffs down the road when its too late to change anything.
 
-They could be seen as a short cut to struggling through a problem to find a solution.  It's not to say that there are not new or unique problems that require new and unique approaches, but having a knowledge of how to approach a challenge and see a pattern that fits a data type or algorithm can save a lot of time.  When you code as a job, time is money and many startups fail as they arrive at the proper solution too late.  The right answer that takes too long is actually the wrong answer in a lot of cases.
+They could be seen as a best practice or even as a shortcut to struggling through a problem to find a solution.  It's not to say that there are not new or unique problems that require new and unique approaches, but having a knowledge of how to approach a challenge and see a pattern that fits a data type and/or algorithm can save a lot of time.  When you code as a job, time is money and many startups fail as they arrive at the proper solution too late.  The right answer that takes too long is actually the wrong answer in a lot of cases.
 
-As a collection of data values with relationships and functions to work with them, each type has important trade-offs. During a coding technical test we need to pay attention more to why a certain data structure is appropriate for the challenge.
+As a collection of data values with relationships (data structures) and functions to work with them (algorithms), each has important benefits and trade-offs. During a coding technical test we need to pay attention more to why a certain data structure is appropriate for the challenge and be able to explain the trade-offs as well as solve a problem.
 
 For more about why they are important, read this short piece called [1 Year of Consistent LeetCoding](https://dev.to/davinderpalrehal/1-year-of-consistent-leetcoding-26d0) by Davinderpal Singh Rehal.  He calls them DSA (Data Structures and Algorithms) and goes over some of the most common ones and how he loves testing himself with them.
 
 ### The Trekhleb
 
-The aforementioned Algorithms and Data Structures in JavaScript repo (which I call The Trekhleb here) is a very exhaustive list of data structures and algorithms with pseudo code, vanilla JavaScript examples with unit tests and even links to Wikipedia pages and videos from the [hacker rank channel](https://www.`yo`utube.com/@HackerrankOfficial).  There are many contributors, 1,115 commits so far, the last only two months ago.  These seem to mainly be translations of the content into the 18 languages available.  So they are really trying to spread the word there.
+The aforementioned Algorithms and Data Structures in JavaScript repo (which I call The Trekhleb here) is a very exhaustive list of data structures and algorithms with pseudo code, vanilla JavaScript examples with unit tests and even links to Wikipedia pages and videos from the [hacker rank channel](https://www.youtube.com/@HackerrankOfficial).  There are many contributors, 1,115 commits so far, the last only two months ago.  There are translations of the content into the 18 languages available, so they are really trying to spread the word there.
 
 One limitation I see with it is that it does not fit in with the way I code these days, which is usually in TypeScript and in a React/Node setting.
 
@@ -94,42 +94,35 @@ The frontend in a mix of layout, styles and business logic that relies on a sing
 
 First I will look at some of the most popular data types, such as hash tables, linked lists and trees.
 
-I will discuss the example code at suggest some sample implementations using functional TypeScript approach.
+I will discuss the example code at suggest some sample implementations using a functional TypeScript approach.
 
-I will then try to implement a real world solution and see how that goes.  The scop of this article has already increased quite a bit just with this, so possibly I will include the real world example in a separate article.
+I discuss the most popular questions about the subject, as well as covering a sample question from LeetCode and how it relates to the subject.
 
 ## Hash table
 
 A [Hash table (hash map)](https://github.com/trekhleb/javascript-algorithms/tree/master/src/data-structures/hash-table) is a data structure which implements an associative array abstract data type.  It contains a structure that can map keys to values.
 
-The data type uses a hash function to compute an index into an array of buckets or slots, from which the desired value can be found
-For fast lookups O(1) constant time (usually, could also be O(n) linear time)
+This data type uses a hash function to compute an index into an array of buckets or slots, from which the desired value can be found.
 
-Ideally, the hash function will assign each key to a unique bucket, but most hash table designs employ an imperfect hash function, which might cause hash collisions where the hash function generates the same index for more than one key. Such collisions must be accommodated in some way.
+It offers a fast lookups O(1) constant time.  This is important to remember.
 
-Todo:
-    - Collision handling
-    - How they grow/shrink
-    - Implement simple solution
-    - Practice questions
+It could also be O(n) linear time if there is a collision where the hash function generates the same index for more than one key. Such collisions must be accommodated in some way, usually with a linked list (a technique called chaining).
 
-It is possible to use a JavaScript object as a hash table, or a Map.
-Map stores key-value pairs, where keys can be of any data type, including objects and functions.
+It is possible to use a JavaScript object or a Map as a hash table.  A Map stores key-value pairs, where keys can be of any data type, including objects and functions.
 
-Order of Insertion maintained
-Efficient Operations: Map provides average constant time complexity, O(1), for operations like set, get, and delete.
+In a Map the order of insertion is maintained.
 
-Why Use Map Over Object?
+Why use a map over an object?
 
-No Key Collisions: Unlike objects, Map keys are not limited to strings and symbols, reducing the risk of key collisions.
-Size Property: Map has a size property that directly returns the number of key-value pairs.
-Better Performance: Map is generally more performant for frequent additions and deletions of key-value pairs.
+- With an object, there will be no key collisions.  Unlike objects, Map keys are not limited to strings and symbols, reducing the risk of key collisions.
+- A Map has a size property that directly returns the number of key-value pairs.
+- A Map is generally more performant for frequent additions and deletions of key-value pairs.
+
+### LRU (Least Recently Used) Cache
 
 Another common use case is implementing an LRU (Least Recently Used) Cache.
 
-An LRU Cache is a data structure that stores a limited number of items and removes the least recently used item when the cache reaches its capacity. This is a great way to showcase your skills with hash tables and linked lists.
-
-When hash tables encounter collisions, they can use a technique called chaining to store multiple key-value pairs in the same bucket which is often done with a linked list.
+An LRU Cache is a data structure that stores a limited number of items and removes the least recently used item when the cache reaches its capacity.
 
 ## Linked list
 
