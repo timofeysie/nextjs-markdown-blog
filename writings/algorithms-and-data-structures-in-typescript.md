@@ -527,6 +527,47 @@ Comments: usually done in-place with O(log(n)) stack space
 
 The `Stable: no` means that when Quicksort encounters elements of equal value, their relative order in the final sorted array may be different from their original order in the unsorted array.
 
+### Big O notation and the polynomial-time benchmark
+
+ [Big O notation](https://en.wikipedia.org/wiki/Big_O_notation) is a mathematical way to describe how an algorithm's performance (usually time or space requirements) grows as the input size grows.
+
+A [polynomial](https://en.wikipedia.org/wiki/Polynomial) is an expression consisting of variables (usually x) and coefficients, that involves only the operations of addition, subtraction, multiplication, and non-negative integer exponents. For example:
+
+- 3x² + 2x + 1 is a polynomial (read as "three x squared plus two x plus one")
+- x³ + 2x² is a polynomial (read as "x cubed plus two x squared")
+- 2^x is not a polynomial (read as "two to the power of x" - this is exponential)
+- x! is not a polynomial (read as "x factorial" - this grows faster than any polynomial)
+
+The [polynomial-time benchmark](https://en.wikipedia.org/wiki/Time_complexity#Polynomial_time) is particularly important as it represents a key distinction between "efficient" and "inefficient" algorithms.
+
+An algorithm runs in polynomial time if its running time is upper bounded by a polynomial expression in the size of the input. For example:
+
+- O(1): constant time
+- O(log n): logarithmic time
+- O(n): linear time
+- O(n log n): linearithmic time
+- O(n²): quadratic time
+- O(n³): cubic time
+
+Algorithms with polynomial time complexity (O(n^k) where k is a constant) are generally considered "efficient" or "tractable". This includes our earlier examples:
+
+- Hash table lookups: O(1)
+- Binary search: O(log n)
+- Quicksort average case: O(n log n)
+
+In contrast, algorithms with non-polynomial time complexity are considered "inefficient" or "intractable":
+
+- O(2^n): exponential time
+- O(n!): factorial time
+
+For example, the brute force solution to the Traveling Salesman Problem has O(n!) complexity, making it impractical for large inputs. This is why we often seek approximation algorithms or heuristics for such problems.
+
+The polynomial-time benchmark is important because:
+
+1. Polynomial functions grow more slowly than exponential functions for large inputs
+2. Polynomial-time algorithms remain feasible as input sizes grow
+3. Many fundamental computer science problems can be solved in polynomial time
+
 ### The example code
 
 Here is what the steps above look like in the class-based code example.  I have removed the comments for brevity and tightened up the layout so please visit the Quicksort link above for the full code.
