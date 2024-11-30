@@ -42,6 +42,8 @@ As a collection of data values with relationships (data structures) and function
 
 For more about why they are important, read this short piece called [1 Year of Consistent LeetCoding](https://dev.to/davinderpalrehal/1-year-of-consistent-leetcoding-26d0) by Davinderpal Singh Rehal.  He calls them DSA (Data Structures and Algorithms) and goes over some of the most common ones and how he loves testing himself with them.
 
+Apparently DSA is a popular acronym.  It's also used by Aman Manazir in his [How I Mastered Data Structures and Algorithms in 8 Weeks](https://www.youtube.com/watch?v=ADXNcv6KbMQ&t=355s) video which has some great advice.
+
 ### The Trekhleb
 
 The aforementioned Algorithms and Data Structures in JavaScript repo (which I call The Trekhleb here) is a very exhaustive list of data structures and algorithms with pseudo code, vanilla JavaScript examples with unit tests and even links to Wikipedia pages and videos from the [hacker rank channel](https://www.youtube.com/@HackerrankOfficial).  There are many contributors, 1,115 commits so far, the last only two months ago.  There are translations of the content into the 18 languages available, so they are really trying to spread the word there.
@@ -139,27 +141,25 @@ Under what circumstances are linked lists useful?  This [StackOverflow question]
 
 It was Asked 14 years, 6 months ago and viewed 32k times. I counted 18 answers there.
 
-One answer: when do you need to do a lot of insertions and removals at the middle of a sequence, but not very many lookups in the list by ordinal?
+One answer: *When do you need to do a lot of insertions and removals at the middle of a sequence, but not very many lookups in the list by ordinal?*
 
 Discussions about LLs often revolve around memory use and languages other than JavaScript.  It comes down to a discussion of Big O notation (more on that later).
 
-Adding an element: O(1)
-Indexing: O(n)
+Adding an element: O(1) (constant time)
+Indexing: O(n) (linear time)
 Getting an element in a known position: O(n)
 
-One example answer: One of the most useful cases I find for linked lists working in performance-critical fields like mesh and image processing, physics engines, and raytracing is when using linked lists actually improves locality of reference and reduces heap allocations and sometimes even reduces memory use compared to the straightforward alternatives.
+One example answer: *One of the most useful cases I find for linked lists working in performance-critical fields like mesh and image processing, physics engines, and raytracing is when using linked lists actually improves locality of reference and reduces heap allocations and sometimes even reduces memory use compared to the straightforward alternatives.*
 
-Even the least rated answers provide insight into actual usage.
+Even the least rated answers provide insight into actual usage: *Rope Strings are a good example to start with. It's a popular data structure in text editors where users want to insert and delete all over the place.  The Python data type called deque found in collections.deque uses a doubly linked list. A vector or deque would typically be slow to add at either end, requiring (at least in my example of two distinct appends) that a copy be taken of the entire list (vector), or the index block and the data block being appended to (deque).*
 
-Rope Strings are a good example to start with. It's a popular data structure in text editors where users want to insert and delete all over the place.
-
-The Python data type called deque found in collections.deque uses a doubly linked list.
-
-A vector or deque would typically be slow to add at either end, requiring (at least in my example of two distinct appends) that a copy be taken of the entire list (vector), or the index block and the data block being appended to (deque).
+None of the answers indicate the type of things that one would use on the frontend in a React app.  But still one might be expected to discuss this data type in a technical interview.  JavaScript does not have the low level memory concerns of other languages, and in general, arrays and their friends take care of a lot of this pressure under the hood.
 
 ## Map & Set & modern JavaScript
 
-The Set object was introduced in ECMAScript 2015 (ES6), which was officially released in June 2015.  Note the dates were used to embarrass browsers who might implement the features years later.
+The Set object was introduced in ECMAScript 2015 (ES6), which was officially released in June 2015.
+
+>[Fun fact] Dates were used in ECMAScript releases apparently to embarrass browsers who might implement the features years later.
 
 This was a significant update to JavaScript that introduced many new features and data structures, including Set, Map, WeakSet, WeakMap, arrow functions, let and const declarations, and more.
 
@@ -179,7 +179,7 @@ map.set('key1', 'value1');
 console.log(map.get('key1')); // Outputs: 'value1'
 ```
 
-### Set
+### Set & programming shortcuts
 
 This is a collection of unique values, meaning it does not allow duplicate entries. It is also implemented using a hash table, which ensures that each value is stored only once and allows for efficient checks for the presence of a value.
 
@@ -191,7 +191,7 @@ console.log(set.has('value1')); // Outputs: true
 
 So, while both Map and Set use hash tables internally, Map is used for key-value pairs, and Set is used for unique values.
 
-Since a Set is a collection of unique values. You can convert an array to a Set and then back to an array to remove duplicates:
+Since a Set is a collection of unique values. You can convert an array to a Set and then back to an array as a shot cut to remove duplicates:
 
 ```js
 const array = [1, 2, 2, 3, 4, 4, 5];
@@ -200,9 +200,78 @@ const uniqueArray = [...new Set(array)];
 const uniqueArray = Array.from(new Set(array));
 ```
 
+This could be used for example to pass one of the most basic [LeetCode questions](https://leetcode.com/problems/contains-duplicate): *Given an integer array nums, return true if any value appears at least twice in the array, and return false if every element is distinct.*
+
+Here is a TypeScript solution:
+
+```ts
+function containsDuplicate(nums: number[]): boolean {
+    const uniqueArray = [...new Set(nums)];
+    return uniqueArray.length < nums.length;
+}
+```
+
+The problem with this solution is that it side steps the thought process of how to solve the problem.  First, lets consider the above solution.
+
+LeetCode says it is space & time complexity O(N).
+
+- Runtime 14 ms beats 56.06% of the other answers.
+- Memory 63.17MB beats 22.88% of the other answers.
+
+On second thought, that doesn't look that good.  It only beats 56%/22% of other answers?  Why does that seem so bad?  Can you see why?
+
+The problem asks us to think about how to keep track of the frequency of each element in the array and how to do this efficiently.
+
+Yes, using a Set in this novel way works, but it is not the most efficient solution, and nothing was learned about the problem space.
+
+I think the performance problem is that I am creating a new array and then comparing its length to the original array's length.  This doubles the memory usage.  In my mind, I value readable code more than saving a few bytes. I like to use well named variables as a kind of natural language documentation.
+
+But its worth considering a better solution.
+
+It could also be a one-liner.
+
+```ts
+function containsDuplicate(nums: number[]): boolean {
+    return nums.length > new Set(nums).size;
+}
+```
+
+- Runtime 13 ms Beats 60.99%
+- Memory 61.74 MB Beats 79.29%
+
+60%/79% is better than my original solution I was so proud of a moment ago (56%/22%).
+
+You could argue that using shortcuts is more real-world.  I suppose it depends on what you goals are.  If you are on the job at a startup with a short funding runway, the quickest brute force solution is probably the best choice.
+
+If you are learning DSA and want to understand them well enough to pass tests and technical interviews, then you need to think about the problem space and consider various efficient solutions.
+
+Also, are you working on a large platform application that will need to be extended and added to for years to come?  In that case you might also like more readable and extensible code that doesn't contain cryptic and hard to read shortcuts that save memory and time.
+
+A C developer who is a genius will always win in this kind of problem.  But I would hate to be the dev who comes in later and has to debug an issue with some of the business logic in the genius code from last year.
+
+So it's hard to say what the best solution is. I hate how a lot of programming solutions all come down to the cliche "it depends".
+
+### Another take on this discussion
+
+Common advice: *You should memorize LeetCode problem solutions.*
+
+Aman Manazir: *This could not be worse advice.*
+
+He explains why.
+
+*Sure, I do agree that working through a bunch of LeetCode problems is a good idea — but beyond that, this approach is pretty terrible.*
+
+*First of all, you’re unlikely to get lucky in the interview and get a problem you’ve seen before.*
+
+*Second, the goal is to develop problem-solving skills so that you can tackle most coding problems, even ones you haven’t seen before.*
+
+*So stop trying to memorize solutions and instead focus on understanding the problem and building your technical skills.*
+
+So in essence, learning how to remove duplicates with a Set shortcut misses the point of building your skills.  Or not, I'm still not sure.
+
 ## Trees
 
-Trees are abstract data type/structure that **simulates a hierarchical tree structure, with a root value and subtrees of children with a parent node, represented as a set of linked nodes.*
+Trees are abstract data type/structure that *simulates a hierarchical tree structure, with a root value and subtrees of children with a parent node, represented as a set of linked nodes.*
 
 There are four trees listed:
 
@@ -214,7 +283,7 @@ There are four trees listed:
 
 ### The Binary Search Tree (aka ordered or sorted binary trees)
 
-The Trekhleb for [Binary Search Tree](https://github.com/trekhleb/javascript-algorithms/tree/master/src/data-structures/tree/binary-search-tree) says they are *a particular type of container: data structures that store "items" (such as numbers, names etc.) in memory. They allow fast lookup, addition and removal of items, and can be used to implement either dynamic sets of items, or lookup tables that allow finding an item by its key*
+The Trekhleb for a [Binary Search Tree](https://github.com/trekhleb/javascript-algorithms/tree/master/src/data-structures/tree/binary-search-tree) says they are *a particular type of container: data structures that store "items" (such as numbers, names etc.) in memory. They allow fast lookup, addition and removal of items, and can be used to implement either dynamic sets of items, or lookup tables that allow finding an item by its key*
 
 The video linked to is a helpful introduction.
 
@@ -340,15 +409,11 @@ setRight(rootNode, rightNode);
 traverseInOrder(rootNode, (node) => console.log(node.value));
 ```
 
-#### Explanation
-
-The createNode function creates a new node.
-
-The setLeft and setRight Functions to set the left and right children of a node.  There is also a setValue function to set the value of a node.
+The createNode, setLeft and setRight F=functions are self-explanatory.
 
 The traverseInOrder function is a recursive function that traverses the tree in order and applies a callback to each node (that's the ```(node) => console.log(node.value)``` part).
 
-When creating a binary tree node, the decision to create a left or right node typically depends on the specific requirements of the tree structure you're building. In a Binary Search Tree (BST), which is a common type of binary tree, the decision is based on the value of the new node compared to the value of the existing node. Here's how it generally works:
+When creating a binary tree node, the decision to create a left or right node typically depends on the specific requirements of the tree structure you're building. In a Binary Search Tree (BST), which is a common type of binary tree, the decision is based on the value of the new node compared to the value of the existing node. Here's how it generally works.
 
 ##### For a Binary Search Tree
 
@@ -423,14 +488,20 @@ Question: How would you use a BST to implement a feature in a real-world applica
 
 Answer: A BST can be used to maintain a sorted list of scores in a leader board, allowing for efficient insertion of new scores and retrieval of top scores.
 
+You might wonder with all the trees, why a BST is the best choice for a leader board?
+
+Lets find out.
+
 ### Other Tree type examples
 
-#### AVL trees
+#### AVL (Adelson-Velsky Landis) trees
+
+Named after its inventors, Georgy Adelson-Velsky and Evgenii Landis, who published it in their 1962 paper “An algorithm for the organization of information”.
 
 While not as commonly used directly in frontend development as some other data structures, AVL trees can still have practical applications in certain scenarios. Here are some examples of how an AVL tree might be relevant to a front-end developer:
 
 - Autocomplete suggestions: efficiently store and retrieve words or phrases, maintaining them in sorted order for quick prefix-based searches.
-- Maintaining a dynamically sorted list of elements, such as a leaderboard or a list of users/products that need to be kept in order.
+- Maintaining a dynamically sorted list of elements, such as a leader board or a list of users/products that need to be kept in order.
 - Range queries: When you need to efficiently find elements within a specific range, such as filtering products by price or date range.
 
 #### Red-Black Trees
@@ -447,23 +518,43 @@ While not as commonly used directly in frontend development as some other data s
 
 #### Fenwick Tree
 
-- Real-time Leaderboard
+- Real-time Leader board
 - Efficient Range Sum Queries in Data Grids.
 - Interactive Histogram with Cumulative Frequency that allows users to select ranges and instantly see cumulative frequencies with efficient prefix sum calculations.
 
-### Leaderboards and trees
+### Leader boards and trees
 
-You might notice that a leaderboard is listed in both AVL and Fenwick Tree examples.  They can also be a good use case for a BST.  In fact, they could apply to all tree types.So what's the difference in these implementations?
+You might notice that a leader board is listed in both AVL and Fenwick Tree examples.
 
-A BST can be a good choice for a leaderboard when you want a simpler implementation than an AVL tree and can tolerate occasional performance degradation. It's a middle ground between the consistent but complex AVL tree and the specialized Fenwick tree.
+They can also be a good use case for a BST.  
 
-For smaller to medium-sized leaderboards or those with frequent updates and varied query types, a BST could be an excellent choice.
+In fact, they could apply to all tree types.
+
+So what's the difference in these implementations?
+
+A BST can be a good choice for a leader board when you want a simpler implementation than an AVL tree and can tolerate occasional performance degradation.
+
+It's a middle ground between the consistent but complex AVL tree and the specialized Fenwick tree.
+
+For smaller to medium-sized leader boards or those with frequent updates and varied query types, a BST could be an excellent choice.
 
 Why not use a Red-Black Tree?
 
-For a leaderboard, a Red-Black tree doesn't offer significant advantages over an AVL tree. Both provide similar performance guarantees, so the choice often comes down to implementation preference.
+For a leader board, a Red-Black tree doesn't offer significant advantages over an AVL tree.
 
-Why not use a Segment trees?  They excel at range queries, which could be useful for certain types of leaderboards, especially those requiring frequent updates to ranges of scores.  But why not use it?  For a typical leaderboard that primarily needs individual updates and rank queries, a segment tree might be overkill. It's more complex to implement and maintain than necessary for basic leaderboard operations.
+Both provide similar performance guarantees, so the choice often comes down to implementation preference.
+
+Why not use a Segment trees?
+
+They excel at range queries, which could be useful for certain types of leader boards, especially those requiring frequent updates to ranges of scores.
+
+But why not use it?
+
+For a typical leader board that primarily needs individual updates and rank queries, a segment tree might be overkill.
+
+It's more complex to implement and maintain than necessary for basic leader board operations.
+
+We will come back to the leader board discussion later.  But first, lets dig into algorithms.
 
 ## Algorithms (how to solve a class of problems)
 
@@ -570,7 +661,9 @@ The polynomial-time benchmark is important because:
 
 ### The example code
 
-Here is what the steps above look like in the class-based code example.  I have removed the comments for brevity and tightened up the layout so please visit the Quicksort link above for the full code.
+Here is what the steps above look like in the class-based code example.
+
+I have removed the comments for brevity and tightened up the layout so please visit the Quicksort link above for the full code.
 
 Most of the examples use the Comparator class which looks like this:
 
@@ -1154,6 +1247,108 @@ It's a common pattern in coding interviews and is often used as a building block
 It's a good idea to also dive into the comments at the end of the editorial section.  There are extensive ideas there:
 
 Someone asks: *How does the HashMap solution work if the elements are not unique in the array and the target is a addition of two duplicate integers?*  They also show their own solution.
+
+## Pareto Problem Set
+
+In this section I present a list from the amazing Aman Manazir who I mentioned earlier.
+
+His take, like mine, is that there are too many DSA to go through them all in one lifetime, so we have to focus on the most popular.
+He also mentions an issue with just studying them which he calls the "cook book trap".
+This means that if you just memorize recipes so your prepared to cook anything you will fail to cook anything, or something like that.
+He says you have to crack a few eggs and get your hands dirty.
+
+This is commonly know as learn by doing.
+He recommends only learning a particular DSA after you try and fail at solving a problem.
+This kind of the way I go.  I try the brute force method, learn from that, then cheat and look up the optimized solution as I have shown above.
+
+Here is suggested list of leetcode problems to solve.
+I have left off the difficulty ratings, so if you want to see those, sign up for his email list.
+
+### ARRAYS & HASHING
+
+01 [Contains Duplicate](https://github.com/dipjul/NeetCode-150/blob/main/01.%20Arrays%20%26%20Hashing/01.%20ContainsDuplicate.md)
+02 [Valid Anagram](https://leetcode.com/problems/valid-anagram/description/)
+03 Two Sum
+04 Group Anagrams
+05 Top K Frequent Elements
+06 Valid Sudoku
+07 Product of Array Except Self
+08 Longest Consecutive Sequence
+
+### TWO POINTERS
+
+09 Valid Palindrome
+10 Two Sum II Input Array Is Sorted
+11 3Sum
+12 Container With Most Water
+
+### SLIDING WINDOW
+
+13 Best Time to Buy And Sell Stock
+14 Longest Substring Without Repeating Characters
+15 Longest Repeating Character Replacement
+
+### STACK
+
+16 Valid Parentheses
+17 Min Stack
+18 Daily Temperatures
+
+### BINARY SEARCH
+
+19 Binary Search
+20 Find Minimum in Rotated Sorted Array
+21 Search in Rotated Sorted Array
+
+### LINKED LIST
+
+22 Reverse Linked List
+23 Merge Two Sorted Lists
+24 Reorder List
+25 Remove Nth Node From End of List
+Remove Nth Node From End of List
+26 Linked List Cycle
+27 LRU Cache
+
+### TREES
+
+28 Invert Binary Tree
+29 Maximum Depth of Binary Tree
+30 Diameter of Binary Tree
+31 Balanced Binary Tree
+32 Same Tree
+
+33 Subtree of Another Tree
+34 Lowest Common Ancestor of a Binary Search Tree
+35 Binary Tree Level Order Traversal
+36 Binary Tree Right Side View
+37 Count Good Nodes In Binary Tree
+38 Validate Binary Search Tree
+39 Kth Smallest Element In a Bst
+
+### HEAP/PRIORITY QUEUE
+
+40 Kth Largest Element In a Stream
+41 Last Stone Weight
+42 Kth Largest Element in An Array
+
+### GRAPHS
+
+43 Number of Islands
+44 Max Area of Island
+45 Clone Graph
+46 Pacific Atlantic Water Flow
+47 Surrounded Regions
+48 Course Schedule
+49 Course Schedule II
+
+These problems are all on the [NeetCode-150](https://github.com/dipjul/NeetCode-150) GitHub repo.
+
+They show the solution and the time and space complexity, but don't use TypeScript.  But you can use that as a source of problems to go through.
+
+I recommend signing to his email list.
+
+He can provide a lot of resources like this [Coding Practice Template](https://manaziraman.notion.site/Coding-Practice-Template-9f269a19ec184485b227524397aa3077) for tracking your problem solving progress.
 
 ## Summary
 
