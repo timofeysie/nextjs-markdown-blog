@@ -355,15 +355,6 @@ Instead of using a class, we can use functions to create and manipulate nodes.
 ```TypeScript
 import { Comparator } from '../../utils/comparator/Comparator';
 
-type BinaryTreeNode<T> = {
-  value: T | null;
-  left: BinaryTreeNode<T> | null;
-  right: BinaryTreeNode<T> | null;
-  parent: BinaryTreeNode<T> | null;
-  meta: Map<string, any>;
-  nodeComparator: (a: T, b: T) => number;
-};
-
 const createNode = <T>(value: T | null = null): BinaryTreeNode<T> => ({
   value,
   left: null,
@@ -1266,65 +1257,63 @@ I have left off the difficulty ratings, so if you want to see those, sign up for
 
 ### ARRAYS & HASHING
 
-01 [Contains Duplicate](https://github.com/dipjul/NeetCode-150/blob/main/01.%20Arrays%20%26%20Hashing/01.%20ContainsDuplicate.md)
-02 [Valid Anagram](https://leetcode.com/problems/valid-anagram/description/)
-03 Two Sum
-04 Group Anagrams
-05 Top K Frequent Elements
-06 Valid Sudoku
-07 Product of Array Except Self
-08 Longest Consecutive Sequence
+- 01 [Contains Duplicate](https://github.com/dipjul/NeetCode-150/blob/main/01.%20Arrays%20%26%20Hashing/01.%20ContainsDuplicate.md)
+- 02 [Valid Anagram](https://github.com/dipjul/NeetCode-150/blob/main/01.%20Arrays%20%26%20Hashing/02.ValidAnagram.md) ([leetcode link](https://leetcode.com/problems/valid-anagram/description/))
+- 03 [Two Sum](https://github.com/dipjul/NeetCode-150/blob/main/01.%20Arrays%20%26%20Hashing/03.TwoSum.md)
+- 04 [Group Anagrams](https://github.com/dipjul/NeetCode-150/blob/main/01.%20Arrays%20%26%20Hashing/04.GroupAnagrams.md)
+- 05 [Top K Frequent Elements](https://github.com/dipjul/NeetCode-150/blob/main/01.%20Arrays%20%26%20Hashing/05.TopKElements.md)
+- 06 [Valid Sudoku](https://github.com/dipjul/NeetCode-150/blob/main/01.%20Arrays%20%26%20Hashing/07.ValidSodoku.md)
+- 07 [Product of Array Except Self](https://leetcode.com/problems/product-of-array-except-self/description/)
+- 08 [Longest Consecutive Sequence](...)
 
 ### TWO POINTERS
 
-09 Valid Palindrome
-10 Two Sum II Input Array Is Sorted
-11 3Sum
-12 Container With Most Water
+- 09 [Valid Palindrome](..)
+- 10 [Two Sum II Input Array Is Sorted](.)
+- 11 [3Sum](.)
+- 12 [Container With Most Water](.)
 
 ### SLIDING WINDOW
 
-13 Best Time to Buy And Sell Stock
-14 Longest Substring Without Repeating Characters
-15 Longest Repeating Character Replacement
+- 13 [Best Time to Buy And Sell Stock](.)
+- 14 [Longest Substring Without Repeating Characters](.)
+- 15 [Longest Repeating Character Replacement](.)
 
 ### STACK
 
-16 Valid Parentheses
-17 Min Stack
-18 Daily Temperatures
+- 16 [Valid Parentheses](.)
+- 17 [Min Stack](.)
+- 18 [Daily Temperatures](.)
 
 ### BINARY SEARCH
 
-19 Binary Search
-20 Find Minimum in Rotated Sorted Array
-21 Search in Rotated Sorted Array
+- 19 [Binary Search](.)
+- 20 [Find Minimum in Rotated Sorted Array](.)
+- 21 [Search in Rotated Sorted Array](.)
 
 ### LINKED LIST
 
-22 Reverse Linked List
-23 Merge Two Sorted Lists
-24 Reorder List
-25 Remove Nth Node From End of List
-Remove Nth Node From End of List
-26 Linked List Cycle
-27 LRU Cache
+- 22 [Reverse Linked List](https://leetcode.com/problems/reverse-linked-list/description/)
+- 23 Merge Two Sorted Lists
+- 24 Reorder List
+- 25 [Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/description/)
+- 26 [Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/description/)
+- 27 [LRU Cache](https://leetcode.com/problems/lru-cache/description/)
 
 ### TREES
 
-28 Invert Binary Tree
-29 Maximum Depth of Binary Tree
-30 Diameter of Binary Tree
-31 Balanced Binary Tree
-32 Same Tree
-
-33 Subtree of Another Tree
-34 Lowest Common Ancestor of a Binary Search Tree
-35 Binary Tree Level Order Traversal
-36 Binary Tree Right Side View
-37 Count Good Nodes In Binary Tree
-38 Validate Binary Search Tree
-39 Kth Smallest Element In a Bst
+- 28 [Invert Binary Tree](https://github.com/dipjul/NeetCode-150/blob/main/07.%20Tree/01.InvertBinaryTree.md)
+- 29 Maximum Depth of Binary Tree
+- 30 Diameter of Binary Tree
+- 31 Balanced Binary Tree
+- 32 Same Tree
+- 33 Subtree of Another Tree
+- 34 Lowest Common Ancestor of a Binary Search Tree
+- 35 Binary Tree Level Order Traversal
+- 36 Binary Tree Right Side View
+- 37 Count Good Nodes In Binary Tree
+- 38 Validate Binary Search Tree
+- 39 Kth Smallest Element In a Bst
 
 ### HEAP/PRIORITY QUEUE
 
